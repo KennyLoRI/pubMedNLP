@@ -1,0 +1,14 @@
+## Branch Structure
+1. Main - contains the latest working version of the project.
+2. Dev - contains the current version in development.
+3. Dev_initials - contains a copy of the dev branch (to be updated regularly from DEV) on which each individual is working.
+
+Branching hierarchy:
+Development is done in Dev_initials.
+If a new feature or something similar is completed, it is merged into Dev.
+Everytime an individual merges something into Dev another has to confirm the merge.
+Only working components that do not break the functionality of the Dev branch will be merged.
+Once we reached another milestone all of it will be merged into Main.
+
+So the structure is:
+Dev_initials -> Dev -> Main
