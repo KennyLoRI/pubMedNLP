@@ -1,0 +1,11 @@
+## Document Owner: Kenneth Styppa
+#possible ways for data extraction
+In joint brainstorming together with Daniel and Arjan the following technologies were mentioned:
+1. Selenium
+2. Beautiful Soup
+
+Further research showed pubmed support special libraries for extraction.
+source: https://medium.com/@felipe.odorcyk/scrapping-data-from-pubmed-database-78a9b53de8ca
+
+
+

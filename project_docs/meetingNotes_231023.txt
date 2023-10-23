@@ -1,0 +1,14 @@
+
+##Meeting 23.10.2023
+#Time
+15:45 - 16:00
+
+#attendees
+all
+
+#Decisions
+The following decisions have been made:
+1. Regular team meeting. Monday 18:30 - open end
+2. Data to be used: pubmed
+
+
