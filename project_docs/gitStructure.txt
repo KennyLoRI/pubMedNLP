@@ -12,3 +12,7 @@ Once we reached another milestone all of it will be merged into Main.
 
 So the structure is:
 Dev_initials -> Dev -> Main
+
+How to write a commit: 
+1. Write all authors/contributers of the commit in brackets e.g: 
+"[Name 1, Name 2] <this is a commit message>"
