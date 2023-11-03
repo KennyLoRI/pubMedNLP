@@ -10,6 +10,9 @@
 #bikes:
 #  type: pandas.CSVDataset
 #  filepath: "data/01_raw/bikes.csv"
+extract_data:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/extract_data.csv
 #
 #weather:
 #  type: spark.SparkDataset
