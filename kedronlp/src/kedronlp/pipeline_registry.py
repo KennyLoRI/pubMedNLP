@@ -3,6 +3,7 @@ from typing import Dict
 
 from kedro.framework.project import find_pipelines
 from kedro.pipeline import Pipeline
+from .pipelines.data_processing.pipeline import create_pipeline as data_processing_pipeline
 
 
 def register_pipelines() -> Dict[str, Pipeline]:
@@ -11,6 +12,10 @@ def register_pipelines() -> Dict[str, Pipeline]:
     Returns:
         A mapping from pipeline names to ``Pipeline`` objects.
     """
-    pipelines = find_pipelines()
+    pipelines = {
+        "data_processing": data_processing_pipeline()
+    }
+    #pipelines = find_pipelines()
+    #print("Discovered pipelines:", pipelines.keys())
     pipelines["__default__"] = sum(pipelines.values())
     return pipelines

@@ -1,12 +1,5 @@
-#model_options:
-#  test_size: 0.2
-#  random_state: 3
-#  features:
-#    - engines
-#    - passenger_capacity
-#    - crew
-#    - d_check_complete
-#    - moon_clearance_complete
-#    - iata_approved
-#    - company_rating
-#    - review_scores_rating
+extract_params:
+  window_duration_days: 30
+  start_date: '2013/01/01'
+  end_date: '2014/01/01'
+
