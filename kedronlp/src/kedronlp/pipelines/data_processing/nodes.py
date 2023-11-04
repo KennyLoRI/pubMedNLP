@@ -1,21 +1,20 @@
+import pandas
 import pandas as pd
 from kedronlp.extract_utils import get_article_IDs, fetch_details
 
-# def preprocess_companies(companies: pd.DataFrame) -> pd.DataFrame:
-#     """Preprocesses the data for companies.
-#
-#     Args:
-#         companies: Raw data.
-#     Returns:
-#         Preprocessed data, with `company_rating` converted to a float and
-#         `iata_approved` converted to boolean.
-#     """
-#     companies["iata_approved"] = _is_true(companies["iata_approved"])
-#     companies["company_rating"] = _parse_percentage(companies["company_rating"])
-#     return companies
+def extract_data(extract_params) -> pandas.DataFrame:
+    """
+    Function that calls the Pubmed API via the Entrez package.
+    :param
+        extract_params:
+            hyperparameters specifying start and end date of the data to be extracted
+            as well as the time window in which the request is done to receive data in a batch-wise manner.
+            If this node fails reduce window duration because request maximum is likely exceeded
 
+    :return:
+        pandas dataframe containing the crawled details (abstracts, kewords etc.) of all articles matching the query including.
+    """
 
-def extract_data(extract_params):
     title_list = []
     authors_list = []
     affiliation_list = []
@@ -29,8 +28,7 @@ def extract_data(extract_params):
     major_qualifier_list = []
     qualifier_list = []
 
-    studiesIdList = get_article_IDs(extract_params)
-    #studies = fetch_details(studiesIdList)
+    studiesIdList = get_article_IDs(extract_params) #calls IDs of the articles to fetch detailed data for
     chunk_size = 500  # reduce chunksize to not exceed request limits
     for chunk_i in range(0, len(studiesIdList), chunk_size):
         chunk = studiesIdList[chunk_i:chunk_i + chunk_size]

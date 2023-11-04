@@ -24,13 +24,14 @@ def search(query, mindate, maxdate):
     results = Entrez.read(handle)
     return results
 
-def fetch_details(id_list):
+def fetch_details(id_list) -> dict:
     """
     Function to fetch detailed data for a list of ID's of articles in Pubmed
 
     :param
         id_list: list of IDs from esearch
-    :return: nested Dictionary containing the detailed data (in XML)
+    :return:
+        nested Dictionary containing the detailed data (in XML)
     """
     ids = ','.join(id_list)
     Entrez.email = 'email@example.com'
@@ -40,7 +41,15 @@ def fetch_details(id_list):
     results = Entrez.read(handle)
     return results
 
-def get_article_IDs(extract_params):
+def get_article_IDs(extract_params) -> list:
+    """
+    Function that extracts article IDs for later fetching in a batch-wise manner as specified by a window.
+    :param
+        extract_params:
+            Parameters defining start and end date of the query as well as a window iterator
+    :return
+        list of IDs
+    """
     delay_seconds = 1
     result_dicts = {}
     start_date = datetime.strptime(extract_params['start_date'], '%Y/%m/%d')  # Start date (January 1, 2023)
