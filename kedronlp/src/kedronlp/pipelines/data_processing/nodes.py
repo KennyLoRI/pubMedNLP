@@ -15,7 +15,7 @@ from kedronlp.extract_utils import get_article_IDs, fetch_details
 #     return companies
 
 
-def extract_data():
+def extract_data(extract_params):
     title_list = []
     authors_list = []
     affiliation_list = []
@@ -29,7 +29,7 @@ def extract_data():
     major_qualifier_list = []
     qualifier_list = []
 
-    studiesIdList = get_article_IDs()
+    studiesIdList = get_article_IDs(extract_params)
     #studies = fetch_details(studiesIdList)
     chunk_size = 500  # reduce chunksize to not exceed request limits
     for chunk_i in range(0, len(studiesIdList), chunk_size):

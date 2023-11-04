@@ -40,12 +40,12 @@ def fetch_details(id_list):
     results = Entrez.read(handle)
     return results
 
-def get_article_IDs():
+def get_article_IDs(extract_params):
     delay_seconds = 1
     result_dicts = {}
-    start_date = datetime(2013, 1, 1)  # Start date (January 1, 2023)
-    end_date = datetime(2014, 1, 1)
-    window_duration = timedelta(days=30)  # assuming 30 days per month and 2 months to be fine
+    start_date = datetime.strptime(extract_params['start_date'], '%Y/%m/%d')  # Start date (January 1, 2023)
+    end_date = datetime.strptime(extract_params['end_date'], '%Y/%m/%d')  # end_date = datetime(2014, 1, 1)
+    window_duration = timedelta(days=extract_params['window_duration_days'])  # timedelta(days=30)
     current_date = start_date
 
     # Loop over time windows of 2 months

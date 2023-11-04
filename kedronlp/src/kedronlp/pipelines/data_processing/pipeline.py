@@ -7,7 +7,7 @@ def create_pipeline(**kwargs) -> Pipeline:
         [
             node(
                 func=extract_data,
-                inputs=None,
+                inputs="params:extract_params",
                 outputs="extract_data",
                 name="extract_data_node",
             ),
