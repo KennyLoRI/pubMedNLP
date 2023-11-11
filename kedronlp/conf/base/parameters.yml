@@ -1,5 +1,5 @@
 extract_params:
   window_duration_days: 30
   start_date: '2013/01/01'
-  end_date: '2014/01/01'
+  end_date: '2023/11/01'
 
