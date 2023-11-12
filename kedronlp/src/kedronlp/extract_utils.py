@@ -52,8 +52,8 @@ def get_article_IDs(extract_params) -> list:
     """
     delay_seconds = 1
     result_dicts = {}
-    start_date = datetime.strptime(extract_params['start_date'], '%Y/%m/%d')  # Start date (January 1, 2023)
-    end_date = datetime.strptime(extract_params['end_date'], '%Y/%m/%d')  # end_date = datetime(2014, 1, 1)
+    start_date = datetime.strptime(extract_params['start_date'], '%Y/%m/%d')
+    end_date = datetime.strptime(extract_params['end_date'], '%Y/%m/%d')
     window_duration = timedelta(days=extract_params['window_duration_days'])  # timedelta(days=30)
     current_date = start_date
 
@@ -90,4 +90,4 @@ def get_article_IDs(extract_params) -> list:
         print(f"current date processed:{current_date}")
         current_date = window_end
         time.sleep(delay_seconds)
-    return returned_dicts['IdList']
+    return result_dicts['IdList']

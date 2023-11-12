@@ -51,7 +51,7 @@ def extract_data(extract_params) -> pandas.DataFrame:
                 descr = [descriptor['DescriptorName'] for descriptor in paper['MedlineCitation']['MeshHeadingList']]
                 descriptor_list.append(descr)
             except:
-                descriptor_list.append("No Data")
+                descriptor_list.append("NA")
             try:
                 mdescr = [descriptor['DescriptorName'] for descriptor in paper['MedlineCitation']['MeshHeadingList'] if
                           descriptor['DescriptorName'].attributes.get('MajorTopicYN') == 'Y']
