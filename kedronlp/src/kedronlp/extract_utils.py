@@ -13,7 +13,7 @@ def search(query, mindate, maxdate):
         Dictionary with the following keys: 'Count', 'RetMax', 'RetStart', 'IdList', 'TranslationSet', 'QueryTranslation'
     """
     #docs: https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESearch
-    Entrez.email = 'email@example.com'
+    Entrez.email = 'email@example1.com'
     handle = Entrez.esearch(db='pubmed',
                             sort='relevance',
                             retmax='10000',
@@ -50,17 +50,17 @@ def get_article_IDs(extract_params) -> list:
     :return
         list of IDs
     """
-    delay_seconds = 1
+    delay_seconds = 0.1
     result_dicts = {}
     start_date = datetime.strptime(extract_params['start_date'], '%Y/%m/%d')
     end_date = datetime.strptime(extract_params['end_date'], '%Y/%m/%d')
     window_duration = timedelta(days=extract_params['window_duration_days'])  # timedelta(days=30)
     current_date = start_date
+    window_end = start_date + window_duration
 
     # Loop over time windows of 2 months
-    while current_date < end_date:
-        # Calculate the end of the 1-month window
-        window_end = current_date + window_duration
+    last_iteration = False
+    while window_end <= end_date:
         try:
             returned_dicts = search('Intelligence', current_date.strftime('%Y/%m/%d'), window_end.strftime('%Y/%m/%d'))
         except:
@@ -87,7 +87,14 @@ def get_article_IDs(extract_params) -> list:
             else:
                 # Add the key-value pair to result_dicts
                 result_dicts[key] = value
-        print(f"current date processed:{current_date}")
+        print(f"window end date processed:{window_end}")
         current_date = window_end
+        window_end = current_date + window_duration
+        if last_iteration:
+            break
+        elif window_end > end_date:
+            window_end = end_date
+            last_iteration = True
+
         time.sleep(delay_seconds)
     return result_dicts['IdList']
