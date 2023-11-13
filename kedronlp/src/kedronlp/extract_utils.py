@@ -34,7 +34,7 @@ def fetch_details(id_list) -> dict:
         nested Dictionary containing the detailed data (in XML)
     """
     ids = ','.join(id_list)
-    Entrez.email = 'email@example.com'
+    Entrez.email = 'emailtest@example.com'
     handle = Entrez.efetch(db='pubmed',
     retmode='xml',
     id=ids)
@@ -50,7 +50,6 @@ def get_article_IDs(extract_params) -> list:
     :return
         list of IDs
     """
-    delay_seconds = 0.1
     result_dicts = {}
     start_date = datetime.strptime(extract_params['start_date'], '%Y/%m/%d')
     end_date = datetime.strptime(extract_params['end_date'], '%Y/%m/%d')
@@ -61,11 +60,7 @@ def get_article_IDs(extract_params) -> list:
     # Loop over time windows of 2 months
     last_iteration = False
     while window_end <= end_date:
-        try:
-            returned_dicts = search('Intelligence', current_date.strftime('%Y/%m/%d'), window_end.strftime('%Y/%m/%d'))
-        except:
-            print(f"Error: query unsuccessful. currdate = {current_date}, window = {window_end}")
-            break
+        returned_dicts = search('Intelligence', current_date.strftime('%Y/%m/%d'), window_end.strftime('%Y/%m/%d'))
 
         # accumulate dictionary values
         for key, value in returned_dicts.items():
@@ -96,5 +91,4 @@ def get_article_IDs(extract_params) -> list:
             window_end = end_date
             last_iteration = True
 
-        time.sleep(delay_seconds)
     return result_dicts['IdList']

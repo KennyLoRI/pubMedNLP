@@ -2,15 +2,7 @@ from elasticsearch import helpers, Elasticsearch
 import csv
 import ast
 
-es = Elasticsearch(
-    [
-        {
-            "host": "localhost",
-            "port": 9200,
-            "scheme": "http",
-        }
-    ]
-)
+es = Elasticsearch("http://localhost:9200")
 
 es.options(ignore_status=[400,404]).indices.delete(index="pubmed")
 
@@ -35,6 +27,16 @@ with open("../data/01_raw/extract_data.csv") as csv_file:
             for key in ["Authors", "Affiliations", "Qualifier", "Major Qualifier"]:
                 if row[key] != "NA":
                     row[key] = ast.literal_eval(row[key])
+                if key == "Authors":
+                    author_list = []
+                    for author in row[key]:
+                        if "," in author:
+                            lastname, firstname = author.split(", ")
+                            fullname = firstname + " " + lastname
+                        else:
+                            fullname = author
+                        author_list.append(fullname)
+                    row[key] = author_list
                 else:
                     row[key] = []
             for key in ["Descriptor", "Major Descriptor"]:
