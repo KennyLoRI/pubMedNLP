@@ -1,6 +1,5 @@
 ##########################
 # KEDRO PROJECT
-*.csv
 # ignore all local configuration
 conf/local/.gitkeep
 !conf/local/.gitkeep

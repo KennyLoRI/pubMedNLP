@@ -99,6 +99,7 @@ def extract_data(extract_params) -> pandas.DataFrame:
             except:
                 pubdate_month_list.append('NA')
         print(f"percentage fetched: {chunk_i / len(studiesIdList)}")
+        print(f"chunk:{chunk_i}")
     df = pd.DataFrame(
             list(zip(
             title_list,
