@@ -1,6 +1,7 @@
 from Bio import Entrez
 from datetime import datetime, timedelta
 import time
+import io
 
 def search(query, mindate, maxdate):
     """
@@ -13,7 +14,7 @@ def search(query, mindate, maxdate):
         Dictionary with the following keys: 'Count', 'RetMax', 'RetStart', 'IdList', 'TranslationSet', 'QueryTranslation'
     """
     #docs: https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESearch
-    Entrez.email = 'email@example1.com'
+    Entrez.email = 'emails@examples.com'
     handle = Entrez.esearch(db='pubmed',
                             sort='relevance',
                             retmax='10000',
@@ -34,11 +35,22 @@ def fetch_details(id_list) -> dict:
         nested Dictionary containing the detailed data (in XML)
     """
     ids = ','.join(id_list)
-    Entrez.email = 'emailtest@example.com'
+    Entrez.email = 'emails@examples2.com'
     handle = Entrez.efetch(db='pubmed',
-    retmode='xml',
-    id=ids)
-    results = Entrez.read(handle)
+                           retmode='xml',
+                           id=ids)
+    results = None
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            xml_data = handle.read()
+            results = Entrez.read(io.BytesIO(xml_data), validate=False)
+            break  # Break out of the loop if successful
+        except Exception as e:
+            print(f"Error on attempt {attempt + 1}: {e}")
+    else:
+        print("Failed after maximum retries.")
+    handle.close()
     return results
 
 def get_article_IDs(extract_params) -> list:
@@ -50,6 +62,7 @@ def get_article_IDs(extract_params) -> list:
     :return
         list of IDs
     """
+    delay_seconds = 0.01
     result_dicts = {}
     start_date = datetime.strptime(extract_params['start_date'], '%Y/%m/%d')
     end_date = datetime.strptime(extract_params['end_date'], '%Y/%m/%d')
