@@ -1,0 +1,16 @@
+Attendants: Shruti, Arjan, Daniel, Kenny
+
+Project Basic Pillars
+1. Data Extraction
+2. Preprocessing (First 
+3. Data Ingestion into Elastic Search
+__________
+
+Advanced Stuff: 
+4. Q&A Engine: 
+    1. Information Retrieval 
+        1. query - > model extracts keys - > take keywords use elastic search - > retrieve document  -> 
+    2. Question Answering 
+        1. generate embedding for the question (probably BERT)
+        2. use outputted documents and question embedding as input for LLM to decode answer 
+    3. Front-end Textinterface in Java-Script (Least Priority) 

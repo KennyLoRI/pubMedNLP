@@ -73,11 +73,7 @@ def get_article_IDs(extract_params) -> list:
     # Loop over time windows of 2 months
     last_iteration = False
     while window_end <= end_date:
-        try:
-            returned_dicts = search('Intelligence', current_date.strftime('%Y/%m/%d'), window_end.strftime('%Y/%m/%d'))
-        except:
-            print(f"Error: query unsuccessful. currdate = {current_date}, window = {window_end}")
-            break
+        returned_dicts = search('Intelligence', current_date.strftime('%Y/%m/%d'), window_end.strftime('%Y/%m/%d'))
 
         # accumulate dictionary values
         for key, value in returned_dicts.items():
@@ -108,5 +104,4 @@ def get_article_IDs(extract_params) -> list:
             window_end = end_date
             last_iteration = True
 
-        time.sleep(delay_seconds)
     return result_dicts['IdList']
