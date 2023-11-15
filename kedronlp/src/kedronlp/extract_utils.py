@@ -62,7 +62,6 @@ def get_article_IDs(extract_params) -> list:
     :return
         list of IDs
     """
-    delay_seconds = 0.01
     result_dicts = {}
     start_date = datetime.strptime(extract_params['start_date'], '%Y/%m/%d')
     end_date = datetime.strptime(extract_params['end_date'], '%Y/%m/%d')
