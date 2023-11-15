@@ -1,6 +1,18 @@
 from elasticsearch import helpers, Elasticsearch
-import csv
 import ast
+import csv
+import sys
+
+maxInt = sys.maxsize
+
+while True:
+    try:
+        csv.field_size_limit(maxInt)
+        break
+    except OverflowError:
+        maxInt = int(maxInt/10)
+
+csv.field_size_limit(sys.maxsize)
 
 es = Elasticsearch("http://localhost:9200")
 
@@ -19,7 +31,7 @@ def get_descriptors(descriptor_string):
 with open("../data/01_raw/extract_data.csv") as csv_file:
     reader = csv.DictReader(csv_file)
     batch = []
-    batch_size = 1000
+    batch_size = 10000
     inserted_rows = 0
     while True:
         try:
@@ -48,10 +60,11 @@ with open("../data/01_raw/extract_data.csv") as csv_file:
             if len(batch) >= batch_size:
                 helpers.bulk(es, batch, index="pubmed")
                 inserted_rows += len(batch)
+                print(f"rows inserted until now: {inserted_rows}")
                 batch = []
         except StopIteration:
             helpers.bulk(es, batch, index="pubmed")
             inserted_rows += len(batch)
             print("done!")
-            print(f"inserted {inserted_rows} rows")
+            print(f"inserted in total {inserted_rows} rows")
             break
