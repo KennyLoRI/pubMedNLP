@@ -1,50 +1,95 @@
-from elasticsearch import helpers, Elasticsearch
-from sentence_transformers import SentenceTransformer
+from transformers import AutoTokenizer, AutoModel
+import torch
+import csv
+import sys
 
-es = Elasticsearch("http://localhost:9200")
+# user libraries
+import scripts_utils
 
-index = "pubmed"
-new_mapping = {
-    "combined_doc": {"type": "text"},
-    "embedding": {"type": "dense_vector", "dims": 768},
-}
-es.indices.put_mapping(properties=new_mapping, index=index)
-model = SentenceTransformer("pritamdeka/S-PubMedBert-MS-MARCO")
 
-resp = helpers.scan(
-    es, query={"query": {"match_all": {}}}, index=index, size=100
-)
-index_reqs = []
-batch_size = 100
-docs_processed = 0
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print("Using device:", device)
+print()
+
+maxInt = sys.maxsize
+
 while True:
     try:
-        hit = next(resp)
-        id = hit["_id"]
-        combined_doc = ""
-        for key, value in hit["_source"].items():
-            if not value:
-                value = "NA"
-            elif type(value) == list:
-                value = ", ".join(value)
-            combined_doc += key + ": " + value + "\n"
-        embedding = model.encode(combined_doc)
-        index_req = {
-            "_op_type": "index",
-            "_index": index,
-            "_id": id,
-            "combined_doc": combined_doc,
-            "embedding": embedding,
-        } | hit["_source"]
-        index_reqs.append(index_req)
-        if len(index_reqs) >= batch_size:
-            helpers.bulk(es, index_reqs)
-            docs_processed += batch_size
-            print(f"number of docs processed: {docs_processed}")
-            index_reqs = []
-    except StopIteration:
-        helpers.bulk(es, index_reqs)
-        docs_processed += len(index_reqs)
-        print(f"number of docs processed: {docs_processed}")
-        print("done!")
+        csv.field_size_limit(maxInt)
         break
+    except OverflowError:
+        maxInt = int(maxInt / 10)
+
+csv.field_size_limit(sys.maxsize)
+
+
+# Mean Pooling - Take attention mask into account for correct averaging
+def mean_pooling(model_output, attention_mask):
+    token_embeddings = model_output[
+        0
+    ]  # First element of model_output contains all token embeddings
+    input_mask_expanded = (
+        attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+    )
+    return torch.sum(token_embeddings * input_mask_expanded, 1) / torch.clamp(
+        input_mask_expanded.sum(1), min=1e-9
+    )
+
+
+def get_doc_embeddings(doc_batch, tokenizer, model):
+    encoded_input = tokenizer(
+        doc_batch, padding=True, truncation=True, return_tensors="pt"
+    )
+    encoded_input = encoded_input.to(device)
+    with torch.no_grad():
+        model_output = model(**encoded_input)
+    doc_embeddings = mean_pooling(model_output, encoded_input["attention_mask"])
+    return doc_embeddings
+
+
+def prepare_write_output(combined_docs, embeddings):
+    rows = []
+    for combined_doc, embedding in zip(combined_docs, embeddings):
+        row = {"combined_doc": combined_doc, "embedding": embedding.detach().tolist()}
+        rows.append(row)
+    return rows
+
+
+def execute_write_pipeline(doc_batch, tokenizer, model, writer):
+    embeddings = get_doc_embeddings(doc_batch, tokenizer, model)
+    rows = prepare_write_output(doc_batch, embeddings)
+    writer.writerows(rows)
+
+
+tokenizer = AutoTokenizer.from_pretrained(
+    "pritamdeka/S-PubMedBert-MS-MARCO", model_max_length=512
+)
+model = AutoModel.from_pretrained("pritamdeka/S-PubMedBert-MS-MARCO").to(device)
+
+input_csv = open("../data/01_raw/extract_data.csv")
+reader = csv.DictReader(input_csv)
+
+output_csv = open("../data/01_raw/doc_embeddings.csv", "w")
+writer = csv.DictWriter(output_csv, fieldnames=["combined_doc", "embedding"])
+writer.writeheader()
+
+doc_batch = []
+batch_size = 256
+total_docs_processed = 0
+while True:
+    try:
+        row = next(reader)
+        row = scripts_utils.preprocess_row(row)
+        combined_doc = scripts_utils.get_combined_doc(row)
+        doc_batch.append(combined_doc)
+        if len(doc_batch) >= batch_size:
+            execute_write_pipeline(doc_batch, tokenizer, model, writer)
+            total_docs_processed += len(doc_batch)
+            print(f"until now processed {total_docs_processed} documents")
+            doc_batch = []
+
+    except StopIteration:
+        execute_write_pipeline(doc_batch, tokenizer, model, writer)
+        print("done!")
+        total_docs_processed += len(doc_batch)
+        print(f"processed in total {total_docs_processed} documents")
