@@ -1,10 +1,7 @@
 from elasticsearch import helpers, Elasticsearch
-import ast
 import csv
 import sys
-
-# user libraries
-import scripts_utils
+import ast
 
 maxInt = sys.maxsize
 
@@ -19,17 +16,26 @@ csv.field_size_limit(sys.maxsize)
 
 es = Elasticsearch("http://localhost:9200")
 
-es.options(ignore_status=[400,404]).indices.delete(index="pubmed")
+es.options(ignore_status=[400,404]).indices.delete(index="pubmed_embeddings")
 
-with open("../data/01_raw/extract_data.csv") as csv_file:
+index = "pubmed_embeddings"
+mappings = {
+    "properties": {
+        "combined_doc": {"type": "text"},
+        "embedding": {"type": "dense_vector", "dims": 768}
+    }
+}
+es.indices.create(index=index, mappings=mappings)
+
+with open("../data/01_raw/doc_embeddings.csv") as csv_file:
     reader = csv.DictReader(csv_file)
     batch = []
-    batch_size = 10000
+    batch_size = 1000
     inserted_rows = 0
     while True:
         try:
             row = next(reader)
-            row = scripts_utils.preprocess_row(row)
+            row["embedding"] = ast.literal_eval(row["embedding"])
             batch.append(row)
             if len(batch) >= batch_size:
                 helpers.bulk(es, batch, index="pubmed")
