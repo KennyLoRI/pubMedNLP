@@ -23,21 +23,18 @@ es.options(ignore_status=[400,404]).indices.delete(index="pubmed")
 with open("../data/01_raw/extract_data.csv") as csv_file:
     reader = csv.DictReader(csv_file)
     batch = []
-    batch_size = 10000
+    batch_size = 1000
     inserted_rows = 0
-    while True:
-        try:
-            row = next(reader)
-            row = scripts_utils.preprocess_row(row)
-            batch.append(row)
-            if len(batch) >= batch_size:
-                helpers.bulk(es, batch, index="pubmed")
-                inserted_rows += len(batch)
-                print(f"rows inserted until now: {inserted_rows}")
-                batch = []
-        except StopIteration:
+    for row in reader:
+        row = scripts_utils.preprocess_row(row)
+        batch.append(row)
+        if len(batch) >= batch_size:
             helpers.bulk(es, batch, index="pubmed")
             inserted_rows += len(batch)
-            print("done!")
-            print(f"inserted in total {inserted_rows} rows")
-            break
+            print(f"rows inserted until now: {inserted_rows}")
+            batch = []
+    if batch:
+        helpers.bulk(es, batch, index="pubmed")
+        inserted_rows += len(batch)
+print("done!")
+print(f"inserted in total {inserted_rows} rows")

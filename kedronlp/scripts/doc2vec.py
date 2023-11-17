@@ -76,20 +76,21 @@ writer.writeheader()
 doc_batch = []
 batch_size = 256
 total_docs_processed = 0
-while True:
-    try:
-        row = next(reader)
-        row = scripts_utils.preprocess_row(row)
-        combined_doc = scripts_utils.get_combined_doc(row)
-        doc_batch.append(combined_doc)
-        if len(doc_batch) >= batch_size:
-            execute_write_pipeline(doc_batch, tokenizer, model, writer)
-            total_docs_processed += len(doc_batch)
-            print(f"until now processed {total_docs_processed} documents")
-            doc_batch = []
-
-    except StopIteration:
+for row in reader:
+    row = scripts_utils.preprocess_row(row)
+    combined_doc = scripts_utils.get_combined_doc(row)
+    doc_batch.append(combined_doc)
+    if len(doc_batch) >= batch_size:
         execute_write_pipeline(doc_batch, tokenizer, model, writer)
-        print("done!")
         total_docs_processed += len(doc_batch)
-        print(f"processed in total {total_docs_processed} documents")
+        print(f"until now processed {total_docs_processed} documents")
+        doc_batch = []
+
+if doc_batch:
+    execute_write_pipeline(doc_batch, tokenizer, model, writer)
+    total_docs_processed += len(doc_batch)
+print("done!")
+print(f"processed in total {total_docs_processed} documents")
+
+input_csv.close()
+output_csv.close()
