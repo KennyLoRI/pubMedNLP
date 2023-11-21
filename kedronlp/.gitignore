@@ -8,7 +8,7 @@ conf/local/.gitkeep
 conf/**/*credentials*
 
 # ignore everything in the following folders
-data/**
+data/01_raw/*.csv
 
 ##########################
 # Common files
