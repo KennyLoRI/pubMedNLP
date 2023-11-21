@@ -1,0 +1,3 @@
+Extracted data from PubMed and created embeddings from the documents can be found [here](https://drive.google.com/drive/folders/1D-Z-ITZISLATINq3vEcl98bcNDPJrkLi?usp=sharing).
+The file ``extract_data.csv`` contains the extracted documents.
+The file ``doc_embeddings.csv`` contains the combination of all attributes of the documents as one text column (Title, Qualifiers, Authors, Abstract, ...) and the corresponding vector embedding of size 768.
