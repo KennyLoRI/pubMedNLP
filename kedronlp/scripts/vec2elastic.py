@@ -12,7 +12,7 @@ while True:
     except OverflowError:
         maxInt = int(maxInt/10)
 
-csv.field_size_limit(sys.maxsize)
+csv.field_size_limit(maxInt)
 
 es = Elasticsearch("http://localhost:9200")
 
@@ -36,12 +36,12 @@ with open("../data/01_raw/doc_embeddings.csv") as csv_file:
         row["embedding"] = ast.literal_eval(row["embedding"])
         batch.append(row)
         if len(batch) >= batch_size:
-            helpers.bulk(es, batch, index="pubmed")
+            helpers.bulk(es, batch, index="pubmed_embeddings")
             inserted_rows += len(batch)
             print(f"rows inserted until now: {inserted_rows}")
             batch = []
     if batch:
-        helpers.bulk(es, batch, index="pubmed")
+        helpers.bulk(es, batch, index="pubmed_embeddings")
         inserted_rows += len(batch)
 print("done!")
 print(f"inserted in total {inserted_rows} rows")
