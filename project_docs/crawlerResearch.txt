@@ -1,5 +1,5 @@
-## Document Owner: Kenneth Styppa
-#possible ways for data extraction
+### Document Owner: Kenneth Styppa
+###First ideation: possible ways for data extraction
 In joint brainstorming together with Daniel and Arjan the following technologies were mentioned:
 1. Selenium
 2. Beautiful Soup
@@ -7,5 +7,26 @@ In joint brainstorming together with Daniel and Arjan the following technologies
 Further research showed pubmed support special libraries for extraction.
 source: https://medium.com/@felipe.odorcyk/scrapping-data-from-pubmed-database-78a9b53de8ca
 
+##Experimentation with Entrez Library
+#Functionality:
+- might cause problems when too much data is extracted at once (probably insert waiting time)
+- returned data structure: nested dictionary that contains all metadata needed
 
+#Return structure:
+- There are two main keys within this dictionary: 'PubmedBookArticle' and 'PubmedArticle'. In this case, the focus is on the 'PubmedArticle' key, which is associated with a list of articles or papers.
+- The 'PubmedArticle' key maps to a list of dictionaries, where each dictionary represents information about a specific PubMed article.
+- Within each article dictionary, there are various keys and sub-dictionaries that contain information about the article. Some of the key-value pairs include:
+- 'MedlineCitation': This key contains a dictionary that provides detailed information about the article. It includes information such as the title, abstract, authors, journal details, publication date, and more.
+- 'PubmedData': This key contains additional data related to the PubMed article, including references and publication history.
+- Getting the abstracts, title, author names etc was straight forward. However the Keywords that describe the articles is more of a challenge.
 
+#Keyword list structure:
+The keyword is a MeSH structure with the following components:
+- 'QualifierName': This is a list of MeSH qualifiers associated with the MeSH term. Qualifiers provide additional context or specificity to the term. In your example, some MeSH terms have no qualifiers, while others have qualifiers related to "physiology."
+- 'DescriptorName': This is the primary MeSH term itself, which describes a specific concept or subject. It is accompanied by various attributes, including 'UI' (Unique Identifier), which is a unique code for the MeSH term, and 'MajorTopicYN' (Major Topic Y/N), which indicates whether the term is considered a major topic in the context of the article.
+
+Based on this structure the task would be to extract the following:
+- all_descriptors = list of all descriptors (even if MajorTopicYN = "N")
+- major_descriptor = list of the major topic names
+- major qualifiers  = list of only the MajorTopicYN = "Y" qualifiers
+- A list of only

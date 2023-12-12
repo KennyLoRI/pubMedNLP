@@ -2,6 +2,11 @@ from Bio import Entrez
 from datetime import datetime, timedelta
 import time
 import io
+import spacy
+import numpy as np
+import pandas as pd
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
 
 def search(query, mindate, maxdate):
     """
@@ -104,3 +109,71 @@ def get_article_IDs(extract_params) -> list:
             last_iteration = True
 
     return result_dicts['IdList']
+
+def process(text: str, nlp, model):
+    doc = nlp(str(text))
+    sents = [str(sent) for sent in doc.sents]
+    embeddings = model.encode(sents)
+    return list(doc.sents), embeddings
+def cluster_text(sents, vecs, threshold):
+    clusters = [[0]]
+    for i in range(1, len(sents)):
+        if cosine_similarity(vecs[i].reshape(1, -1), vecs[i-1].reshape(1, -1)) < threshold:
+            clusters.append([])
+        clusters[-1].append(i)
+    return clusters
+def get_paragraphs(abstract_text, nlp, model):
+
+    # Initialize the clusters lengths list and final texts list
+    clusters_lens = []
+    final_texts = []
+
+    # Process the chunk
+    initial_threshold = 0.8
+    max_iteration = 5
+    sents, vecs = process(abstract_text, nlp, model)
+
+    # Cluster the sentences
+    clusters = cluster_text(sents, vecs, initial_threshold)
+
+    for cluster in clusters:
+        cluster_txt = ' '.join([sents[i].text for i in cluster])
+        cluster_len = len(cluster_txt)
+        print(f"cluster_txt: {cluster_txt}")
+
+
+        # Check if the cluster is too long
+        if cluster_len > 700:
+            iterator = 1
+            # Track the best subcluster lengths
+            best_num_paragraphs = 500 #initialize with a large value
+            best_div_texts = []
+            while cluster_len > 700:
+                div_lens = []
+                div_texts = []
+                len_collector = []
+                threshold = min(initial_threshold+(0.02*iterator), 0.95)
+                sents_div, vecs_div = process(cluster_txt, nlp=nlp, model=model)
+                reclusters = cluster_text(sents_div, vecs_div, threshold)
+
+                for subcluster in reclusters:
+                    div_txt = ' '.join([sents_div[i].text for i in subcluster])
+                    div_len = len(div_txt)
+                    len_collector.append(div_len)
+                    print(f"div_len: {div_len}") #for debugging
+
+                    if div_len > 60 and div_len < 800:
+                        div_lens.append(div_len)
+                        div_texts.append(div_txt)
+
+                    cluster_len = max(len_collector)
+
+                iterator+=1 #for debugging
+                print(f"subclusters {iterator}: {div_lens}")
+
+            clusters_lens.extend(div_lens)
+            final_texts.extend(div_texts)
+        else:
+            clusters_lens.append(cluster_len)
+            final_texts.append(cluster_txt)
+    return final_texts

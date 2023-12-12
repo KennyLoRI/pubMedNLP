@@ -1,6 +1,10 @@
 import pandas
 import pandas as pd
-from kedronlp.extract_utils import get_article_IDs, fetch_details
+from sentence_transformers import SentenceTransformer
+import spacy
+from functools import partial
+import torch
+from kedronlp.extract_utils import get_article_IDs, fetch_details, get_paragraphs
 
 def extract_data(extract_params) -> pandas.DataFrame:
     """
@@ -120,3 +124,26 @@ def extract_data(extract_params) -> pandas.DataFrame:
                 'Abstract', 'Journal', 'Language', 'Year', 'Month'
             ])
     return df
+
+def process_extract_data(extract_data):
+    spacy.cli.download("en_core_web_sm")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model = SentenceTransformer("pritamdeka/S-PubMedBert-MS-MARCO", device=device)
+    nlp = spacy.load("en_core_web_sm")
+
+    # Create a partial function with constant arguments
+    partial_get_paragraphs = partial(get_paragraphs, nlp=nlp, model=model)
+    extract_data_clean = extract_data.dropna().head(3) #remove head when not testing
+    extract_data_clean['paragraphs'] = extract_data_clean['Abstract'].apply(partial_get_paragraphs)
+    return extract_data_clean
+
+def get_user_query(): #TODO: here we can think of a way to combine embeddings of previous queries
+    #load model
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model = SentenceTransformer("pritamdeka/S-PubMedBert-MS-MARCO", device=device)
+    #get input
+    user_input = input("Please enter your question: ")
+    embeddings = model.encode(user_input)
+    return str({'user_input': user_input, 'embeddings': list(embeddings)})
+
+

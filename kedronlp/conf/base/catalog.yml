@@ -13,7 +13,19 @@
 extract_data:
   type: pandas.CSVDataSet
   filepath: data/01_raw/extract_data.csv
-#
+
+doc_embeddings:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/doc_embeddings.csv
+
+paragraphed_data:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/paragraphed_data.csv
+
+user_query:
+  type: text.TextDataset
+  filepath: data/01_raw/user_query.txt
+
 #weather:
 #  type: spark.SparkDataset
 #  filepath: s3a://your_bucket/data/01_raw/weather*
