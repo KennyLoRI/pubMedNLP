@@ -2,6 +2,7 @@ import chromadb
 import csv
 import sys
 import ast
+from time import time
 
 maxInt = sys.maxsize
 
@@ -42,13 +43,14 @@ for row in reader:
     embeddings.append(ast.literal_eval(row["embedding"]))
     batch.append(row["combined_doc"])
     if len(batch) >= batch_size:
+        start = time()
         collection.upsert(
             ids=ids,
             documents=batch,
             embeddings=embeddings,
         )
         inserted_rows += len(batch)
-        print(f"rows inserted until now: {inserted_rows}")
+        print(f"rows inserted until now: {inserted_rows} (time for one batch: {time()-start:.4f}s)")
         batch = []
         ids = []
         embeddings = []
