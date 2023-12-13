@@ -116,11 +116,19 @@ def process(text: str, nlp, model):
     embeddings = model.encode(sents)
     return list(doc.sents), embeddings
 def cluster_text(sents, vecs, threshold):
+    """
+    Function that takes a list of sentences and clusters them into similar paragraphs based on cosine similarity
+
+    :param sents: list of sentences
+    :param vecs: list of embedding vectors
+    :param threshold: threshold for cosine similarity
+    :return: list of lists where each sublist is one cluster
+    """
     clusters = [[0]]
     for i in range(1, len(sents)):
         if cosine_similarity(vecs[i].reshape(1, -1), vecs[i-1].reshape(1, -1)) < threshold:
-            clusters.append([])
-        clusters[-1].append(i)
+            clusters.append([]) #create nwe cluster if similary < threshold
+        clusters[-1].append(i) #if similarity > threshold add current sentence to the last cluster in the clusters list
     return clusters
 def get_paragraphs(abstract_text, nlp, model):
 
@@ -130,7 +138,7 @@ def get_paragraphs(abstract_text, nlp, model):
 
     # Process the chunk
     initial_threshold = 0.8
-    max_iteration = 5
+    max_iteration = 10
     sents, vecs = process(abstract_text, nlp, model)
 
     # Cluster the sentences
@@ -143,16 +151,14 @@ def get_paragraphs(abstract_text, nlp, model):
 
 
         # Check if the cluster is too long
-        if cluster_len > 700:
+        if cluster_len > 800:
             iterator = 1
             # Track the best subcluster lengths
-            best_num_paragraphs = 500 #initialize with a large value
-            best_div_texts = []
-            while cluster_len > 700:
+            while cluster_len > 800 and iterator < max_iteration:
                 div_lens = []
                 div_texts = []
                 len_collector = []
-                threshold = min(initial_threshold+(0.02*iterator), 0.95)
+                threshold = min(initial_threshold+(0.02*iterator), 0.99)
                 sents_div, vecs_div = process(cluster_txt, nlp=nlp, model=model)
                 reclusters = cluster_text(sents_div, vecs_div, threshold)
 

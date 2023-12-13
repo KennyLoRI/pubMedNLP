@@ -9,7 +9,9 @@ conf/**/*credentials*
 
 # ignore everything in the following folders
 data/01_raw/*.csv
+/data/02_intermediate/paragraphed_data.csv
 chroma_store
+.env
 
 ##########################
 # Common files
