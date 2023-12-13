@@ -1,10 +1,11 @@
-from sentence_transformers import SentenceTransformer
 import torch
+import numpy as np
 import csv
 import sys
 
 # user libraries
 import scripts_utils
+import emb_utils
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -24,14 +25,14 @@ csv.field_size_limit(sys.maxsize)
 
 
 def get_doc_embeddings(doc_batch, model):
-    doc_embeddings = model.encode(doc_batch, device=device, convert_to_numpy=False)
-    return doc_embeddings
+    doc_embeddings = model.encode(doc_batch)
+    return np.stack(doc_embeddings, axis=0).tolist()
 
 
 def prepare_write_output(doc_batch, embeddings):
     rows = []
     for doc, embedding in zip(doc_batch, embeddings):
-        row = {"combined_doc": doc, "embedding": embedding.detach().tolist()}
+        row = {"combined_doc": doc, "embedding": embedding}
         rows.append(row)
     return rows
 
@@ -42,8 +43,7 @@ def execute_write_pipeline(doc_batch, model, writer):
     writer.writerows(rows)
 
 
-model = SentenceTransformer('pritamdeka/S-PubMedBert-MS-MARCO', device=device)
-model.max_seq_length = 512
+model = emb_utils.PubMedBert(device=device)
 
 input_csv = open("../data/01_raw/extract_data.csv")
 reader = csv.DictReader(input_csv)
