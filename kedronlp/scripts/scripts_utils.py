@@ -47,6 +47,17 @@ def get_combined_doc(row):
         combined_doc += key + ": " + value + "\n"
     return combined_doc
 
+def get_doc_info(row):
+    doc_info = ""
+    for key, value in row.items():
+        if key != "Abstract":
+            if not value:
+                value = "NA"
+            elif type(value) == list:
+                value = ", ".join(value)
+            doc_info += key + ": " + value + "\n"
+    return doc_info
+
 def increase_csv_maxsize():
     maxInt = sys.maxsize
 
