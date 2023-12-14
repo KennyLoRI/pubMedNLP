@@ -1,4 +1,6 @@
 import ast
+import csv
+import sys
 
 
 # needed for row_preprocessing
@@ -44,3 +46,26 @@ def get_combined_doc(row):
             value = ", ".join(value)
         combined_doc += key + ": " + value + "\n"
     return combined_doc
+
+def get_doc_info(row):
+    doc_info = ""
+    for key, value in row.items():
+        if key != "Abstract":
+            if not value:
+                value = "NA"
+            elif type(value) == list:
+                value = ", ".join(value)
+            doc_info += key + ": " + value + "\n"
+    return doc_info
+
+def increase_csv_maxsize():
+    maxInt = sys.maxsize
+
+    while True:
+        try:
+            csv.field_size_limit(maxInt)
+            break
+        except OverflowError:
+            maxInt = int(maxInt / 10)
+
+    csv.field_size_limit(sys.maxsize)
