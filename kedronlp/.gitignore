@@ -10,6 +10,7 @@ conf/**/*credentials*
 # ignore everything in the following folders
 data/01_raw/*.csv
 /data/02_intermediate/paragraphed_data.csv
+/data/06_models/llama-2-7b-chat.Q4_K_M.gguf
 chroma_store
 .env
 
