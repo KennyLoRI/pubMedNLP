@@ -2,6 +2,7 @@ from elasticsearch import helpers, Elasticsearch
 import csv
 import sys
 import ast
+from time import time
 
 maxInt = sys.maxsize
 
@@ -36,9 +37,10 @@ with open("../data/01_raw/doc_embeddings.csv") as csv_file:
         row["embedding"] = ast.literal_eval(row["embedding"])
         batch.append(row)
         if len(batch) >= batch_size:
+            start = time()
             helpers.bulk(es, batch, index="pubmed_embeddings")
             inserted_rows += len(batch)
-            print(f"rows inserted until now: {inserted_rows}")
+            print(f"rows inserted until now: {inserted_rows} (time for one batch: {time()-start:.4f}s)")
             batch = []
     if batch:
         helpers.bulk(es, batch, index="pubmed_embeddings")
