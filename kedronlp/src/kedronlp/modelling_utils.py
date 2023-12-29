@@ -28,7 +28,7 @@ def print_context_details(context):
       year = year_match.group(1) if year_match else 'N/A'
       print(f"\nAuthors: {authors}\nTitle: {title}\nYear: {year}\n{'_'*20}")
 
-def instantiate_llm(path = "/Users/Kenneth/PycharmProjects/pubMedNLP/kedronlp/data/06_models/llama-2-7b-chat.Q4_K_M.gguf"):
+def instantiate_llm(path = "data/06_models/llama-2-7b-chat.Q4_K_M.gguf"):
     callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
     llm = LlamaCpp(
         model_path=path,

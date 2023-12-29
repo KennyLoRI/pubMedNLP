@@ -31,7 +31,7 @@ class PubMedEmbeddingFunction(chromadb.EmbeddingFunction):
         return self.model.encode(input)
 
 #custom langchain function to get a vector store object
-def get_langchain_chroma(device, persist_dir="kedronlp/chroma_store"):
+def get_langchain_chroma(device, persist_dir="chroma_store"):
     model = PubMedBert(device=device)
     embed_fn = PubMedEmbeddingFunction(model=model)
     client = chromadb.PersistentClient(path=persist_dir)

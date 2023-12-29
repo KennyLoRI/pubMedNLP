@@ -12,8 +12,8 @@ from kedronlp.modelling_utils import extract_abstract, print_context_details, in
 
 def get_user_query(): #TODO: here we can think of a way to combine embeddings of previous queries
     #load model
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = SentenceTransformer("pritamdeka/S-PubMedBert-MS-MARCO", device=device)
+    #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    #model = SentenceTransformer("pritamdeka/S-PubMedBert-MS-MARCO", device=device)
     #get input
     user_input = input("Please enter your question: ")
     #embeddings = model.encode(user_input)
@@ -23,8 +23,8 @@ def get_user_query(): #TODO: here we can think of a way to combine embeddings of
 def modelling_answer(user_input):
     # Define a prompt
     template = """Answer the question as short as possible and only based on the following context:
-    {context}
-    Question: {question}"""  # TODO put this into the parameters.yml file
+      {context}
+      Question: {question}"""  # TODO put this into the parameters.yml file
     prompt = PromptTemplate(template=template, input_variables=["context", "question"])
 
     # get top k documents for user query
