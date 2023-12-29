@@ -1,5 +1,5 @@
 from kedro.pipeline import Pipeline, node, pipeline
-from .nodes import extract_data, process_extract_data, get_user_query
+from .nodes import extract_data, process_extract_data
 
 
 def create_pipeline(**kwargs) -> Pipeline:
@@ -16,12 +16,6 @@ def create_pipeline(**kwargs) -> Pipeline:
                 inputs="extract_data",
                 outputs="paragraphed_data",
                 name="process_data_node",
-            ),
-            node(
-                func=get_user_query,
-                inputs=None,
-                outputs="user_query",
-                name="get_user_query_node",
-            ),
+            )
         ]
     )

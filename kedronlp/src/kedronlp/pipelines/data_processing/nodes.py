@@ -137,13 +137,3 @@ def process_extract_data(extract_data):
     extract_data_clean['paragraphs'] = extract_data_clean['Abstract'].apply(partial_get_paragraphs)
     return extract_data_clean
 
-def get_user_query(): #TODO: here we can think of a way to combine embeddings of previous queries
-    #load model
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = SentenceTransformer("pritamdeka/S-PubMedBert-MS-MARCO", device=device)
-    #get input
-    user_input = input("Please enter your question: ")
-    embeddings = model.encode(user_input)
-    return str({'user_input': user_input, 'embeddings': list(embeddings)})
-
-
