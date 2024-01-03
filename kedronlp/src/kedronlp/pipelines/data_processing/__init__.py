@@ -1,3 +1,3 @@
-"""Complete Data Processing pipeline for the spaceflights tutorial"""
+"""Data Processing pipeline"""
 
 from .pipeline import create_pipeline  # NOQA
