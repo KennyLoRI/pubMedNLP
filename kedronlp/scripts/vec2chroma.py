@@ -1,6 +1,5 @@
 import chromadb
 import csv
-import sys
 import ast
 from time import time
 
