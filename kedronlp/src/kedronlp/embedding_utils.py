@@ -1,8 +1,8 @@
-#making chromadb use the right embedding function
 from sentence_transformers import SentenceTransformer
 from langchain_community.vectorstores.chroma import Chroma
 import numpy as np
 import chromadb
+
 
 class PubMedBert:
     def __init__(self, device):
@@ -30,7 +30,7 @@ class PubMedEmbeddingFunction(chromadb.EmbeddingFunction):
     def __call__(self, input):
         return self.model.encode(input)
 
-#custom langchain function to get a vector store object
+
 def get_langchain_chroma(device, persist_dir="chroma_store"):
     model = PubMedBert(device=device)
     embed_fn = PubMedEmbeddingFunction(model=model)
@@ -42,4 +42,3 @@ def get_langchain_chroma(device, persist_dir="chroma_store"):
         collection_metadata={"hnsw:space": "cosine"},
     )
     return langchain_chroma
-

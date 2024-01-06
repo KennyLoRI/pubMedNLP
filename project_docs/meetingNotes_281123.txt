@@ -1,0 +1,25 @@
+Attendance: Shruti, Daniel, Kenneth 
+Not attending due to severe sickness: Arjan 
+
+Agenda: 
+- Progress Update
+- Open Todo's for January Milestone
+- Elasticsearch instance set-up
+
+Outcome: 
+- Progress good so far. Data extraction & preprocessing, including embedding creation completed. 
+- Oustanding: Document retrieval logic. 
+Goal: 
+1) Create embedding for user-question
+2) Get top-k documents for the query based on similary search from elasticsearch
+
+Timeline for outstanding task: 
+1. Research: it should be clear how both goals can be achieved by Dec 6th
+2. 1) should be done by Dec 12th. 
+   2) should be done by Dec 21th. 
+
+=> Milestone should be reached by Dec 21th
+
+
+
+

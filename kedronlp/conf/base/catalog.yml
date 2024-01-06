@@ -14,13 +14,21 @@ extract_data:
   type: pandas.CSVDataSet
   filepath: data/01_raw/extract_data.csv
 
-doc_embeddings:
+paragraphs:
   type: pandas.CSVDataSet
-  filepath: data/01_raw/doc_embeddings.csv
+  filepath: data/01_raw/paragraphs.csv
 
-paragraphed_data:
+paragraph_embeddings:
   type: pandas.CSVDataSet
-  filepath: data/02_intermediate/paragraphed_data.csv
+  filepath: data/01_raw/paragraph_embeddings.csv
+
+# doc_embeddings:
+#   type: pandas.CSVDataSet
+#   filepath: data/01_raw/doc_embeddings.csv
+
+# paragraphed_data:
+#   type: pandas.CSVDataSet
+#   filepath: data/02_intermediate/paragraphed_data.csv
 
 user_query:
   type: text.TextDataset

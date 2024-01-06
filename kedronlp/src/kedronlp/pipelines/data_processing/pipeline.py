@@ -1,5 +1,10 @@
 from kedro.pipeline import Pipeline, node, pipeline
-from .nodes import extract_data, process_extract_data
+from .nodes import (
+    extract_data,
+    create_paragraphs,
+    paragraph2vec,
+    vec2chroma,
+)
 
 
 def create_pipeline(**kwargs) -> Pipeline:
@@ -12,10 +17,22 @@ def create_pipeline(**kwargs) -> Pipeline:
                 name="extract_data_node",
             ),
             node(
-                func=process_extract_data,
+                func=create_paragraphs,
                 inputs="extract_data",
-                outputs="paragraphed_data",
-                name="process_data_node",
-            )
+                outputs="paragraphs",
+                name="create_paragraphs_node",
+            ),
+            node(
+                func=paragraph2vec,
+                inputs="paragraphs",
+                outputs="paragraph_embeddings",
+                name="paragraph2vec_node",
+            ),
+            node(
+                func=vec2chroma,
+                inputs="paragraph_embeddings",
+                outputs=None,
+                name="vec2chroma_node",
+            ),
         ]
     )
