@@ -24,9 +24,6 @@ class PubMedEmbeddingFunction(chromadb.EmbeddingFunction):
     def __init__(self, model):
         self.model = model
 
-    def embed_query(self, input):
-        return self.model.encode(input)
-
     def __call__(self, input):
         return self.model.encode(input)
 
