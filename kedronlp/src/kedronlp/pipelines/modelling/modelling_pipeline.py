@@ -18,7 +18,7 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=modelling_answer,
-                inputs=["user_query", "top_k_docs"],
+                inputs=["user_query", "top_k_docs", "params:modelling_params"],
                 outputs=None,
                 name="modelling_answer_node"
             )

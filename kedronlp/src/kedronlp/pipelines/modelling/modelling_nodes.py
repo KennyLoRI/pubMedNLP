@@ -21,12 +21,12 @@ def get_user_query(): #TODO: here we can think of a way to combine embeddings of
     return user_input
 
 
-def modelling_answer(user_input, top_k_docs):
+def modelling_answer(user_input, top_k_docs, modelling_params):
     # Define a prompt
     template = """Answer the question as short as possible and only based on the following context:
       {context}
       Question: {question}"""  # TODO put this into the parameters.yml file
-    prompt = PromptTemplate(template=template, input_variables=["context", "question"])
+    prompt = PromptTemplate(template=modelling_params["prompt_template"], input_variables=["context", "question"])
 
     # prepare context for prompt
     context = top_k_docs.values.flatten().tolist()
