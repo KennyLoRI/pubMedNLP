@@ -3,3 +3,6 @@ extract_params:
   start_date: '2013/01/01'
   end_date: '2023/11/01'
 
+top_k_params:
+  top_k: 3
+  retrieval_strategy: "similarity_search" #alternative: max_marginal_relevance

@@ -22,6 +22,10 @@ paragraph_embeddings:
   type: pandas.CSVDataSet
   filepath: data/01_raw/paragraph_embeddings.csv
 
+top_k_docs:
+  type: pandas.CSVDataSet
+  filepath: data/05_model_input/top_k_docs.csv
+
 # doc_embeddings:
 #   type: pandas.CSVDataSet
 #   filepath: data/01_raw/doc_embeddings.csv

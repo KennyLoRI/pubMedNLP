@@ -1,3 +1,4 @@
+import pandas as pd
 import torch
 from sentence_transformers import SentenceTransformer
 import chromadb
@@ -20,20 +21,15 @@ def get_user_query(): #TODO: here we can think of a way to combine embeddings of
     return user_input
 
 
-def modelling_answer(user_input):
+def modelling_answer(user_input, top_k_docs):
     # Define a prompt
     template = """Answer the question as short as possible and only based on the following context:
       {context}
       Question: {question}"""  # TODO put this into the parameters.yml file
     prompt = PromptTemplate(template=template, input_variables=["context", "question"])
 
-    # get top k documents for user query
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    vectordb = get_langchain_chroma(device=device) #TODO: make sure thi sis not setting up a new chromadb store but just loads it
-    docs = vectordb.similarity_search(user_input, k=3)  # TODO: Finetune doc retrieval
-
     # prepare context for prompt
-    context = [doc.page_content for doc in docs]
+    context = top_k_docs.values.flatten().tolist()
     input_dict = extract_abstract(context=context, question=user_input)
 
     # create chain
@@ -45,4 +41,22 @@ def modelling_answer(user_input):
 
     # print context details
     print_context_details(context=context)
+
+def top_k_retrieval(user_input, top_k_params):
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    vectordb = get_langchain_chroma(device=device)
+
+    if top_k_params["retrieval_strategy"] == "similarity_search":
+        docs = vectordb.similarity_search(user_input, k=top_k_params["top_k"])
+    if top_k_params["retrieval_strategy"] == "max_marginal_relevance":
+        # enforces more diversity of the top_k documents
+        docs = vectordb.max_marginal_relevance_search(user_input, k=top_k_params["top_k"])
+
+    return pd.DataFrame([doc.page_content for doc in docs])
+
+
+
+
+
+
 
