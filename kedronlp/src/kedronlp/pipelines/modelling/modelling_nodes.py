@@ -33,7 +33,14 @@ def modelling_answer(user_input, top_k_docs, modelling_params):
     input_dict = extract_abstract(context=context, question=user_input)
 
     # create chain
-    llm = instantiate_llm()
+    llm = instantiate_llm(modelling_params["temperature"],
+                          modelling_params["max_tokens"],
+                          modelling_params["n_ctx"],
+                          modelling_params["top_p"],
+                          modelling_params["n_gpu_layers"],
+                          modelling_params["n_batch"],
+                          modelling_params["verbose"],)
+
     llm_chain = LLMChain(prompt=prompt, llm=llm)
 
     # Reading & Responding

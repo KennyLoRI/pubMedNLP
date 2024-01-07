@@ -13,3 +13,10 @@ modelling_params:
     {context}
     Question: {question}
   '''
+  temperature: 0
+  max_tokens: 1000
+  n_ctx: 2048
+  top_p: 1
+  n_gpu_layers: 40
+  n_batch: 512
+  verbose: True
