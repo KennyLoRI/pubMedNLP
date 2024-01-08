@@ -10,26 +10,48 @@ from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from kedronlp.embedding_utils import get_langchain_chroma
 from kedronlp.modelling_utils import extract_abstract, print_context_details, instantiate_llm
+from spellchecker import SpellChecker
+import string
 
 def get_user_query(): #TODO: here we can think of a way to combine embeddings of previous queries
     #load model
     #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     #model = SentenceTransformer("pritamdeka/S-PubMedBert-MS-MARCO", device=device)
     #get input
+
+    # Create a SpellChecker object
+    spell = SpellChecker()
+
+    # Load spaCy English language model
+    nlp = spacy.load('en_core_web_sm')
+
+    # Get user input
     user_input = input("Please enter your question: ")
+
+    # Process the text using spaCy
+    doc = nlp(user_input)
+
+    corrected_list = [spell.correction(token.text) + token.whitespace_ if spell.correction(
+        token.text) is not None else token.text + token.whitespace_ for token in doc]
+
+    correct_query = ''.join(corrected_list)
+
     #embeddings = model.encode(user_input)
-    return user_input
+    return correct_query
 
 
 def modelling_answer(user_input, top_k_docs, modelling_params):
     # Define a prompt
-    template = """Answer the question as short as possible and only based on the following context:
-      {context}
-      Question: {question}"""  # TODO put this into the parameters.yml file
     prompt = PromptTemplate(template=modelling_params["prompt_template"], input_variables=["context", "question"])
 
     # prepare context for prompt
     context = top_k_docs.values.flatten().tolist()
+    if not context:
+        print("""Unfortunately I have no information on your question at hand. 
+              This might be the case since I only consider abstracts from Pubmed that match the keyword intelligence. 
+              Furthermore, I only consider papers published between 2013 and 2023. 
+              In case your question matches these requirements please try reformulating your query""")
+
     input_dict = extract_abstract(context=context, question=user_input)
 
     # create chain
