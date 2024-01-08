@@ -1,6 +1,5 @@
 import torch
 import csv
-import sys
 import ast
 
 # user libraries

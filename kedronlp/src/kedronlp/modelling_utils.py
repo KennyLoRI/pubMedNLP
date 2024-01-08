@@ -28,17 +28,24 @@ def print_context_details(context):
       year = year_match.group(1) if year_match else 'N/A'
       print(f"\nAuthors: {authors}\nTitle: {title}\nYear: {year}\n{'_'*20}")
 
-def instantiate_llm(path = "data/06_models/llama-2-7b-chat.Q4_K_M.gguf"):
+def instantiate_llm(temperature = 0,
+                    max_tokens = 1000,
+                    n_ctx = 2048,
+                    top_p = 1,
+                    n_gpu_layers = 40,
+                    n_batch = 512,
+                    verbose = True,
+                    path='data/06_models/llama-2-7b-chat.Q4_K_M.gguf'):
     callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
     llm = LlamaCpp(
         model_path=path,
-        temperature=0,
-        max_tokens=1000,
-        n_ctx=2048,
-        top_p=1,
-        n_gpu_layers=40,
-        n_batch=512,
+        temperature=temperature,
+        max_tokens=max_tokens,
+        n_ctx=n_ctx,
+        top_p=top_p,
+        n_gpu_layers=n_gpu_layers,
+        n_batch=n_batch,
         callback_manager=callback_manager,
-        verbose=True,  # Verbose is required to pass to the callback manager
+        verbose=verbose,  # Verbose is required to pass to the callback manager
         )
     return llm

@@ -3,3 +3,20 @@ extract_params:
   start_date: '2013/01/01'
   end_date: '2023/11/01'
 
+top_k_params:
+  top_k: 3
+  retrieval_strategy: "similarity_search" #alternative: max_marginal_relevance
+
+modelling_params:
+  prompt_template: '''
+    Answer the question as short as possible and only based on the following context:
+    {context}
+    Question: {question}
+  '''
+  temperature: 0
+  max_tokens: 1000
+  n_ctx: 2048
+  top_p: 1
+  n_gpu_layers: 40
+  n_batch: 512
+  verbose: True
