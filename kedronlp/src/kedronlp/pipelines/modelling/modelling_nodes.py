@@ -28,9 +28,10 @@ def get_user_query(): #TODO: here we can think of a way to combine embeddings of
     # Get user input
     user_input = input("Please enter your question: ")
 
-    # Process the text using spaCy
+    # tokenize etc
     doc = nlp(user_input)
 
+    # Correct each token if necessary. If work unknown spell() returns None - Then use original word (medical terms)
     corrected_list = [spell.correction(token.text) + token.whitespace_ if spell.correction(
         token.text) is not None else token.text + token.whitespace_ for token in doc]
 
@@ -80,8 +81,8 @@ def top_k_retrieval(user_input, top_k_params):
     if top_k_params["retrieval_strategy"] == "max_marginal_relevance":
         # enforces more diversity of the top_k documents
         docs = vectordb.max_marginal_relevance_search(user_input, k=top_k_params["top_k"])
-
-    return pd.DataFrame([doc.page_content for doc in docs])
+    top_k_df = pd.DataFrame([doc.page_content for doc in docs])
+    return top_k_df.drop_duplicates() #drop duplicates
 
 
 
