@@ -40,7 +40,6 @@ def get_user_query(): #TODO: here we can think of a way to combine embeddings of
 
     correct_query = ''.join(corrected_list)
 
-    #embeddings = model.encode(user_input)
     return correct_query
 
 
@@ -114,7 +113,8 @@ def top_k_retrieval(user_input, top_k_params, modelling_params):
                               modelling_params["n_gpu_layers"],
                               modelling_params["n_batch"],
                               modelling_params["verbose"])
-        # TODO: not working yet, since generate_queries function of .from_llm falsely creates empty strings
+        # TODO: not working yet, since generate_queries function of .from_llm falsely creates empty strings.
+        # Note: Generated queries were not of high quality since the used llm is not super powerful.
         multiquery_llm_retriever = MultiQueryRetriever.from_llm(
             retriever = vectordb.as_retriever(),
             llm=llm,
