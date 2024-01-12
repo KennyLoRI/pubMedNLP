@@ -11,6 +11,9 @@ from langchain.chains import LLMChain
 from kedronlp.embedding_utils import get_langchain_chroma
 from kedronlp.modelling_utils import extract_abstract, print_context_details, instantiate_llm
 from spellchecker import SpellChecker
+from langchain.schema import Document
+from langchain.retrievers import BM25Retriever, EnsembleRetriever
+
 import string
 
 def get_user_query(): #TODO: here we can think of a way to combine embeddings of previous queries
@@ -81,8 +84,23 @@ def top_k_retrieval(user_input, top_k_params):
     if top_k_params["retrieval_strategy"] == "max_marginal_relevance":
         # enforces more diversity of the top_k documents
         docs = vectordb.max_marginal_relevance_search(user_input, k=top_k_params["top_k"])
+    if top_k_params["retrieval_strategy"] == "ensemble_retrieval":
+        #initiate BM25 retriever
+        lang_docs = [Document(page_content=doc) for doc in vectordb.get().get("documents", [])] # TODO: inefficient workaround - no chroma bm25 integration yet
+        bm25_retriever = BM25Retriever.from_documents(lang_docs)
+        bm25_retriever.k = top_k_params["top_k"]
+
+        #initiate similarity retriever
+        similarity_retriever = vectordb.as_retriever(search_kwargs={"k": top_k_params["top_k"]})
+
+        #initiate ensemble (uses reciprocal rank fusion in the background with default settings)
+        ensemble_retriever = EnsembleRetriever(
+            retrievers=[bm25_retriever, similarity_retriever], weights=[0.5, 0.5]
+        )
+        docs = ensemble_retriever.get_relevant_documents("curing for dysarthria")
+
     top_k_df = pd.DataFrame([doc.page_content for doc in docs])
-    return top_k_df.drop_duplicates() #drop duplicates
+    return top_k_df.drop_duplicates()
 
 
 
