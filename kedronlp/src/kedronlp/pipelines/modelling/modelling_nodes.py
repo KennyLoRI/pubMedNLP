@@ -75,16 +75,22 @@ def modelling_answer(user_input, top_k_docs, modelling_params):
 
     # Reading & Responding
     response = llm_chain.run(input_dict)
-    if not response:
-        print("""Unfortunately I have no information on your question at hand. 
-              This might be the case since I only consider abstracts from Pubmed that match the keyword intelligence. 
-              Furthermore, I only consider papers published between 2013 and 2023. 
-              In case your question matches these requirements please try reformulating your query""")
+    if not response or len(response.strip()) == 0:
+        print("""Answer: Unfortunately I have no information on your question at hand. 
+        This might be the case since I only consider abstracts from Pubmed that match the keyword intelligence. 
+        Furthermore, I only consider papers published between 2013 and 2023. 
+        In case your question matches these requirements please try reformulating your query""")
+        context_dict = {
+            'Author':"NaN",
+            'Title':"NaN",
+            'Year':"NaN"
+        }
 
     # print and save context details
-    context_dict = print_context_details(context=context)
+    else:
+        context_dict = print_context_details(context=context)
 
-    return pd.DataFrame({"response": response, "query": user_input, **context_dict })
+    return pd.DataFrame({"response": [response], "query": [user_input], **context_dict })
 
 def top_k_retrieval(user_input, top_k_params, modelling_params):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
