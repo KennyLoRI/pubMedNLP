@@ -42,6 +42,10 @@ llm_response:
   type: pandas.CSVDataSet
   filepath: data/07_model_output/llm_response.csv
 
+reference_data:
+  type: pandas.CSVDataSet
+  filepath: data/05_model_input/reference_data.csv
+
 #weather:
 #  type: spark.SparkDataset
 #  filepath: s3a://your_bucket/data/01_raw/weather*
