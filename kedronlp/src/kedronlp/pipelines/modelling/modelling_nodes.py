@@ -71,8 +71,10 @@ def modelling_answer(user_input, top_k_docs, modelling_params):
     # Reading & Responding
     response = llm_chain.run(input_dict)
 
-    # print context details
-    print_context_details(context=context)
+    # print and save context details
+    context_dict = print_context_details(context=context)
+
+    return pd.DataFrame({"response": response, "query": user_input, **context_dict })
 
 def top_k_retrieval(user_input, top_k_params, modelling_params):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
