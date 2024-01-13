@@ -133,7 +133,7 @@ def extract_data(extract_params) -> pandas.DataFrame:
             ])
     return df
 
-def process_extract_data(extract_data):
+def process_extract_data(extract_data: pandas.DataFrame) -> pandas.DataFrame:
     spacy.cli.download("en_core_web_sm")
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = SentenceTransformer("pritamdeka/S-PubMedBert-MS-MARCO", device=device)
