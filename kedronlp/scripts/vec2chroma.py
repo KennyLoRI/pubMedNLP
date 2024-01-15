@@ -27,12 +27,22 @@ reader = csv.DictReader(input_csv)
 ids = []
 embeddings = []
 batch = []
+metadatas = []
 batch_size = 500
 inserted_rows = 0
 for row in reader:
     split_doc = row["doc"].split("Paragraph-")
     id = split_doc[0] + "Paragraph-" + split_doc[1][0]
 
+    metadata = {}
+    metadata_chunks = [chunks for chunks in row["doc"].split("\n")][0:-1]
+    for chunk in metadata_chunks:
+        splitter = chunk.find(":")
+        key = chunk[:splitter]
+        value = chunk[splitter+2:]
+        metadata[key] = value
+
+    metadatas.append(metadata)
     ids.append(id)
     embeddings.append(ast.literal_eval(row["embedding"]))
     batch.append(row["doc"])
@@ -43,23 +53,27 @@ for row in reader:
             ids=ids,
             documents=batch,
             embeddings=embeddings,
+            metadatas=metadatas,
         )
         inserted_rows += len(batch)
         print(f"rows inserted until now: {inserted_rows} (time for one batch: {time()-start:.4f}s)")
         batch = []
         ids = []
         embeddings = []
+        metadatas = []
 
 if batch:
     collection.upsert(
         ids=ids,
         documents=batch,
         embeddings=embeddings,
+        metadatas=metadatas,
     )
     inserted_rows += len(batch)
     batch = []
     ids = []
     embeddings = []
+    metadatas = []
 
 print("done!")
 print(f"inserted in total {inserted_rows} documents")
