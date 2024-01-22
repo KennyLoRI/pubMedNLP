@@ -40,6 +40,10 @@ for row in reader:
         splitter = chunk.find(":")
         key = chunk[:splitter]
         value = chunk[splitter+2:]
+        try:
+            value = float(value)
+        except ValueError:
+            value = value
         metadata[key] = value
 
     metadatas.append(metadata)
