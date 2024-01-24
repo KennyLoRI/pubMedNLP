@@ -14,6 +14,7 @@ from spellchecker import SpellChecker
 from langchain.schema import Document
 from langchain.retrievers import BM25Retriever, EnsembleRetriever, MultiQueryRetriever
 import spacy
+import sys
 
 import string
 
@@ -59,6 +60,7 @@ def modelling_answer(user_input, top_k_docs, modelling_params):
               This might be the case since I only consider abstracts from Pubmed that match the keyword intelligence. 
               Furthermore, I only consider papers published between 2013 and 2023. 
               In case your question matches these requirements please try reformulating your query""")
+        sys.exit()
 
     input_dict = extract_abstract(context=context, question=user_input)
 
@@ -76,15 +78,19 @@ def modelling_answer(user_input, top_k_docs, modelling_params):
     # Reading & Responding
     response = llm_chain.run(input_dict)
     if not response or len(response.strip()) == 0:
+
+        #catch context for debugging but don't print
+        context_dict = print_context_details(context=context, print_context=False)
+
         print("""Answer: Unfortunately I have no information on your question at hand. 
         This might be the case since I only consider abstracts from Pubmed that match the keyword intelligence. 
         Furthermore, I only consider papers published between 2013 and 2023. 
         In case your question matches these requirements please try reformulating your query""")
-        context_dict = {
-            'Author':"NaN",
-            'Title':"NaN",
-            'Year':"NaN"
-        }
+
+        response = """Answer: Unfortunately I have no information on your question at hand. 
+        This might be the case since I only consider abstracts from Pubmed that match the keyword intelligence. 
+        Furthermore, I only consider papers published between 2013 and 2023. 
+        In case your question matches these requirements please try reformulating your query"""
 
     # print and save context details
     else:

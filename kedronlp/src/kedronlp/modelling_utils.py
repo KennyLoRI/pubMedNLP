@@ -13,7 +13,7 @@ def extract_abstract(context, question):
   return input_dict
 
 #function to print context information
-def print_context_details(context):
+def print_context_details(context, print_context = True):
   authors_pattern = re.compile(r'Authors: (.+?)\n')
   title_pattern = re.compile(r'Title: (.+?)\n')
   year_pattern = re.compile(r'Year: (\d{4})\n')
@@ -33,7 +33,8 @@ def print_context_details(context):
       authors_list.append(authors)
       title_list.append(title)
       year_list.append(year)
-      print(f"\nAuthors: {authors}\nTitle: {title}\nYear: {year}\n{'_'*20}")
+      if print_context:
+        print(f"\nAuthors: {authors}\nTitle: {title}\nYear: {year}\n{'_'*20}")
 
 
   context_dict = {
