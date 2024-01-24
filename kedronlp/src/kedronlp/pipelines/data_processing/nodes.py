@@ -149,8 +149,6 @@ def create_paragraphs(extract_data: pandas.DataFrame) -> pandas.DataFrame:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Using device:", device)
 
-    scripts_utils.increase_csv_maxsize()
-
     model = emb_utils.PubMedBert(device=device)
 
     paragraphs_df = pd.DataFrame(columns=["doc_info", "paragraphs"])
@@ -235,8 +233,6 @@ def paragraph2vec(paragraphs: pandas.DataFrame) -> pandas.DataFrame:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Using device:", device)
 
-    scripts_utils.increase_csv_maxsize()
-
     def prepare_write_output(description_batch, embeddings):
         rows = []
         for doc, embedding in zip(description_batch, embeddings):
@@ -293,7 +289,6 @@ def paragraph2vec(paragraphs: pandas.DataFrame) -> pandas.DataFrame:
 
 
 def vec2chroma(paragraph_embeddings: pandas.DataFrame) -> pandas.DataFrame:
-    scripts_utils.increase_csv_maxsize()
 
     client = chromadb.PersistentClient(path="chroma_store/")
 
@@ -308,6 +303,8 @@ def vec2chroma(paragraph_embeddings: pandas.DataFrame) -> pandas.DataFrame:
         metadata={"hnsw:space": "cosine"},
     )
 
+    id_lookup = set()
+    duplicate_docs = 0
     ids = []
     embeddings = []
     batch = []
@@ -317,6 +314,12 @@ def vec2chroma(paragraph_embeddings: pandas.DataFrame) -> pandas.DataFrame:
     for _, row in paragraph_embeddings.iterrows():
         split_doc = row["doc"].split("Paragraph-")
         id = split_doc[0] + "Paragraph-" + split_doc[1][0]
+
+        if id in id_lookup:
+            duplicate_docs += 1
+            continue
+
+        id_lookup.add(id)
 
         metadata = {}
         metadata_chunks = [chunks for chunks in row["doc"].split("\n")][0:-1]
@@ -365,3 +368,4 @@ def vec2chroma(paragraph_embeddings: pandas.DataFrame) -> pandas.DataFrame:
 
     print("done!")
     print(f"inserted in total {inserted_rows} documents to chromadb")
+    print(f"found {duplicate_docs} duplicate documents")

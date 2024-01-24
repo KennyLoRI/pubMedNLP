@@ -24,6 +24,8 @@ collection = client.create_collection(
 input_csv = open("../data/01_raw/paragraph_embeddings.csv")
 reader = csv.DictReader(input_csv)
 
+id_lookup = set()
+duplicate_docs = 0
 ids = []
 embeddings = []
 batch = []
@@ -33,6 +35,12 @@ inserted_rows = 0
 for row in reader:
     split_doc = row["doc"].split("Paragraph-")
     id = split_doc[0] + "Paragraph-" + split_doc[1][0]
+
+    if id in id_lookup:
+        duplicate_docs += 1
+        continue
+
+    id_lookup.add(id)
 
     metadata = {}
     metadata_chunks = [chunks for chunks in row["doc"].split("\n")][0:-1]
@@ -81,5 +89,6 @@ if batch:
 
 print("done!")
 print(f"inserted in total {inserted_rows} documents")
+print(f"found {duplicate_docs} duplicate documents")
 
 input_csv.close()
