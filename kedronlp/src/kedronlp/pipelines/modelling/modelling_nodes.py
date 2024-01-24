@@ -90,7 +90,7 @@ def modelling_answer(user_input, top_k_docs, modelling_params):
     else:
         context_dict = print_context_details(context=context)
 
-    return pd.DataFrame({"response": [response], "query": [user_input], **context_dict })
+    return pd.DataFrame({"response": response, "query": user_input, **context_dict}) #TODO check if working when response empty
 
 def top_k_retrieval(user_input, top_k_params, modelling_params):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
