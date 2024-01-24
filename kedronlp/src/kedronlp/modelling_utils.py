@@ -3,6 +3,7 @@ from langchain.llms import LlamaCpp
 from langchain.callbacks.manager import CallbackManager
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 import pandas as pd
+from dateutil import parser
 
 # Extract the abstract from each string
 def extract_abstract(context, question):
@@ -53,7 +54,7 @@ def instantiate_llm(temperature = 0,
                     n_gpu_layers = 40,
                     n_batch = 512,
                     verbose = True,
-                    path='data/06_models/llama-2-7b-chat.Q4_K_M.gguf'):
+                    path='data/06_models/llama-2-7b-chat.Q5_K_M.gguf'):
     callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
     llm = LlamaCpp(
         model_path=path,
@@ -67,3 +68,11 @@ def instantiate_llm(temperature = 0,
         verbose=verbose,  # Verbose is required to pass to the callback manager
         )
     return llm
+
+def is_within_range(date_str, after_years, before_years):
+    date_obj = parser.parse(date_str, fuzzy=True)
+    if after_years and date_obj.year <= max(after_years):
+        return False
+    if before_years and date_obj.year >= min(before_years):
+        return False
+    return True
