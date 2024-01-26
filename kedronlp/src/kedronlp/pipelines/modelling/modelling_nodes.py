@@ -28,7 +28,7 @@ def get_user_query(modelling_params, is_evaluation = False, **kwargs): #TODO: he
     spell = SpellChecker()
     nlp = spacy.load('en_core_web_sm')
     if not is_evaluation:
-        user_input = input("Please enter your question: ")
+        user_input = input("Please enter your question in full text (no abbreviations): ")
     else:
         evaluation_input = kwargs.get("evaluation_input", None) # to get evaluation input: get_user_query(is_evaluation=True, evaluation_input = "input_string")
         user_input = evaluation_input
