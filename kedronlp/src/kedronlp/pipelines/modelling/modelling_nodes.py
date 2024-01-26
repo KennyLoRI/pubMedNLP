@@ -1,15 +1,10 @@
 import pandas as pd
 import torch
-from sentence_transformers import SentenceTransformer
-import chromadb
-from sentence_transformers import SentenceTransformer
-from langchain_community.vectorstores.chroma import Chroma
 from langchain import PromptTemplate
-from langchain.llms import CTransformers
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from kedronlp.embedding_utils import get_langchain_chroma
-from kedronlp.modelling_utils import extract_abstract, print_context_details, instantiate_llm, is_within_range
+from kedronlp.modelling_utils import extract_abstract, print_context_details, instantiate_llm, extract_date_range
 from spellchecker import SpellChecker
 from langchain.schema import Document
 from langchain.retrievers import BM25Retriever, EnsembleRetriever, MultiQueryRetriever
@@ -47,19 +42,25 @@ def get_user_query(modelling_params, is_evaluation = False, **kwargs): #TODO: he
     # Extract metadata-filter intention out of query
     if modelling_params["metadata_strategy"] == "parser":
         author_names = []
-        publishing_dates = []
         paper_titles = []
-        for ent in doc.ents:
-            if ent.label_ == "PERSON":  # Assuming authors are labeled as PERSON entities
+
+        doc_correct = nlp(correct_query)
+
+        #extract authors & titles using NER
+        for ent in doc_correct.ents:
+            if ent.label_ == "PERSON":
                 author_names.append(ent.text)
-            elif ent.label_ == "DATE":
-                publishing_dates.append(ent.text)
-            elif ent.label_ == "WORK_OF_ART":  # Assuming titles are labeled as WORK_OF_ART entities
+            elif ent.label_ == "WORK_OF_ART":
                 paper_titles.append(ent.text)
 
+        # extract dates using handcrafted rules
+        date_range = extract_date_range(doc_correct)
+
+        #output query filters
         structured_query = {
+            "query": correct_query,
             "author_names": author_names,
-            "publishing_dates": publishing_dates,
+            "publishing_dates": date_range,
             "paper_titles": paper_titles
         }
 
@@ -67,8 +68,8 @@ def get_user_query(modelling_params, is_evaluation = False, **kwargs): #TODO: he
         # Define filter structure & prompt template
         metadata_field_info = [
             AttributeInfo(
-                name="major topics", #todo check if this should be excluded in evaluation
-                description="The major topics covered in the paper",
+                name="title", #todo check if this should be excluded in evaluation
+                description="Title of the paper",
                 type="string",
             ),
             AttributeInfo(
@@ -77,13 +78,13 @@ def get_user_query(modelling_params, is_evaluation = False, **kwargs): #TODO: he
                 type="integer",
             ),
             AttributeInfo(
-                name="month",
-                description="The month the paper was published",
+                name="authors",
+                description="The authors who wrote the paper",
                 type="string",
             )
         ]
 
-        document_content_description = "Abstract of a scientific paper"
+        document_content_description = "Brief summary of a scientific paper"
         prompt = get_query_constructor_prompt(
             document_content_description,
             metadata_field_info,

@@ -1,1 +1,1 @@
-{'author_names': [], 'publishing_dates': ['2016'], 'paper_titles': []}
+{'query': 'Give me an overview of the papers published about dysarthria between 2016 and 2020', 'author_names': [], 'publishing_dates': [2016, 2020], 'paper_titles': []}
