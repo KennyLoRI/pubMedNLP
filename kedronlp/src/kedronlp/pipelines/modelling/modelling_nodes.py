@@ -4,7 +4,7 @@ from langchain import PromptTemplate
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from kedronlp.embedding_utils import get_langchain_chroma
-from kedronlp.modelling_utils import extract_abstract, print_context_details, instantiate_llm, extract_date_range
+from kedronlp.modelling_utils import extract_abstract, get_context_details, instantiate_llm, extract_date_range
 from spellchecker import SpellChecker
 from langchain.schema import Document
 from langchain.retrievers import BM25Retriever, EnsembleRetriever, MultiQueryRetriever
@@ -118,16 +118,19 @@ def modelling_answer(user_input, top_k_docs, modelling_params):
     # Define a prompt
     prompt = PromptTemplate(template=modelling_params["prompt_template"], input_variables=["context", "question"])
 
-    # prepare context for prompt
+    # obtain context for prompt
     context = top_k_docs.values.flatten().tolist()
+
+    # If no context retrieved inform the user that no data to the query is available
     if not context:
-        print("""Unfortunately I have no information on your question at hand. 
+        print("""Unfortunately I have no information on your question in my database. 
               This might be the case since I only consider abstracts from Pubmed that match the keyword intelligence. 
               Furthermore, I only consider papers published between 2013 and 2023. 
               In case your question matches these requirements please try reformulating your query""")
         sys.exit()
 
-    input_dict = extract_abstract(context=context, question=user_input)
+    # extract and structure context for input
+    input_dict = get_context_details(context=context, print_context = False, as_input_dict = True, user_input = user_input, abstract_only = modelling_params["abstract_only"])
 
     # create chain
     llm = instantiate_llm(modelling_params["temperature"],
@@ -142,10 +145,10 @@ def modelling_answer(user_input, top_k_docs, modelling_params):
 
     # Reading & Responding
     response = llm_chain.run(input_dict)
-    if not response or len(response.strip()) == 0:
 
-        #catch context for debugging but don't print
-        context_dict = print_context_details(context=context, print_context=False)
+    # If response is empty, save the retrieved context but print apologies statement
+    if not response or len(response.strip()) == 0:
+        context_dict = get_context_details(context=context, print_context=False)
 
         print("""Answer: Unfortunately I have no information on your question at hand. 
         This might be the case since I only consider abstracts from Pubmed that match the keyword intelligence. 
@@ -159,7 +162,7 @@ def modelling_answer(user_input, top_k_docs, modelling_params):
 
     # print and save context details
     else:
-        context_dict = print_context_details(context=context)
+        context_dict = get_context_details(context=context)
 
     return pd.DataFrame({"response": response, "query": user_input, **context_dict}) #TODO check if working when response empty
 

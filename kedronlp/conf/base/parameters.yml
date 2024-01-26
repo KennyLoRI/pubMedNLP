@@ -8,7 +8,9 @@ top_k_params:
   retrieval_strategy: "ensemble_retrieval" #alternatives: "similarity", "max_marginal_relevance", "ensemble_retrieval"
   advanced_dense_retriever: "similarity" #alternative "mmr" # is only relevant when ensemble_retrieval or multi_query_retrieval are selected as retrieval strategy
   mq_include_original: False #boolean indicating if by multiquery retrieval the original query should be included
+
 modelling_params:
+  abstract_only: True
   prompt_template: '''
     You are an AI assistant that answers questions using as few words as possible and only based on the following context:
     {context}
