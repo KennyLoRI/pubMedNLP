@@ -6,8 +6,8 @@ def create_pipeline(**kwargs) -> Pipeline:
         [
             node(
                 func=get_user_query,
-                inputs=None,
-                outputs="user_query",
+                inputs="params:modelling_params",
+                outputs=["user_query", "user_query_filters"],
                 name="get_user_query_node",
             ),
             node(
