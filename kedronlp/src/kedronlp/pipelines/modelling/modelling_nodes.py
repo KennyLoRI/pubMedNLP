@@ -1,6 +1,7 @@
 import pandas as pd
 import torch
 from langchain import PromptTemplate
+import regex as re
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from kedronlp.embedding_utils import get_langchain_chroma
@@ -19,25 +20,35 @@ from langchain.chains.query_constructor.base import (
 import string
 
 def get_user_query(modelling_params, is_evaluation = False, **kwargs): #TODO: here we can think of a way to combine embeddings of previous queries
-    #load model
-    #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    #model = SentenceTransformer("pritamdeka/S-PubMedBert-MS-MARCO", device=device)
-    #get input
+    #print user information
+    print("""
+    Welcome to our PubMed RAG System. 
+    Get ready for chatting with over 190k medical abstracts!
+    
+    ***********
+    To get the most out of this system, enclose special abbreviations or weird medical terms in asterisks (*word*). 
+    Example question: What is the *TT100K* dataset?
+    Thanks and have fun!
+    """)
 
     # Obtain query
     spell = SpellChecker()
     nlp = spacy.load('en_core_web_sm')
     if not is_evaluation:
-        user_input = input("Please enter your question in full text (no abbreviations): ")
+        user_input = input("Please enter your question (use *word* for abbreviations or special terms): ")
     else:
         evaluation_input = kwargs.get("evaluation_input", None) # to get evaluation input: get_user_query(is_evaluation=True, evaluation_input = "input_string")
         user_input = evaluation_input
 
     # Correct query
-    doc = nlp(user_input)
-    corrected_list = [spell.correction(token.text) + token.whitespace_ if spell.correction(
-        token.text) is not None else token.text + token.whitespace_ for token in doc] # If word unknown spell() returns None - Then use original word (medical terms)
-    correct_query = ''.join(corrected_list)
+    # Identify words the user wants to be passed in as they are
+    pattern = r'\*(.*?)\*'  # Regular expression to match words enclosed in **
+    # Use re.findall to extract all matches
+    excemption_words = re.findall(pattern, user_input)
+    # Apply spell correction excluding asterisked words
+    corrected_list = [spell.correction(token) if token.strip('*') not in excemption_words and None else token.strip("*") for token in user_input.split()]
+
+    correct_query = ' '.join(corrected_list)
 
     # Extract metadata-filter intention out of query
     if modelling_params["metadata_strategy"] == "parser":

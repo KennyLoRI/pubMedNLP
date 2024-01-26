@@ -10,7 +10,7 @@ top_k_params:
   mq_include_original: False #boolean indicating if by multiquery retrieval the original query should be included
 
 modelling_params:
-  abstract_only: True
+  abstract_only: False
   prompt_template: '''
     You are an AI assistant that answers questions using as few words as possible and only based on the following context:
     {context}
