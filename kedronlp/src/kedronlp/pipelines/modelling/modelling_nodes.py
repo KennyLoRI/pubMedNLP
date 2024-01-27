@@ -41,14 +41,17 @@ def get_user_query(modelling_params, is_evaluation = False, **kwargs): #TODO: he
         user_input = evaluation_input
 
     # Correct query
-    # Identify words the user wants to be passed in as they are
-    pattern = r'\*(.*?)\*'  # Regular expression to match words enclosed in **
-    # Use re.findall to extract all matches
-    excemption_words = re.findall(pattern, user_input)
-    # Apply spell correction excluding asterisked words
-    corrected_list = [spell.correction(token) if token.strip('*') not in excemption_words and None else token.strip("*") for token in user_input.split()]
+    if modelling_params["spell_checker"] == True:
+        # Identify words the user wants to be passed in as they are
+        pattern = r'\*(.*?)\*'  # Regular expression to match words enclosed in **
+        # Use re.findall to extract all matches
+        excemption_words = re.findall(pattern, user_input)
+        # Apply spell correction excluding asterisked words
+        corrected_list = [spell.correction(token) if token.strip('*') not in excemption_words and None else token.strip("*") for token in user_input.split()]
 
-    correct_query = ' '.join(corrected_list)
+        correct_query = ' '.join(corrected_list)
+    else:
+        correct_query = user_input
 
     # Extract metadata-filter intention out of query
     if modelling_params["metadata_strategy"] == "parser":
