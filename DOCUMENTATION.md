@@ -43,7 +43,11 @@ Discuss prior work related to the project, emphasizing differences from previous
 
 ## Methods/Approach
 
+```
 Provide conceptual details of the system, including data processing pipelines, algorithms, and key methods. Be specific about methods, and include equations and figures where necessary. Clearly distinguish original contributions from existing methods.
+```
+
+For our technical orchestration we employed Kedro, an open-source data pipeline framework for standardized and modular data science projects to enhance project reproducibility and collaboration. We organized our project into distinct modular pipelines, facilitating the encapsulation of a typical RAG system in a structured manner. This way, we created two self-sustaining pipelines. One for data processing, which contained all tasks ranging from data extraction, to text chunking and preprocessing, as well as document embedding into the chroma vector store. The second pipeline, uses the resulting vector store as a database for eventually creating the  RAG system which encompasses obtaining and cleaning user input, retrieving relevant documents, and using both of the former as input for text generation via a quantised llama2 model. In the following we will highlight the noticeable aspects of each of these pipelines, providing an overview over the challenges faced and the solution built. 
 
 ## Experimental Setup and Results
 
