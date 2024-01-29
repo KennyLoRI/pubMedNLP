@@ -5,7 +5,7 @@
 ### Team Members
 - [Kenneth Styppa](mailto:kenneth.styppa@web.de) (3735069, Scientific Computing)
 - [Full Name 2](mailto:email2@example.com) (Matriculation Number, Course of Study)
-- [Full Name 3](mailto:email3@example.com) (Matriculation Number, Course of Study)
+- [Arjan Siddhpura](mailto:arjan.siddhpura@stud.uni-heidelberg.com) (3707267, Bachelor Informatik)
 
 ### Member Contribution
 
