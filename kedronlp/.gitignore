@@ -12,6 +12,7 @@ conf/**/*credentials*
 data/01_raw/*.csv
 /data/02_intermediate/paragraphed_data.csv
 /data/06_models/llama-2-7b-chat.Q4_K_M.gguf
+/data/06_models/llama-2-7b-chat.Q5_K_M.gguf
 *.csv
 chroma_store
 .env

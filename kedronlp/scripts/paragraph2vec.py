@@ -13,17 +13,17 @@ print()
 
 scripts_utils.increase_csv_maxsize()
 
-def prepare_write_output(doc_batch, embeddings):
+def prepare_write_output(description_batch, embeddings):
     rows = []
-    for doc, embedding in zip(doc_batch, embeddings):
+    for doc, embedding in zip(description_batch, embeddings):
         row = {"doc": doc, "embedding": embedding}
         rows.append(row)
     return rows
 
 
-def execute_write_pipeline(doc_batch, model, writer):
+def execute_write_pipeline(doc_batch, description_batch, model, writer):
     embeddings = model.encode(doc_batch)
-    rows = prepare_write_output(doc_batch, embeddings)
+    rows = prepare_write_output(description_batch, embeddings)
     writer.writerows(rows)
 
 
@@ -38,6 +38,7 @@ writer.writeheader()
 
 id_lookup = set()
 doc_batch = []
+description_batch = []
 duplicate_docs = 0
 batch_size = 256
 total_docs_processed = 0
@@ -45,20 +46,22 @@ for row in reader:
     paragraphs = ast.literal_eval(row["paragraphs"])
 
     for i, paragraph in enumerate(paragraphs):
-        combined_paragraph = row["doc_info"] + f"Paragraph-{i}: " + paragraph
+        description = row["doc_info"] + f"Paragraph-{i}: " + paragraph
 
-        if combined_paragraph in id_lookup:
+        if description in id_lookup:
             duplicate_docs += 1
             continue
 
-        id_lookup.add(combined_paragraph)
-        doc_batch.append(combined_paragraph)
+        id_lookup.add(description)
+        description_batch.append(description)
+        doc_batch.append(paragraph)
 
         if len(doc_batch) >= batch_size:
-            execute_write_pipeline(doc_batch, model, writer)
+            execute_write_pipeline(doc_batch, description_batch, model, writer)
             total_docs_processed += len(doc_batch)
             print(f"until now processed {total_docs_processed} documents")
             doc_batch = []
+            description_batch = []
             
 
 if doc_batch:

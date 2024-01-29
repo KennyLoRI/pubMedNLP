@@ -38,6 +38,15 @@ user_query:
   type: text.TextDataset
   filepath: data/01_raw/user_query.txt
 
+user_query_filters:
+  type: text.TextDataset
+  filepath: data/01_raw/user_query_filters.txt
+
+
+llm_response:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/llm_response.csv
+
 #weather:
 #  type: spark.SparkDataset
 #  filepath: s3a://your_bucket/data/01_raw/weather*

@@ -6,20 +6,20 @@ def create_pipeline(**kwargs) -> Pipeline:
         [
             node(
                 func=get_user_query,
-                inputs=None,
-                outputs="user_query",
+                inputs="params:modelling_params",
+                outputs=["user_query", "user_query_filters"],
                 name="get_user_query_node",
             ),
             node(
                 func=top_k_retrieval,
-                inputs=["user_query", "params:top_k_params"],
+                inputs=["user_query", "params:top_k_params","params:modelling_params"],
                 outputs="top_k_docs",
                 name="top_k_retrieval_node",
             ),
             node(
                 func=modelling_answer,
                 inputs=["user_query", "top_k_docs", "params:modelling_params"],
-                outputs=None,
+                outputs="llm_response",
                 name="modelling_answer_node"
             )
 

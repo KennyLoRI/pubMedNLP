@@ -133,7 +133,7 @@ def extract_data(extract_params) -> pandas.DataFrame:
             ])
     return df
 
-def process_extract_data(extract_data):
+def process_extract_data(extract_data: pandas.DataFrame) -> pandas.DataFrame:
     spacy.cli.download("en_core_web_sm")
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = SentenceTransformer("pritamdeka/S-PubMedBert-MS-MARCO", device=device)
@@ -148,8 +148,6 @@ def process_extract_data(extract_data):
 def create_paragraphs(extract_data: pandas.DataFrame) -> pandas.DataFrame:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Using device:", device)
-
-    scripts_utils.increase_csv_maxsize()
 
     model = emb_utils.PubMedBert(device=device)
 
@@ -235,11 +233,9 @@ def paragraph2vec(paragraphs: pandas.DataFrame) -> pandas.DataFrame:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Using device:", device)
 
-    scripts_utils.increase_csv_maxsize()
-
-    def prepare_write_output(doc_batch, embeddings):
+    def prepare_write_output(description_batch, embeddings):
         rows = []
-        for doc, embedding in zip(doc_batch, embeddings):
+        for doc, embedding in zip(description_batch, embeddings):
             row = {"doc": doc, "embedding": embedding}
             rows.append(row)
         return pd.DataFrame(rows)
@@ -250,6 +246,7 @@ def paragraph2vec(paragraphs: pandas.DataFrame) -> pandas.DataFrame:
 
     id_lookup = set()
     doc_batch = []
+    description_batch = []
     duplicate_docs = 0
     batch_size = 256
     total_docs_processed = 0
@@ -257,27 +254,29 @@ def paragraph2vec(paragraphs: pandas.DataFrame) -> pandas.DataFrame:
         paragraphs_list = ast.literal_eval(row["paragraphs"])
 
         for i, paragraph in enumerate(paragraphs_list):
-            combined_paragraph = row["doc_info"] + f"Paragraph-{i}: " + paragraph
+            description = row["doc_info"] + f"Paragraph-{i}: " + paragraph
 
-            if combined_paragraph in id_lookup:
+            if description in id_lookup:
                 duplicate_docs += 1
                 continue
 
-            id_lookup.add(combined_paragraph)
-            doc_batch.append(combined_paragraph)
+            id_lookup.add(description)
+            description_batch.append(description)
+            doc_batch.append(paragraph)
 
             if len(doc_batch) >= batch_size:
                 embeddings = model.encode(doc_batch)
-                new_rows_df = prepare_write_output(doc_batch, embeddings)
+                new_rows_df = prepare_write_output(description_batch, embeddings)
                 paragraph_embeddings = pd.concat([paragraph_embeddings, new_rows_df], ignore_index=True)
                 total_docs_processed += len(doc_batch)
                 print(f"until now processed {total_docs_processed} documents")
                 doc_batch = []
+                description_batch = []
                 
 
     if doc_batch:
         embeddings = model.encode(doc_batch)
-        new_rows_df = prepare_write_output(doc_batch, embeddings)
+        new_rows_df = prepare_write_output(description_batch, embeddings)
         paragraph_embeddings = pd.concat([paragraph_embeddings, new_rows_df], ignore_index=True)
         total_docs_processed += len(doc_batch)
 
@@ -290,7 +289,6 @@ def paragraph2vec(paragraphs: pandas.DataFrame) -> pandas.DataFrame:
 
 
 def vec2chroma(paragraph_embeddings: pandas.DataFrame) -> pandas.DataFrame:
-    scripts_utils.increase_csv_maxsize()
 
     client = chromadb.PersistentClient(path="chroma_store/")
 
@@ -305,15 +303,37 @@ def vec2chroma(paragraph_embeddings: pandas.DataFrame) -> pandas.DataFrame:
         metadata={"hnsw:space": "cosine"},
     )
 
+    id_lookup = set()
+    duplicate_docs = 0
     ids = []
     embeddings = []
     batch = []
+    metadatas = []
     batch_size = 500
     inserted_rows = 0
     for _, row in paragraph_embeddings.iterrows():
         split_doc = row["doc"].split("Paragraph-")
         id = split_doc[0] + "Paragraph-" + split_doc[1][0]
 
+        if id in id_lookup:
+            duplicate_docs += 1
+            continue
+
+        id_lookup.add(id)
+
+        metadata = {}
+        metadata_chunks = [chunks for chunks in row["doc"].split("\n")][0:-1]
+        for chunk in metadata_chunks:
+            splitter = chunk.find(":")
+            key = chunk[:splitter]
+            value = chunk[splitter+2:]
+            try:
+                value = float(value)
+            except ValueError:
+                value = value
+            metadata[key] = value
+
+        metadatas.append(metadata)
         ids.append(id)
         embeddings.append(ast.literal_eval(row["embedding"]))
         batch.append(row["doc"])
@@ -324,23 +344,28 @@ def vec2chroma(paragraph_embeddings: pandas.DataFrame) -> pandas.DataFrame:
                 ids=ids,
                 documents=batch,
                 embeddings=embeddings,
+                metadatas=metadatas,
             )
             inserted_rows += len(batch)
             print(f"rows inserted until now: {inserted_rows} (time for one batch: {time()-start:.4f}s)")
             batch = []
             ids = []
             embeddings = []
+            metadatas = []
 
     if batch:
         collection.upsert(
             ids=ids,
             documents=batch,
             embeddings=embeddings,
+            metadatas=metadatas,
         )
         inserted_rows += len(batch)
         batch = []
         ids = []
         embeddings = []
+        metadatas = []
 
     print("done!")
     print(f"inserted in total {inserted_rows} documents to chromadb")
+    print(f"found {duplicate_docs} duplicate documents")

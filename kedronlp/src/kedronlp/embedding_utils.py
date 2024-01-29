@@ -25,6 +25,10 @@ class PubMedEmbeddingFunction(chromadb.EmbeddingFunction):
         self.model = model
 
     def embed_query(self, input):
+        # Skip encoding if the input is an empty string. Important for multiquery retrieval
+        if not input.strip():
+            raise ValueError("Query cannot be an empty string")
+
         return self.model.encode(input)
 
     def __call__(self, input):
