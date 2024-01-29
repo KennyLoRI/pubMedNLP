@@ -79,36 +79,34 @@ Dense retrieval with either pure cosine similarity or max marginal relevance, wh
 ###### a) Cosine Similarity
 
 Cosine similarity is a fundamental metric used in natural language processing to quantify the similarity between two vectors. In the context of our retriever, cosine similarity is employed to measure the angle between the query vector \(Q\) and the document vector \(D\), producing a numerical representation of their similarity. The formula for cosine similarity is given by:
-$$
-\[ \text{Cosine Similarity}(Q, D) = \frac{Q \cdot D}{\|Q\| \cdot \|D\|} \]
-$$
-Where $\(Q \cdot D\)$ is the dot product of the query and document vectors, and \(\|Q\|\) and \(\|D\|\) are the Euclidean norms of the respective vectors.
+$\[ \text{Cosine Similarity}(Q, D) = \frac{Q \cdot D}{\|Q\| \cdot \|D\|} \]$
+Where $\(Q \cdot D\)$ is the dot product of the query and document vectors, and $\(\|Q\|\)$ and $\(\|D\|\)$ are the Euclidean norms of the respective vectors.
 
 ###### b) Max Marginal Relevance (MMR)
-As already mentioned Max Marginal Relevance (MMR) fosters diversity among the retrieved documents while maintaining high relevance to the query. The MMR score for a document \(D\) is computed as:
+As already mentioned Max Marginal Relevance (MMR) fosters diversity among the retrieved documents while maintaining high relevance to the query. The MMR score for a document $\(D\)$ is computed as:
 
-\[ \text{MMR}(Q, D) = \lambda \cdot \text{Cosine Similarity}(Q, D) - (1 - \lambda) \cdot \max_{D'}(\text{Cosine Similarity}(D, D')) \]
+$\[ \text{MMR}(Q, D) = \lambda \cdot \text{Cosine Similarity}(Q, D) - (1 - \lambda) \cdot \max_{D'}(\text{Cosine Similarity}(D, D')) \]$
 
-where \(\lambda\) controls the trade-off between relevance and diversity, and \(\max_{D'}(\text{Cosine Similarity}(D, D'))\) computes the maximum cosine similarity between the target document \(D\) over all previously selected documents \(D'\).
+where $\(\lambda\)$ controls the trade-off between relevance and diversity, and $\(\max_{D'}(\text{Cosine Similarity}(D, D'))\)$ computes the maximum cosine similarity between the target document $\(D\)$ over all previously selected documents $\(D'\)$.
 
 #### 2) Ensemble Retrieval Strategy
-Our ensemble retriever combines dense retrieval (based on either cosine similarity or max marginal relevance) with BM25, a term-frequency-based retrieval operation specifically suited for providing exact term-based matches. The underlying idea of running both retrievers in parallel is to ensure that both exact term-based relevance as well as context-based relevance are captured and later combined via the reciprocal fusion rank. The BM25 score for a document \(D\) given a query \(Q\) is calculated as:
+Our ensemble retriever combines dense retrieval (based on either cosine similarity or max marginal relevance) with BM25, a term-frequency-based retrieval operation specifically suited for providing exact term-based matches. The underlying idea of running both retrievers in parallel is to ensure that both exact term-based relevance, as well as context-based relevance, are captured and later combined via the reciprocal fusion rank. The BM25 score for a document \(D\) given a query \(Q\) is calculated as:
 
-\[ \text{BM25}(Q, D) = \sum_{i} \frac{{(f_{i} \cdot (k_{1} + 1))}}{{(f_{i} + k_{1} \cdot (1 - b + b \cdot \frac{{\text{Doc\_Length}}}{{\text{avg\_Doc\_Length}}}))}} \cdot \frac{{(qf_{i} \cdot (k_{2} + 1))}}{{(qf_{i} + k_{2})}} \]
+$\[ \text{BM25}(Q, D) = \sum_{i} \frac{{(f_{i} \cdot (k_{1} + 1))}}{{(f_{i} + k_{1} \cdot (1 - b + b \cdot \frac{{\text{Doc\_Length}}}{{\text{avg\_Doc\_Length}}}))}} \cdot \frac{{(qf_{i} \cdot (k_{2} + 1))}}{{(qf_{i} + k_{2})}} \]$
 
 Where:
-- \(f_{i}\) is the term frequency of term \(i\) in the document.
-- \(qf_{i}\) is the term frequency of term \(i\) in the query.
-- \(k_{1}\) and \(k_{2}\) are tuning parameters.
-- \(b\) is a parameter controlling the impact of document length normalization.
-- \(\text{Doc\_Length}\) is the length of the document.
-- \(\text{avg\_Doc\_Length}\) is the average document length in the corpus.
+- $\(f_{i}\)$ is the term frequency of term $\(i\)$ in the document.
+- $\(qf_{i}\)$ is the term frequency of term $\(i\)$ in the query.
+- $\(k_{1}\)$ and $\(k_{2}\)$ are tuning parameters.
+- $\(b\)$ is a parameter controlling the impact of document length normalization.
+- $\(\text{Doc\_Length}\)$ is the length of the document.
+- $\(\text{avg\_Doc\_Length}\)$ is the average document length in the corpus.
 
 The Reciprocal Fusion Rank formula combines rankings from the dense retrieval strategy and BM25 through the following procedure:
 
-\[ RFR(Q, D) = \frac{1}{\frac{1}{\text{Rank}_{\text{dense}}(Q, D)} + \frac{1}{\text{Rank}_{\text{BM25}}(Q, D)}} \]
+$\[ RFR(Q, D) = \frac{1}{\frac{1}{\text{Rank}_{\text{dense}}(Q, D)} + \frac{1}{\text{Rank}_{\text{BM25}}(Q, D)}} \]$
 
-In this formula, \(\text{Rank}_{\text{dense}}(Q, D)\) and \(\text{Rank}_{\text{BM25}}(Q, D)\) represent the rankings generated by the dense retrieval and BM25 components, respectively. Out of this eventually ranked set of retrieved documents the top_k as indicated in our parameters.yml file are extracted.
+In this formula, $\(\text{Rank}_{\text{dense}}(Q, D)\)$ and $\(\text{Rank}_{\text{BM25}}(Q, D)\)$ represent the rankings generated by the dense retrieval and BM25 components, respectively. Out of this eventually ranked set of retrieved documents the top_k as indicated in our parameters.yml file are extracted.
 
 Since the medical terminology used in the data at hand, no retrieval strategy exhibits clear superiority apriori, although intuition suggested that a combination of context and specificity  is possibly best suited to the wide-ranging and oftentimes critical queries in the medical domain. Through deploying, testing and comparing these different retrieving strategies, we thus aimed to identify the retriever which meets the requirements the best using a diverse manually annotated validation set.
 
