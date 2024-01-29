@@ -47,12 +47,12 @@ Discuss prior work related to the project, emphasizing differences from previous
 Provide conceptual details of the system, including data processing pipelines, algorithms, and key methods. Be specific about methods, and include equations and figures where necessary. Clearly distinguish original contributions from existing methods.
 ```
 ### Project Orchestration
-For our technical orchestration, we employed Kedro, an open-source data pipeline framework to create reproducible, maintainable, and modular data science code ready for production. We organized our project into two distinct pipelines, facilitating the process of creating an RAG System end-to-end  in a structured manner.  The first pipeline contained all the nodes that laid the groundwork for the system. These ranged from data extraction to text chunking and preprocessing, as well as document embedding into the chroma vector store. The second pipeline uses the resulting vector store as a database for eventually creating the RAG system as a series of three nodes which encompass obtaining and cleaning user input, retrieving relevant documents, and using both of the former as input and context for text generation via a quantised llama2 model. Due to the complexity and the strong interdependence of these components, using Kedro was crucial to enforcing code quality and system stability. Furthermore, the ability to extract system settings such as used prompt templates, retrieval strategies and model hyperparameters into the parameters.yml file streamlined our evaluation procedure by providing the possibility to perform grid-search over a predefined set of parameters for the full modelling pipeline. 
+For our technical orchestration, we employed Kedro, an open-source data pipeline framework to create reproducible, maintainable, and modular data science code ready for production [^1]. We organized our project into two distinct pipelines, facilitating the process of creating an RAG System end-to-end  in a structured manner.  The first pipeline contained all the nodes that laid the groundwork for the system. These ranged from data extraction to text chunking and preprocessing, as well as document embedding into the chroma vector store. The second pipeline uses the resulting vector store as a database for eventually creating the RAG system as a series of three nodes which encompass obtaining and cleaning user input, retrieving relevant documents, and using both of the former as input and context for text generation via a quantised llama2 model. Due to the complexity and the strong interdependence of these components, using Kedro was crucial to enforcing code quality and system stability. Furthermore, the ability to extract system settings such as prompt templates, retrieval strategies and model hyperparameters into the parameters.yml file streamlined our evaluation procedure by providing the possibility to perform grid-search over a predefined set of parameters for the full modelling pipeline. 
 In the following paragraphs, we will highlight the noticeable aspects of each of these pipelines and nodes, providing an overview of the challenges faced and the solution built. 
 
 ### Data Processing Pipeline
 #### Data Extraction
-Data extraction was performed via the Entrez Programming Utilities (API) which is provided by the National Center for Biotechnology Information (NCBI) for programmatically accessing and retrieving data from various NCBI databases, including PubMed. 
+Data extraction was performed via the Entrez Programming Utilities (API) which is provided by the National Center for Biotechnology Information (NCBI) for programmatically accessing and retrieving data from various NCBI databases, including PubMed [^2]. 
 #### Text Preprocessing and Chunking
 #### Document Embedding
 ### Data Modelling Pipeline for Text Generation
@@ -79,9 +79,16 @@ Include qualitative analysis. Discuss system performance in different contexts a
 Recap main contributions, highlight achievements, and reflect on limitations. Suggest potential extensions or improvements for future work.
 
 ## References
+[^1]: B. Deepa and K. Ramesh, "Production Level Data Pipeline Environment for Machine Learning Models," 2021 7th International Conference on Advanced Computing and Communication Systems (ICACCS), Coimbatore, India, 2021, pp. 404-407, doi: 10.1109/ICACCS51430.2021.9442035.
 
-- [Author1 et al. 2020](#link-to-the-bib-section)
-- [Author2 et al. 2021](#link-to-the-bib-section)
+[^2]: Entrez Programming Utilities Help [Internet]. Bethesda (MD): National Center for Biotechnology Information (US); 2010-. Available from: https://www.ncbi.nlm.nih.gov/books/NBK25501/
+```
+Example:
+[^1]: Smith, J., et al. (2020). *Title of the Paper*. Journal of Scientific Research, 15(3), 123-145. [DOI: 10.1234/jsr.2020.01234](http://dx.doi.org/10.1234/jsr.2020.01234)
+
+[^2]: Johnson, A., & Brown, M. (2019). *Another Title*. Scientific Journal of Advanced Research, 8(2), 67-89. [DOI: 10.5678/sjar.2019.04567](http://dx.doi.org/10.5678/sjar.2019.04567)
+```
+
 ```
 
 Feel free to customize the template further based on your specific project details and preferences.
