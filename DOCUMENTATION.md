@@ -98,8 +98,8 @@ Where:
 - $qf_{i}$ is the term frequency of term $\(i\)$ in the query.
 - $k_{1}$ and $\(k_{2}\)$ are tuning parameters.
 - $b$ is a parameter controlling the impact of document length normalization.
-- $\text{Doc\_Length}$ is the length of the document.
-- $\text{avg\_Doc\_Length}$ is the average document length in the corpus.
+- `$\text{Doc\_Length}$` is the length of the document.
+- `$\text{avg\_Doc\_Length}$` is the average document length in the corpus.
 
 The Reciprocal Fusion Rank formula combines rankings from the dense retrieval strategy and BM25 through the following procedure:
 
