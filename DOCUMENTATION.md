@@ -10,11 +10,11 @@
 ### Member Contribution
 
 #### Kenneth Styppa
-- Technical project orchestration via Kedro
+- Technical project orchestration via Kedro 
 - Data Retrieval via Entrez API
 - User input retrieval & preprocessing
-- Filter Intention Extraction & NER on user input
-- Document Retrieval (Dense, BM25, Ensemble, MMR)
+- Filter Intention Extraction & NER on user input for improving document retrieval.
+- Document Retrieval (Dense, BM25, Hybrid, MMR, Filter)
 - Text Generation Pipeline
 - Organizational project orchestration
 
@@ -52,7 +52,12 @@ In the following paragraphs, we will highlight the noticeable aspects of each of
 
 ### Data Processing Pipeline
 #### Data Extraction
-Data extraction was performed via the Entrez Programming Utilities (API) which is provided by the National Center for Biotechnology Information (NCBI) for programmatically accessing and retrieving data from various NCBI databases, including PubMed [^2]. 
+Data extraction was performed in the "extract_data_node" via the Entrez Programming Utilities (API). Provided by the National Center for Biotechnology Information (NCBI) Entrez offers relatively easy, although limited access to retrieve data from various NCBI databases, including PubMed [^2]. The procedure of obtaining the data mainly included two steps: 
+1. Using Entrez's research function to retrieve article IDs that match the project requirements i.e. articles referring to the keyword "Intelligence" and published between 2013/01/01 and 2023/11/01.
+2. Using Entrez's efetch function to retrieve detailed information for each of the retrieved IDs, and writing the retrieved results returned from the handle into a dataframe.
+
+To avoid API limitations and stability issues for large-scoped retrieval, we conducted these two steps in a batch-wise manner. First, we used a sliding window of 30 days for which we retrieved the article IDs iterating over the whole timeframe on a month-by-month basis. Second, when having obtained the full ID list, we fetched the abstracts including their metadata for chunks of 500. 
+
 #### Text Preprocessing and Chunking
 #### Document Embedding
 ### Data Modelling Pipeline for Text Generation
