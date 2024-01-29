@@ -67,12 +67,14 @@ As part of our evaluation, we compared the system's performance once with the fu
 #### Document Embedding
 ### Data Modelling Pipeline for Text Generation
 ### Obtaining and postprocessing user input
-The user's question was obtained via a simple command line input prompt. This input was forwarded into a spell-checking procedure correcting only spelling errors on a word-by-word basis.  Due to the special properties of the biomedical vocabulary that were likely to be encountered when creating a medical Q&A system we additionally gave the user the ability to enclose special terms in asterisks to ensure it is not falsely corrected in the spellchecking procedure. To test the robustness of this task, we created a parameter for this process in our parameters.yml file, such that we were able to compare the performance of the full system with and without the spell-checker being used. After the input query has been corrected it is passed into a module that performs named entity recognition using "en_core_web_sm" from spacy in conjunction with handcrafted linguistic rules to extract author names as well as time ranges indicated in the user query.
+The user's question was obtained via a simple command line input prompt. This input was forwarded into a spell-checking procedure correcting only spelling errors on a word-by-word basis.  Due to the special properties of the biomedical vocabulary that were likely to be encountered when creating a medical Q&A system, we additionally gave the user the ability to enclose special terms in asterisks to ensure it is not falsely corrected in the spellchecking procedure. To test the robustness of this task, we created a parameter for this process in our parameters.yml file, such that we were able to compare the performance of the full system with and without the spell-checker being used. After the input query has been corrected it is passed into a module that performs named entity recognition using "en_core_web_sm" from Spacy in conjunction with handcrafted linguistic rules to extract author names as well as time ranges indicated in the user query.
 
 ### Document retrieval 
-### Text Generation
+For retrieving the relevant documents to a user's input query we first filtered out all documents that matched the filter statements extracted in the previous step, e.g. only publications with a publication year between 2020 and 2023. This narrowed down the database for the actual retrieval operation that followed subsequently. Our retriever node employed two main retrieving strategies that were each tested and compared in the evaluation phase of the project and can be easily switched on and off in the parameters.yml file. The retrieval strategies available are: 
+1) Dense retrieval with either pure cosine similarity or max marginal relevance, which is also based on cosine similarity but tries to enforce dissimilarity and therefore greater diversity upon the retrieved documents while retaining high similarity with the original query.
+2) Ensemble retrieval which combines dense retrieval (based on either cosine similarity or max marginal relevance) with BM25 as retrieval operations which are then combined using the reciprocal fusion rank. 
 
-## Experimental Setup and Results
+## Experimental setup and results
 
 ### Data
 Describe the dataset, including its source, collection method, and any insightful metrics.
