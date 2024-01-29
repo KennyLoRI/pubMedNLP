@@ -80,7 +80,7 @@ Present results using tables and plots, comparing against baselines if available
 ### Analysis
 Include qualitative analysis. Discuss system performance in different contexts and compare with baselines.
 
-## Conclusion and Future Work
+## Conclusion, Limitations and Future Work
 
 Recap main contributions, highlight achievements, and reflect on limitations. Suggest potential extensions or improvements for future work.
 
