@@ -38,6 +38,7 @@ Although being pretrained on a vast corpus of data, Large Language Models (LLMs)
 The purpose of this project was to create such a system based on 190k scientific abstracts from the Pubmed database, to test and evaluate the possibility of creating  a privacy-preserving, question-answering application that meets the high standards required in the medical domain.
 
 ## Related Work
+### A short overview on Retrieval Augmented Generation
 
 Discuss prior work related to the project, emphasizing differences from previous work and the context of current research.
 
@@ -60,6 +61,9 @@ Data extraction was performed in the "extract_data_node" via the Entrez Programm
 To avoid API limitations and stability issues for large-scoped retrieval, we conducted these two steps in a batch-wise manner. First, we used a sliding window of 30 days for which we retrieved the article IDs iterating over the whole timeframe on a month-by-month basis. Second, when having obtained the full ID list, we fetched the abstracts including their metadata for chunks of 500. 
 
 #### Text Preprocessing and Chunking
+Having extracted the relevant abstracts, the next step is to split them into right-sized fragments to ensure the relevance of the retrieved results downstream in the retriever step of the system. Finding this optimal chunk size is a trade-off between context and specificity. It is generally acknowledged that neither too small nor too large chunk sizes are desirable since they "[...]may lead to sub-optimal outcomes" [^3]. The average size of our retrieved abstracts was moderate [TODO insert abstract data distribution]. Consequently, it was not evident whether embedding the full abstract strategy already suffers from the problems of large chunk sizes. To test this end-to-end, we employed two embedding strategies. One embeds the full abstracts while the other employs a semantic chunking approach that approximately leads to two chunks per abstract and embeds those. To eventually determine the optimal chunk size for our production systems we compared the full systems performance with either of these strategies. 
+
+As part of our evaluation, we compared the system's performance once with the full abstract embeddings and once with the chunk embeddings. 
 #### Document Embedding
 ### Data Modelling Pipeline for Text Generation
 
@@ -80,7 +84,10 @@ Present results using tables and plots, comparing against baselines if available
 ### Analysis
 Include qualitative analysis. Discuss system performance in different contexts and compare with baselines.
 
-## Conclusion, Limitations and Future Work
+## Conclusion
+### Limitations
+During development, some of our initial ideas were not implementable since the underlying code functionality could not be guaranteed due to errors in the source code of Langchain, which is still largely under open-source development. This specifically accounts for our idea to also implement and test a multi-query retrieval strategy, which 
+### Future Work
 
 Recap main contributions, highlight achievements, and reflect on limitations. Suggest potential extensions or improvements for future work.
 
@@ -88,13 +95,5 @@ Recap main contributions, highlight achievements, and reflect on limitations. Su
 [^1]: B. Deepa and K. Ramesh, "Production Level Data Pipeline Environment for Machine Learning Models," 2021 7th International Conference on Advanced Computing and Communication Systems (ICACCS), Coimbatore, India, 2021, pp. 404-407, doi: 10.1109/ICACCS51430.2021.9442035.
 
 [^2]: Entrez Programming Utilities Help [Internet]. Bethesda (MD): National Center for Biotechnology Information (US); 2010-. Available from: https://www.ncbi.nlm.nih.gov/books/NBK25501/
-```
-Example:
-[^1]: Smith, J., et al. (2020). *Title of the Paper*. Journal of Scientific Research, 15(3), 123-145. [DOI: 10.1234/jsr.2020.01234](http://dx.doi.org/10.1234/jsr.2020.01234)
 
-[^2]: Johnson, A., & Brown, M. (2019). *Another Title*. Scientific Journal of Advanced Research, 8(2), 67-89. [DOI: 10.5678/sjar.2019.04567](http://dx.doi.org/10.5678/sjar.2019.04567)
-```
-
-```
-
-Feel free to customize the template further based on your specific project details and preferences.
+[^3]: Gao, Yunfan, et al. "Retrieval-augmented generation for large language models: A survey." arXiv preprint arXiv:2312.10997 (2023).
