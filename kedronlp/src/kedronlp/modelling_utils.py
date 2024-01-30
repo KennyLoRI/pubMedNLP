@@ -32,11 +32,11 @@ def get_context_details(context, print_context = True, as_input_dict = False, us
       title_match = title_pattern.search(data_string)
       year_match = year_pattern.search(data_string)
 
-      abstracts = abstracts_match.group(1) if authors_match else 'NA'
+      abstracts = abstracts_match.group(1) if abstracts_match else 'NA'
       authors = authors_match.group(1) if authors_match else 'NA'
       title = title_match.group(1) if title_match else 'NA'
       year = year_match.group(1) if year_match else 'NA'
-      abstracts_list.append(abstracts if abstracts else 'NA')
+      abstracts_list.append(abstracts)
       authors_list.append(authors)
       title_list.append(title)
       year_list.append(year)
