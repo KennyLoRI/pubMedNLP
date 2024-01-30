@@ -11,7 +11,7 @@ top_k_params:
 
 modelling_params:
   spell_checker: True
-  abstract_only: False
+  abstract_only: True
   prompt_template: '''
     You are an AI assistant that answers questions using as few words as possible and only based on the following context:
     {context}
