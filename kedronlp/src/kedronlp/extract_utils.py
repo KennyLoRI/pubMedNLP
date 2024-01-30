@@ -115,6 +115,7 @@ def process(text: str, nlp, model):
     sents = [str(sent) for sent in doc.sents]
     embeddings = model.encode(sents)
     return list(doc.sents), embeddings
+
 def cluster_text(sents, vecs, threshold):
     """
     Function that takes a list of sentences and clusters them into similar paragraphs based on cosine similarity
