@@ -243,15 +243,19 @@ def top_k_retrieval(user_input, top_k_params, modelling_params, user_query_filte
                 }
             }
 
+        potential_filters = [publishing_dates_filter, author_names_filter, paper_titles_filter]
         filter = {
-            "$and": [publishing_dates_filter, author_names_filter, paper_titles_filter]
+            "$and": [filter for filter in potential_filters if filter]
         }
-
-        breakpoint()
+        if len(filter["$and"]) == 1:
+            filter = filter["$and"][0]
+        elif len(filter["$and"]) == 0:
+            filter = None
 
     #basic similarity search
     if top_k_params["retrieval_strategy"] == "similarity":
-        docs = vectordb.similarity_search(user_input, k=top_k_params["top_k"])
+        breakpoint()
+        docs = vectordb.similarity_search(user_input, k=top_k_params["top_k"], filter=filter)
         print(f"vectordb:{vectordb}, user_input:{user_input}, number_docs_in_chroma:{vectordb._collection.count()}")
 
     #diversity enforcing similarity search

@@ -1,1 +1,1 @@
-{'query': 'test', 'author_names': [], 'publishing_dates': [None, None], 'paper_titles': []}
+{'query': 'What is Dysarthria?', 'author_names': [], 'publishing_dates': [None, None], 'paper_titles': []}

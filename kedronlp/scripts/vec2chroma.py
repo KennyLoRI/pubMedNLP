@@ -30,8 +30,10 @@ ids = []
 embeddings = []
 batch = []
 metadatas = []
-batch_size = 500
+batch_size = 1000
 inserted_rows = 0
+
+start_insertion = time()
 for row in reader:
     split_doc = row["doc"].split("Paragraph-")
     id = split_doc[0] + "Paragraph-" + split_doc[1][0]
@@ -87,8 +89,10 @@ if batch:
     embeddings = []
     metadatas = []
 
+end_insertion = time()
+input_csv.close()
+
 print("done!")
 print(f"inserted in total {inserted_rows} documents")
 print(f"found {duplicate_docs} duplicate documents")
-
-input_csv.close()
+print(f"insertion duration: {(end_insertion - start_insertion)/60:.2f} min")
