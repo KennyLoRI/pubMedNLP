@@ -12,7 +12,7 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=top_k_retrieval,
-                inputs=["user_query", "params:top_k_params","params:modelling_params"],
+                inputs=["user_query", "params:top_k_params","params:modelling_params", "user_query_filters"],
                 outputs="top_k_docs",
                 name="top_k_retrieval_node",
             ),

@@ -16,8 +16,8 @@ from langchain.chains.query_constructor.base import (
     get_query_constructor_prompt,
     AttributeInfo,
 )
-
-import string
+import ast
+import itertools
 
 def get_user_query(modelling_params, is_evaluation = False, **kwargs): #TODO: here we can think of a way to combine embeddings of previous queries
     #print user information
@@ -180,13 +180,82 @@ def modelling_answer(user_input, top_k_docs, modelling_params):
 
     return pd.DataFrame({"response": response, "query": user_input, **context_dict}) #TODO check if working when response empty
 
-def top_k_retrieval(user_input, top_k_params, modelling_params):
+def top_k_retrieval(user_input, top_k_params, modelling_params, user_query_filters):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     vectordb = get_langchain_chroma(device=device)
+    user_query_filters = ast.literal_eval(user_query_filters)
+    start, end = user_query_filters["publishing_dates"]
+    author_names = user_query_filters["author_names"]
+    paper_titles = user_query_filters["paper_titles"]
+    # start, end = 2021, 2023
+    # author_names = ["Bill Gates", "Steve Jobs", "Elon Musk"]
+    # paper_titles = ["a paper title", "another paper title"]
+
+    filter = {}
+    strategy = modelling_params["metadata_strategy"]
+    if strategy == "parser" or strategy == "llm_detection":
+        publishing_dates_filter = {}
+        if start != None:
+            gte_start = {
+                "Year": {
+                    "$gte": start
+                }
+            }
+        if end != None:
+            lte_end = {
+                "Year": {
+                    "$lte": end
+                }
+            }
+
+        if start != None and end != None:
+            publishing_dates_filter = {
+                "$and": [gte_start, lte_end]
+            }
+        if start != None and end == None:
+            publishing_dates_filter = gte_start
+        if start == None and end != None:
+            publishing_dates_filter = lte_end
+        
+        author_names_filter = {}
+        if author_names:
+            if len(author_names) == 1:
+                author_name = author_names[0]
+                author_names_filter = {
+                    "Authors": {
+                        "$eq": author_name
+                    }
+                }
+            else:
+                author_permutations = list(itertools.permutations(author_names))
+                author_permutations = [", ".join(authors) for authors in author_permutations]
+                author_names_filter = {
+                    "Authors": {
+                        "$in": author_permutations
+                    }
+                }
+
+        paper_titles_filter = {}
+        if paper_titles:
+            paper_titles_filter = {
+                "Title": {
+                    "$in": paper_titles
+                }
+            }
+
+        potential_filters = [publishing_dates_filter, author_names_filter, paper_titles_filter]
+        filter = {
+            "$and": [filter for filter in potential_filters if filter]
+        }
+        if len(filter["$and"]) == 1:
+            filter = filter["$and"][0]
+        elif len(filter["$and"]) == 0:
+            filter = None
 
     #basic similarity search
     if top_k_params["retrieval_strategy"] == "similarity":
-        docs = vectordb.similarity_search(user_input, k=top_k_params["top_k"])
+        breakpoint()
+        docs = vectordb.similarity_search(user_input, k=top_k_params["top_k"], filter=filter)
         print(f"vectordb:{vectordb}, user_input:{user_input}, number_docs_in_chroma:{vectordb._collection.count()}")
 
     #diversity enforcing similarity search
