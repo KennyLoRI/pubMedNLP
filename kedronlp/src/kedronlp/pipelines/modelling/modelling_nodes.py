@@ -1,6 +1,5 @@
 import pandas as pd
 import torch
-from langchain import PromptTemplate
 import regex as re
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
@@ -8,7 +7,8 @@ from kedronlp.embedding_utils import get_langchain_chroma
 from kedronlp.modelling_utils import extract_abstract, get_context_details, instantiate_llm, extract_date_range
 from spellchecker import SpellChecker
 from langchain.schema import Document
-from langchain.retrievers import BM25Retriever, EnsembleRetriever, MultiQueryRetriever
+from langchain_community.retrievers import BM25Retriever
+from langchain.retrievers import EnsembleRetriever, MultiQueryRetriever
 import spacy
 import sys
 from langchain.chains.query_constructor.base import (
@@ -254,7 +254,6 @@ def top_k_retrieval(user_input, top_k_params, modelling_params, user_query_filte
 
     #basic similarity search
     if top_k_params["retrieval_strategy"] == "similarity":
-        breakpoint()
         docs = vectordb.similarity_search(user_input, k=top_k_params["top_k"], filter=filter)
         print(f"vectordb:{vectordb}, user_input:{user_input}, number_docs_in_chroma:{vectordb._collection.count()}")
 
