@@ -7,7 +7,8 @@ from kedronlp.embedding_utils import get_langchain_chroma
 from kedronlp.modelling_utils import get_context_details, instantiate_llm, extract_date_range
 from spellchecker import SpellChecker
 from langchain.schema import Document
-from langchain.retrievers import BM25Retriever, EnsembleRetriever, MultiQueryRetriever
+from langchain_community.retrievers import BM25Retriever
+from langchain.retrievers import EnsembleRetriever, MultiQueryRetriever
 import spacy
 from langchain.chains.query_constructor.base import (
     StructuredQueryOutputParser,
@@ -264,7 +265,7 @@ def chat_loop(modelling_params, top_k_params):
         # extract and structure context for input
         input_dict = get_context_details(context=context, print_context = False, as_input_dict = True, user_input = user_input, abstract_only = modelling_params["abstract_only"])
         # Reading & Responding
-        response = llm_chain.run(input_dict)
+        response = llm_chain.invoke(input_dict)["text"]
 
         # If response is empty, save the retrieved context but print apologies statement
         if not response or len(response.strip()) == 0:
@@ -283,5 +284,3 @@ def chat_loop(modelling_params, top_k_params):
         # print and save context details
         else:
             context_dict = get_context_details(context=context)
-
-        print(f"Answer: {response}")

@@ -7,7 +7,8 @@ from kedronlp.embedding_utils import get_langchain_chroma
 from kedronlp.modelling_utils import extract_abstract, get_context_details, instantiate_llm, extract_date_range
 from spellchecker import SpellChecker
 from langchain.schema import Document
-from langchain.retrievers import BM25Retriever, EnsembleRetriever, MultiQueryRetriever
+from langchain_community.retrievers import BM25Retriever
+from langchain.retrievers import EnsembleRetriever, MultiQueryRetriever
 import spacy
 import sys
 from langchain.chains.query_constructor.base import (

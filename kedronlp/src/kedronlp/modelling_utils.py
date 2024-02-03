@@ -1,5 +1,5 @@
 import regex as re
-from langchain.llms import LlamaCpp
+from langchain_community.llms import LlamaCpp
 from langchain.callbacks.manager import CallbackManager
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 import pandas as pd
@@ -25,6 +25,8 @@ def get_context_details(context, print_context = True, as_input_dict = False, us
   authors_list = []
   title_list = []
   year_list = []
+  if print_context:
+    print(f"\n\n{'='*20}\nSources:")
   for data_string in context:
       abstracts_match = abstract_pattern.search(data_string)
       authors_match = authors_pattern.search(data_string)
@@ -40,7 +42,6 @@ def get_context_details(context, print_context = True, as_input_dict = False, us
       title_list.append(title)
       year_list.append(year)
       if print_context:
-        print(f"\n\n{'='*20}\nSources:")
         print(f"\nAuthors: {authors}\nTitle: {title}\nYear: {year}\n{'_'*20}")
 
   if as_input_dict == False:

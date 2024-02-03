@@ -7,9 +7,9 @@ from kedronlp.embedding_utils import get_langchain_chroma
 from kedronlp.modelling_utils import get_context_details, instantiate_llm, extract_date_range
 from spellchecker import SpellChecker
 from langchain.schema import Document
-from langchain.retrievers import BM25Retriever, EnsembleRetriever, MultiQueryRetriever
+from langchain_community.retrievers import BM25Retriever
+from langchain.retrievers import EnsembleRetriever, MultiQueryRetriever
 import spacy
-import sys
 from langchain.chains.query_constructor.base import (
     StructuredQueryOutputParser,
     get_query_constructor_prompt,
@@ -107,15 +107,6 @@ def eval_list(query_list, modelling_params, top_k_params):
                 metadata_field_info,
             )
 
-            # Instantiate llm for creating the structured query
-            llm = instantiate_llm(modelling_params["temperature"],
-                                modelling_params["max_tokens"],
-                                modelling_params["n_ctx"],
-                                modelling_params["top_p"],
-                                modelling_params["n_gpu_layers"],
-                                modelling_params["n_batch"],
-                                modelling_params["verbose"], )
-
             #define output parser and create the query construction pipeline
             output_parser = StructuredQueryOutputParser.from_components()
             query_constructor = prompt | llm | output_parser
@@ -202,7 +193,6 @@ def eval_list(query_list, modelling_params, top_k_params):
         #basic similarity search
         if top_k_params["retrieval_strategy"] == "similarity":
             docs = vectordb.similarity_search(user_input, k=top_k_params["top_k"], filter=filter)
-            print(f"vectordb:{vectordb}, user_input:{user_input}, number_docs_in_chroma:{vectordb._collection.count()}")
 
         #diversity enforcing similarity search
         if top_k_params["retrieval_strategy"] == "max_marginal_relevance":
@@ -228,13 +218,6 @@ def eval_list(query_list, modelling_params, top_k_params):
         # Given a query, use an LLM to write a set of queries (default: 3).
         # Retrieve docs for each query. Return the unique union of all retrieved docs.
         if top_k_params["retrieval_strategy"] == "multi_query_retrieval":
-            llm = instantiate_llm(modelling_params["temperature"],
-                                modelling_params["max_tokens"],
-                                modelling_params["n_ctx"],
-                                modelling_params["top_p"],
-                                modelling_params["n_gpu_layers"],
-                                modelling_params["n_batch"],
-                                modelling_params["verbose"])
             # TODO: not working yet, since generate_queries function of .from_llm falsely creates empty strings.
             # Note: Generated queries were not of high quality since the used llm is not super powerful.
             multiquery_llm_retriever = MultiQueryRetriever.from_llm(
@@ -254,27 +237,21 @@ def eval_list(query_list, modelling_params, top_k_params):
 
         # If no context retrieved inform the user that no data to the query is available
         if not context:
-            print("""Unfortunately I have no information on your question in my database. 
+            response = """Unfortunately I have no information on your question in my database. 
                 This might be the case since I only consider abstracts from Pubmed that match the keyword intelligence. 
                 Furthermore, I only consider papers published between 2013 and 2023. 
-                In case your question matches these requirements please try reformulating your query""")
-            
+                In case your question matches these requirements please try reformulating your query"""
             query_responses.append({"response": response, "query": user_input})
             continue
 
         # extract and structure context for input
         input_dict = get_context_details(context=context, print_context = False, as_input_dict = True, user_input = user_input, abstract_only = modelling_params["abstract_only"])
         # Reading & Responding
-        response = llm_chain.run(input_dict)
+        response = llm_chain.invoke(input_dict)["text"]
 
         # If response is empty, save the retrieved context but print apologies statement
         if not response or len(response.strip()) == 0:
             context_dict = get_context_details(context=context, print_context=False)
-
-            print("""Answer: Unfortunately I have no information on your question at hand. 
-            This might be the case since I only consider abstracts from Pubmed that match the keyword intelligence. 
-            Furthermore, I only consider papers published between 2013 and 2023. 
-            In case your question matches these requirements please try reformulating your query""")
 
             response = """Answer: Unfortunately I have no information on your question at hand. 
             This might be the case since I only consider abstracts from Pubmed that match the keyword intelligence. 
@@ -283,7 +260,7 @@ def eval_list(query_list, modelling_params, top_k_params):
 
         # print and save context details
         else:
-            context_dict = get_context_details(context=context)
+            context_dict = get_context_details(context=context, print_context=False)
 
         query_responses.append({"response": response, "query": user_input, **context_dict})
     
