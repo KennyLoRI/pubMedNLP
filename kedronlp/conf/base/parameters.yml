@@ -12,16 +12,23 @@ top_k_params:
 modelling_params:
   spell_checker: True
   abstract_only: True
+  # prompt_template: '''
+  #   You are an AI assistant that answers questions using as few words as possible and only based on the following context:
+  #   {context}
+  #   Question: {question}
+  # '''
+
   prompt_template: '''
-    You are an AI assistant that answers questions using as few words as possible and only based on the following context:
+    Be as short as possible in your answer. As an AI assistant, answer the question accurately, precisely and concisely. Use the following context: 
     {context}
     Question: {question}
   '''
+
   temperature: 0
   max_tokens: 1000
   n_ctx: 2048
   top_p: 1
   n_gpu_layers: 40
   n_batch: 512
-  verbose: True
+  verbose: False
   metadata_strategy: "parser" # alternative: "llm_detection"
