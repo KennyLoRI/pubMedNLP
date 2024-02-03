@@ -132,7 +132,7 @@ def extract_date_range(doc):
                 elif prev_token.text.lower() == "between" and doc[token.i + 1].text.lower() == "and" and doc[token.i + 2].is_digit:
                     start_date = year
                     end_date = date_parser.parse(doc[token.i + 2].text).year
-                elif prev_token.text.lower() == "in":
+                elif prev_token.text.lower() in ["within", "during", "in", "throughout"]:
                     start_date = year
                     end_date = year
             except ValueError:
