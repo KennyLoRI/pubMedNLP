@@ -21,7 +21,6 @@ def get_context_details(context, print_context = True, as_input_dict = False, us
   title_pattern = re.compile(r'Title: (.+?)\n')
   year_pattern = re.compile(r'Year: (\d{4})\n')
 
-  print(f"\n\n{'='*20}\nSources:")
   abstracts_list = []
   authors_list = []
   title_list = []
@@ -41,6 +40,7 @@ def get_context_details(context, print_context = True, as_input_dict = False, us
       title_list.append(title)
       year_list.append(year)
       if print_context:
+        print(f"\n\n{'='*20}\nSources:")
         print(f"\nAuthors: {authors}\nTitle: {title}\nYear: {year}\n{'_'*20}")
 
   if as_input_dict == False:

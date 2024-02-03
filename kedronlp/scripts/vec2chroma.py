@@ -3,11 +3,6 @@ import csv
 import ast
 from time import time
 
-# user libs
-import scripts_utils
-
-scripts_utils.increase_csv_maxsize()
-
 client = chromadb.PersistentClient(path="../chroma_store")
 
 try:
