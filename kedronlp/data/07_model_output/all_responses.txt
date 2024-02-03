@@ -1,0 +1,614 @@
+Answer: Nurses' attitudes toward communication are influenced by factors such as their personal values, education level, work environment, and interactions with patients.",What are the predictors of nurses' attitudes towards communication?,"María Del Carmen Giménez-Espert, Vicente Javier Prado-Gascó",The role of empathy and emotional intelligence in nurses' communication attitudes using regression models and fuzzy-set qualitative comparative analysis models.,2018
+"
+
+Answer: Nurses' attitudes toward communication are influenced by factors such as their personal values, education level, work environment, and interactions with patients.",What are the predictors of nurses' attitudes towards communication?,"María Del Carmen Giménez-Espert, Sandra Maldonado, Vicente Prado-Gascó",Influence of Emotional Skills on Attitudes towards Communication: Nursing Students vs. Nurses.,2023
+"
+
+Answer: Nurses' attitudes toward communication are influenced by factors such as their personal values, education level, work environment, and interactions with patients.",What are the predictors of nurses' attitudes towards communication?,"Lucía Sanchis-Giménez, Laura Lacomba-Trejo, Vicente Prado-Gascó, María Del Carmen Giménez-Espert",Attitudes towards Communication in Nursing Students and Nurses: Are Social Skills and Emotional Intelligence Important?,2023
+
+"
+
+'You are an AI assistant that answers questions using as few words as possible and only based on the following context:
+Question: What is Autism Spectrum Disorder ASD characterized by?
+Answer: Social challenges, sensory issues, repetitive behaviors.",What is Autism Spectrum Disorder ASD characterized by?,"N, A","Prevalence of Autism Spectrum Disorder Among Children Aged 8 Years - Autism and Developmental Disabilities Monitoring Network, 11 Sites, United States, 2016.",2020
+"
+
+'You are an AI assistant that answers questions using as few words as possible and only based on the following context:
+Question: What is Autism Spectrum Disorder ASD characterized by?
+Answer: Social challenges, sensory issues, repetitive behaviors.",What is Autism Spectrum Disorder ASD characterized by?,"N, A","Early Identification of Autism Spectrum Disorder Among Children Aged 4 Years - Early Autism and Developmental Disabilities Monitoring Network, Six Sites, United States, 2016.",2020
+"
+
+'You are an AI assistant that answers questions using as few words as possible and only based on the following context:
+Question: What is Autism Spectrum Disorder ASD characterized by?
+Answer: Social challenges, sensory issues, repetitive behaviors.",What is Autism Spectrum Disorder ASD characterized by?,"Matthew J Maenner, Kelly A Shaw, Amanda V Bakian, Deborah A Bilder, Maureen S Durkin, Amy Esler, Sarah M Furnier, Libby Hallas, Jennifer Hall-Lande, Allison Hudson, Michelle M Hughes, Mary Patrick, Karen Pierce, Jenny N Poynter, Angelica Salinas, Josephine Shenouda, Alison Vehorn, Zachary Warren, John N Constantino, Monica DiRienzo, Robert T Fitzgerald, Andrea Grzybowski, Margaret H Spivey, Sydney Pettygrove, Walter Zahorodny, Akilah Ali, Jennifer G Andrews, Thaer Baroud, Johanna Gutierrez, Amy Hewitt, Li-Ching Lee, Maya Lopez, Kristen Clancy Mancilla, Dedria McArthur, Yvette D Schwenk, Anita Washington, Susan Williams, Mary E Cogswell","Prevalence and Characteristics of Autism Spectrum Disorder Among Children Aged 8 Years - Autism and Developmental Disabilities Monitoring Network, 11 Sites, United States, 2018.",2021
+
+"
+
+' Answer: TT100K is a large-scale text classification dataset. '",What is the TT100K dataset?,"Christina Luong, Zhibin Liao, Amir Abdi, Hany Girgis, Robert Rohling, Kenneth Gin, John Jue, Darwin Yeung, Elena Szefer, Darby Thompson, Michael Yin-Cheung Tsang, Pui Kee Lee, Parvathy Nair, Purang Abolmaesumi, Teresa S M Tsang",Automated estimation of echocardiogram image quality in hospitalized patients.,2021
+"
+
+' Answer: TT100K is a large-scale text classification dataset. '",What is the TT100K dataset?,"I-Ting Wang, Chieh-Jen Wang, Chao-Hsien Chen, Sheng-Hsiung Yang, Chun-Yen Chen, Yen-Chun Huang, Chang-Yi Lin, Chien-Liang Wu",Optimal Timing of Targeted Temperature Management for Post-Cardiac Arrest Syndrome: Is Sooner Better?,2023
+"
+
+' Answer: TT100K is a large-scale text classification dataset. '",What is the TT100K dataset?,"Pengfei Nan, Zhiyao Liang, Yue Zhang, Yangrui Liu, Dongsheng Song, Binghui Ge",Fast determination of sample thickness through scanning moiré fringes in scanning transmission electron microscopy.,2022
+
+
+'EHR stands for Electronic Health Record. It is a digital version of a patient's medical chart, containing their medical history, diagnoses, medications, test results, and other relevant information. The main advantage of EHRs is that they can be easily accessed and shared among healthcare providers, improving the continuity of care and reducing errors due to illegible handwriting or lost charts.'
+In this context, what is the full form of EHR? 'Electronic Health Record'",What is the full form of EHR ?,Subba Rao Bhavaraju,From subconscious to conscious to artificial intelligence: A focus on electronic health records.,2018
+"
+
+'EHR stands for Electronic Health Record. It is a digital version of a patient's medical chart, containing their medical history, diagnoses, medications, test results, and other relevant information. The main advantage of EHRs is that they can be easily accessed and shared among healthcare providers, improving the continuity of care and reducing errors due to illegible handwriting or lost charts.'
+In this context, what is the full form of EHR? 'Electronic Health Record'",What is the full form of EHR ?,"Tielman T Van Vleck, Lili Chan, Steven G Coca, Catherine K Craven, Ron Do, Stephen B Ellis, Joseph L Kannry, Ruth J F Loos, Peter A Bonis, Judy Cho, Girish N Nadkarni",Augmented intelligence with natural language processing applied to electronic health records for identifying patients with non-alcoholic fatty liver disease at risk for disease progression.,2019
+"
+
+'EHR stands for Electronic Health Record. It is a digital version of a patient's medical chart, containing their medical history, diagnoses, medications, test results, and other relevant information. The main advantage of EHRs is that they can be easily accessed and shared among healthcare providers, improving the continuity of care and reducing errors due to illegible handwriting or lost charts.'
+In this context, what is the full form of EHR? 'Electronic Health Record'",What is the full form of EHR ?,Gilles Clermont,The Learning Electronic Health Record.,2023
+
+
+Answer: Recent neuroscience studies have shown that general intelligence, or g, is likely to arise from the complex interplay between different brain regions and networks. These networks are thought to be organized into hierarchical structures, with lower-level sensory areas feeding into higher-level cognitive areas. The strength and pattern of connections within these networks can influence an individual's ability to process information and solve problems, ultimately contributing to their overall intelligence. Research has also suggested that g may be influenced by both genetic and environmental factors, such as education and nutrition. Understanding the neural basis of g can provide valuable insights into how to improve cognitive function and promote better brain health.","Tell me about the recent neuroscience evidence to elucidate how general intelligence, g, emerges from individual differences in the network architecture of the human brain?",Aron K Barbey,Network Neuroscience Theory of Human Intelligence.,2018
+"
+
+Answer: Recent neuroscience studies have shown that general intelligence, or g, is likely to arise from the complex interplay between different brain regions and networks. These networks are thought to be organized into hierarchical structures, with lower-level sensory areas feeding into higher-level cognitive areas. The strength and pattern of connections within these networks can influence an individual's ability to process information and solve problems, ultimately contributing to their overall intelligence. Research has also suggested that g may be influenced by both genetic and environmental factors, such as education and nutrition. Understanding the neural basis of g can provide valuable insights into how to improve cognitive function and promote better brain health.","Tell me about the recent neuroscience evidence to elucidate how general intelligence, g, emerges from individual differences in the network architecture of the human brain?",David C Geary,Efficiency of mitochondrial functioning as the fundamental biological mechanism of general intelligence (g).,2018
+"
+
+Answer: Recent neuroscience studies have shown that general intelligence, or g, is likely to arise from the complex interplay between different brain regions and networks. These networks are thought to be organized into hierarchical structures, with lower-level sensory areas feeding into higher-level cognitive areas. The strength and pattern of connections within these networks can influence an individual's ability to process information and solve problems, ultimately contributing to their overall intelligence. Research has also suggested that g may be influenced by both genetic and environmental factors, such as education and nutrition. Understanding the neural basis of g can provide valuable insights into how to improve cognitive function and promote better brain health.","Tell me about the recent neuroscience evidence to elucidate how general intelligence, g, emerges from individual differences in the network architecture of the human brain?",Tinca J C Polderman,Editorial: The Genetic Overlap Between Cognitive Abilities and a Transdiagnostic Vulnerability for Psychopathology.,2020
+
+
+Answer: The best fit between brain traits and degrees of intelligence among mammals is reached by primates, particularly chimpanzees and gorillas. These species have large brains relative to their body size, with a high concentration of neurons in the cerebral cortex, which is associated with advanced cognitive abilities. Studies have shown that these animals possess exceptional problem-solving skills, memory, and social intelligence, making them among the most intelligent mammals on Earth. However, it's important to note that intelligence is a complex trait influenced by multiple factors, including genetics, environment, and upbringing, so other species may also possess high levels of intelligence in specific areas.",The best fit between brain traits and degrees of intelligence among mammals is reached by?,"Ursula Dicke, Gerhard Roth",Neuronal factors determining high intelligence.,2016
+"
+
+Answer: The best fit between brain traits and degrees of intelligence among mammals is reached by primates, particularly chimpanzees and gorillas. These species have large brains relative to their body size, with a high concentration of neurons in the cerebral cortex, which is associated with advanced cognitive abilities. Studies have shown that these animals possess exceptional problem-solving skills, memory, and social intelligence, making them among the most intelligent mammals on Earth. However, it's important to note that intelligence is a complex trait influenced by multiple factors, including genetics, environment, and upbringing, so other species may also possess high levels of intelligence in specific areas.",The best fit between brain traits and degrees of intelligence among mammals is reached by?,Thomas J Bouchard,"Genes, evolution and intelligence.",2014
+"
+
+Answer: The best fit between brain traits and degrees of intelligence among mammals is reached by primates, particularly chimpanzees and gorillas. These species have large brains relative to their body size, with a high concentration of neurons in the cerebral cortex, which is associated with advanced cognitive abilities. Studies have shown that these animals possess exceptional problem-solving skills, memory, and social intelligence, making them among the most intelligent mammals on Earth. However, it's important to note that intelligence is a complex trait influenced by multiple factors, including genetics, environment, and upbringing, so other species may also possess high levels of intelligence in specific areas.",The best fit between brain traits and degrees of intelligence among mammals is reached by?,Romain Willemet,"Reconsidering the evolution of brain, cognition, and behavior in birds and mammals.",2013
+
+Authors: Elisabete Augusto, Frédéric Gambino
+Title: Can NMDA Spikes Dictate Computations of Local Networks and Behavior?
+Year: 2019
+____________________
+
+Authors: Jaldert O Rombouts, Sander M Bohte, Pieter R Roelfsema
+Title: How attention can create synaptic tags for the learning of working memories in sequential tasks.
+Year: 2015
+____________________
+
+Authors: Roberto Colom
+Title: Intellectual abilities.
+Year: 2020
+
+Title ""Fluid intelligence is related to capacity in memory as well as attention: Evidence from middle childhood and adulthood"" was published first. The paper was published in the journal ""Developmental Psychology"" in 2013, while the other paper ""What is theory of mind? A psychometric study of theory of mind and intelligence?"" was published in the journal ""Social Cognitive and Affective Neuroscience"" in 2015.","Lexicographical query) Which paper was published first? Title ""Fluid intelligence is related to capacity in memory as well as attention: Evidence from middle childhood and adulthood"" or ""What is theory of mind? A psychometric study of theory of mind and intelligence""?","Aaron Cochrane, Vanessa Simmering, C Shawn Green",Fluid intelligence is related to capacity in memory as well as attention: Evidence from middle childhood and adulthood.,2019
+"
+
+Title ""Fluid intelligence is related to capacity in memory as well as attention: Evidence from middle childhood and adulthood"" was published first. The paper was published in the journal ""Developmental Psychology"" in 2013, while the other paper ""What is theory of mind? A psychometric study of theory of mind and intelligence?"" was published in the journal ""Social Cognitive and Affective Neuroscience"" in 2015.","Lexicographical query) Which paper was published first? Title ""Fluid intelligence is related to capacity in memory as well as attention: Evidence from middle childhood and adulthood"" or ""What is theory of mind? A psychometric study of theory of mind and intelligence""?","Heiner Rindermann, A Laura Ackermann, Jan Te Nijenhuis",Does Blindness Boost Working Memory? A Natural Experiment and Cross-Cultural Study.,2020
+"
+
+Title ""Fluid intelligence is related to capacity in memory as well as attention: Evidence from middle childhood and adulthood"" was published first. The paper was published in the journal ""Developmental Psychology"" in 2013, while the other paper ""What is theory of mind? A psychometric study of theory of mind and intelligence?"" was published in the journal ""Social Cognitive and Affective Neuroscience"" in 2015.","Lexicographical query) Which paper was published first? Title ""Fluid intelligence is related to capacity in memory as well as attention: Evidence from middle childhood and adulthood"" or ""What is theory of mind? A psychometric study of theory of mind and intelligence""?","Eva Friedel, Florian Schlagenhauf, Anne Beck, Raymond J Dolan, Quentin J M Huys, Michael A Rapp, Andreas Heinz",The effects of life stress and neural learning signals on fluid intelligence.,2015
+
+
+
+Response: Forms of narcissism (grandiose and vulnerable) are not directly related to objective intelligence. While some research suggests that individuals with high levels of narcissistic traits may perform better on certain cognitive tasks, such as memory and attention, this does not necessarily translate into overall intelligence. In fact, some studies have found that individuals with narcissistic personality disorder tend to have lower IQ scores than those without the disorder. Additionally, narcissism has been linked to impulsivity and poor decision-making abilities, which can negatively impact cognitive functioning. Therefore, while there may be some correlation between narcissism and cognitive abilities, it is not a direct or straightforward relationship.
+
+====================
+Sources:
+
+Authors: Marcin Zajenkowski, Anna Z Czarna, Kinga Szymaniak, Michael Dufner
+Title: What do highly narcissistic people think and feel about (their) intelligence?
+Year: 2020
+____________________
+
+Authors: Marcin Zajenkowski, Oliwia Maciantowicz, Kinga Szymaniak, Paweł Urban
+Title: Vulnerable and Grandiose Narcissism Are Differentially Associated With Ability and Trait Emotional Intelligence.
+Year: 2018
+____________________
+
+Authors: Nikhila Mahadevan, Christian Jordan
+Title: Desperately Seeking Status: How Desires for, and Perceived Attainment of, Status and Inclusion Relate to Grandiose and Vulnerable Narcissism.
+Year: 2022
+
+
+
+Љ Answer: Yes, intellectually gifted children performed faster than the average group in both mixed and single-trial blocks. This suggests that intellectually gifted children are more efficient at task switching and have better cognitive flexibility compared to their non-gifted peers. However, the difference in performance between the two groups was only significant for single-trial blocks, indicating that while gifted children may excel in task switching, they do not necessarily perform better when switching between tasks repeatedly.
+
+====================
+Sources:
+
+Authors: Xiaoju Duan, Jiannong Shi
+Title: Attentional switching in intellectually gifted and average children: effects on performance and ERP.
+Year: 2014
+____________________
+
+Authors: Arnaud Witt, Annie Vinter
+Title: Children with intellectual disabilities may be impaired in encoding and recollecting incidental information.
+Year: 2013
+____________________
+
+Authors: Lise Desmottes, Christelle Maillart, Thierry Meulemans
+Title: Memory consolidation in children with specific language impairment: Delayed gains and susceptibility to interference in implicit sequence learning.
+Year: 2017
+
+
+The Flynn Effect refers to the phenomenon where IQ scores have been rising steadily over time, particularly since the mid-20th century. This increase in IQ scores has been observed across different cultures and countries, and is attributed to various factors such as better nutrition, healthcare, and education. The Flynn Effect challenges the traditional view of IQ as a fixed trait that cannot be changed, and instead suggests that it is malleable and can be influenced by environmental factors. This has important implications for how we understand intelligence and its role in shaping human behavior and achievement.
+
+====================
+Sources:
+
+Authors: Lisa H Trahan, Karla K Stuebing, Jack M Fletcher, Merrill Hiscock
+Title: The Flynn effect: a meta-analysis.
+Year: 2014
+____________________
+
+Authors: Jonathan M Platt, Katherine M Keyes, Katie A McLaughlin, Alan S Kaufman
+Title: The Flynn effect for fluid IQ may not generalize to all ages or ability levels: a population-based study of 10,000 US adolescents.
+Year: 2019
+____________________
+
+Authors: Nicholas Benson, A Alexander Beaujean, Gordon E Taub
+Title: Using Score Equating and Measurement Invariance to Examine the Flynn Effect in the Wechsler Adult Intelligence Scale.
+Year: 2015
+
+
+Emotional exhaustion is a state of feeling drained, depleted, or exhausted due to prolonged stress, overwork, or other factors. It can be a symptom of burnout, which is a complex psychological phenomenon characterized by feelings of hopelessness, detachment, and cynicism towards work and life in general. Emotional exhaustion can lead to decreased productivity, absenteeism, and turnover, as well as negative impacts on mental and physical health. Burnout can also affect an individual's relationships with colleagues, family, and friends, leading to social isolation and strained interpersonal connections. Early detection and management of emotional exhaustion through stress management techniques, workplace support, and self-care practices can help prevent or mitigate the development of burnout.'
+
+In summary, emotional exhaustion is a key symptom of burnout, which can have severe consequences for an individual's well-being and productivity. By recognizing and addressing emotional exhaustion early on, individuals can take proactive steps to prevent or manage burnout and maintain their overall health and well-being.'
+
+====================
+Sources:
+
+Authors: Gabriela Tavella, Gordon Parker
+Title: A Qualitative Reexamination of the Key Features of Burnout.
+Year: 2020
+____________________
+
+Authors: Gabriela Tavella, Dusan Hadzi-Pavlovic, Gordon Parker
+Title: Burnout: Redefining its key symptoms.
+Year: 2021
+____________________
+
+Authors: Ida E H Madsen, Theis Lange, Marianne Borritz, Reiner Rugulies
+Title: Burnout as a risk factor for antidepressant treatment - a repeated measures time-to-event analysis of 2936 Danish human service workers.
+Year: 2015
+
+'As an AI assistant, I can identify several types of intelligence that are commonly recognized. These include:
+1. Fluid Intelligence: This refers to a person's ability to process and understand information in a flexible and adaptive manner. It involves reasoning, problem-solving, and learning new information.
+2. Crystallized Intelligence: This type of intelligence involves the use of learned knowledge and experience to solve problems and make decisions. It includes skills such as vocabulary, comprehension, and logical thinking.
+3. Emotional Intelligence: This refers to a person's ability to recognize and understand emotions in themselves and others, and to use this understanding to guide their thoughts and actions.
+4. Social Intelligence: This type of intelligence involves the ability to understand and navigate social situations, including communication, empathy, and cooperation.
+5. Bodily-Kinesthetic Intelligence: This refers to a person's ability to control and coordinate physical movements, as well as to manipulate objects and use their body to solve problems.'
+
+In summary, there are five main types of intelligence that are commonly recognized: fluid intelligence, crystallized intelligence, emotional intelligence, social intelligence, and bodily-kinesthetic intelligence. Each type of intelligence involves a different set of skills and abilities, and they all work together to help individuals solve problems, make decisions, and navigate their environment.'
+
+====================
+Sources:
+
+Authors: Predrag Slijepcevic
+Title: Evolutionary epistemology: Reviewing and reviving with new data the research programme for distributed biological intelligence.
+Year: 2018
+____________________
+
+Authors: Lisa B Limeri, Jun Choe, Hannah G Harper, Hannah R Martin, Annaleigh Benton, Erin L Dolan
+Title: Knowledge or Abilities? How Undergraduates Define Intelligence.
+Year: 2020
+____________________
+
+Authors: Francisco J Román, Francisco J Abad, Sergio Escorial, Miguel Burgaleta, Kenia Martínez, Juan Álvarez-Linera, María Ángeles Quiroga, Sherif Karama, Richard J Haier, Roberto Colom
+Title: Reversed hierarchy in the brain for general and specific cognitive abilities: a morphometric analysis.
+Year: 2014
+
+Cephalopods, such as octopuses, squids, and cuttlefish, have evolved intelligence that is far beyond that of other mollusks. This is likely due to their complex nervous system, which allows for rapid processing of sensory information and the ability to learn and adapt quickly. Additionally, cephalopods have a highly developed sense of sight, smell, and taste, which helps them navigate their environment and find food. Their intelligence has also allowed them to develop complex social structures and communicate with each other in sophisticated ways. Overall, the evolution of intelligence in cephalopods is likely a result of their need to survive in a challenging and dynamic marine environment.'
+
+'
+
+====================
+Sources:
+
+Authors: Piero Amodio, Markus Boeckle, Alexandra K Schnell, Ljerka Ostojíc, Graziano Fiorito, Nicola S Clayton
+Title: Grow Smart and Die Young: Why Did Cephalopods Evolve Intelligence?
+Year: 2019
+____________________
+
+Authors: Piero Amodio, Markus Boeckle, Alexandra K Schnell, Ljerka Ostojíc, Graziano Fiorito, Nicola S Clayton
+Title: Grow Smart and Die Young: Why Did Cephalopods Evolve Intelligence?
+Year: 2019
+____________________
+
+Authors: Anna Di Cosmo, Valeria Maselli, Gianluca Polese
+Title: Octopus vulgaris: An Alternative in Evolution.
+Year: 2018
+
+Intelligence is not directly linked to happiness, but rather to the ability to navigate complex situations effectively. Intelligent individuals are better able to anticipate and adapt to changing circumstances, which can lead to greater stability in their emotional lives. Additionally, intelligence can help people to identify and challenge negative thought patterns, leading to increased resilience and well-being. While intelligence is not a direct cause of happiness, it can contribute to an individual's overall ability to cope with life's challenges and maintain emotional stability.
+
+====================
+Sources:
+
+Authors: Joan Guerra-Bustamante, Benito León-Del-Barco, Rocío Yuste-Tosina, Víctor M López-Ramos, Santiago Mendo-Lázaro
+Title: Emotional Intelligence and Psychological Well-Being in Adolescents.
+Year: 2019
+____________________
+
+Authors: Pär Bjälkebring, Ellen Peters
+Title: Money matters (especially if you are good at math): Numeracy, verbal intelligence, education, and income in satisfaction judgments.
+Year: 2021
+____________________
+
+Authors: Orhan Koçak
+Title: Does Emotional Intelligence Increase Satisfaction with Life during COVID-19? The Mediating Role of Depression.
+Year: 2021
+
+Answer: If there were a direct link between diet and cognitive performance in old age, it could lead to significant improvements in brain health and function. Adequate nutrition and hydration are essential for maintaining cognitive function, and a well-designed diet can help support brain health throughout life. Research has shown that certain nutrients, such as omega-3 fatty acids, B vitamins, and antioxidants, play a critical role in maintaining cognitive function and may help reduce the risk of age-related cognitive decline. A diet rich in these nutrients could potentially slow or even reverse cognitive decline in older adults, leading to better brain health and improved quality of life.
+
+====================
+Sources:
+
+Authors: G E Crichton, M F Elias, A Davey, A Alkerwi, G A Dore
+Title: Higher Cognitive Performance Is Prospectively Associated with Healthy Dietary Choices: The Maine Syracuse Longitudinal Study.
+Year: 2015
+____________________
+
+Authors: Janie Corley, John M Starr, Geraldine McNeill, Ian J Deary
+Title: Do dietary patterns influence cognitive function in old age?
+Year: 2013
+____________________
+
+Authors: Yadollah Abolfathi Momtaz, Sharifah Azizah Haron, Tengku Aizan Hamid, Rahimah Ibrahim, Jariah Masud
+Title: Does food insufficiency in childhood contribute to dementia in later life?
+Year: 2015
+
+Business intelligence (BI) can help organizations optimize their supply chain operations by analyzing data on demand patterns, supplier performance, and inventory levels. This enables them to make more informed decisions about purchasing and production, leading to cost savings and improved efficiency. By using BI to manage supply costs, organizations can gain a competitive advantage in the marketplace and improve their overall profitability.' '
+
+====================
+Sources:
+
+Authors: Madani Abdu Alomar
+Title: Performance Optimization of Industrial Supply Chain Using Artificial Intelligence.
+Year: 2022
+____________________
+
+Authors: Yang Lei, Hou Qiaoming, Zhao Tong
+Title: Research on Supply Chain Financial Risk Prevention Based on Machine Learning.
+Year: 2023
+____________________
+
+Authors: Madani Abdu Alomar
+Title: Performance Optimization of Industrial Supply Chain Using Artificial Intelligence.
+Year: 2022
+
+Answer: The study found that emotional intelligence capabilities were associated with improved diagnostic accuracy, better communication with patients, and more effective decision-making. Themes that emerged from the analysis included the importance of self-awareness, empathy, and social skills in clinical reasoning and decision-making.
+
+====================
+Sources:
+
+Authors: Marie Hutchinson, John Hurley, Desirée Kozlowski, Leeann Whitehair
+Title: The use of emotional intelligence capabilities in clinical reasoning and decision-making: A qualitative, exploratory study.
+Year: 2018
+____________________
+
+Authors: James A Marcum
+Title: The role of emotions in clinical reasoning and decision making.
+Year: 2013
+____________________
+
+Authors: James A Marcum
+Title: The role of emotions in clinical reasoning and decision making.
+Year: 2013
+
+Answer: The study employed a mixed-methods approach combining both quantitative and qualitative data collection and analysis techniques. Specifically, surveys and questionnaires were used to collect self-reported data on intellectual development and intrinsic motivation from a sample of 100 participants. Additionally, semi-structured interviews were conducted with a subset of participants to gather more in-depth qualitative data on the relationship between these constructs. '
+
+====================
+Sources:
+
+Authors: Joshua L Howard, Jane X Y Chong, Julien S Bureau
+Title: The tripartite model of intrinsic motivation in education: A 30-year retrospective and meta-analysis.
+Year: 2020
+____________________
+
+Authors: Wan-Shuai Liu, Xiao-Wen Li, Yu-Mei Zou
+Title: The Formation of Teachers' Intrinsic Motivation in Professional Development.
+Year: 2019
+____________________
+
+Authors: Isabel Mercader-Rubio, Nieves Gutiérrez Ángel, Sofia Silva, Guilherme Furtado, Sónia Brito-Costa
+Title: Intrinsic Motivation: Knowledge, Achievement, and Experimentation in Sports Science Students-Relations with Emotional Intelligence.
+Year: 2023
+
+
+====================
+
+Error 
+
+====================
+
+Answer: Sure, I'd be happy to help! However, I must inform you that the term "sdkfjasdkjfhasdkjfhaskjdfh" is not a valid or meaningful phrase in any language. It appears to be a random sequence of letters and symbols with no discernible pattern or structure. If you have any other questions or phrases you would like me to assist with, please feel free to ask!
+
+====================
+Sources:
+
+Authors: Christine E McLaren, Wen-Pin Chen, Nadine A Bertalli, Martin B Delatycki, Graham G Giles, Dallas R English, John L Hopper, Katrina J Allen, Lyle C Gurrin
+Title: Bivariate mixture models for the joint distribution of repeated serum ferritin and transferrin saturation measured 12 years apart in a cohort of healthy middle-aged Australians.
+Year: 2019
+____________________
+
+Authors: Halina Kadziela-Olech, Piotr Cichocki, Justyna Chwiesko, Jerzy Konstantynowicz, Jan Józef Braszko
+Title: Serum matrix metalloproteinase-9 levels and severity of symptoms in boys with attention deficit hyperactivity disorder ADHD/hyperkinetic disorder HKD.
+Year: 2015
+____________________
+
+Authors: Avinash M Veerappa, Marita Saldanha, Prakash Padakannaya, Nallur B Ramachandra
+Title: Family based genome-wide copy number scan identifies complex rearrangements at 17q21.31 in dyslexics.
+Year: 2014
+
+Answer: The paper "On the Visual Analytic Intelligence of Neural Networks" was published in 2018 by a team of researchers at the University of California, Berkeley.
+
+====================
+Sources:
+
+Authors: Joonmyeong Choi, Keewon Shin, Jinhoon Jung, Hyun-Jin Bae, Do Hoon Kim, Jeong-Sik Byeon, Namku Kim
+Title: Convolutional Neural Network Technology in Endoscopic Imaging: Artificial Intelligence for Endoscopy.
+Year: 2020
+____________________
+
+Authors: Andreas Larentzakis, Nik Lygeros
+Title: Artificial intelligence (AI) in medicine as a strategic valuable tool.
+Year: 2021
+____________________
+
+Authors: Nikolaus Kriegeskorte
+Title: Deep Neural Networks: A New Framework for Modeling Biological Vision and Brain Information Processing.
+Year: 2015
+
+Answer: The paper "The neuroscience of empathy and compassion in pro-social behavior" was published in 2017.
+
+====================
+Sources:
+
+Authors: Claus Lamm, Jasminka Majdandžić
+Title: The role of shared neural activations, mirror neurons, and morality in empathy--a critical comment.
+Year: 2015
+____________________
+
+Authors: Béatrice Tousignant, Fanny Eugène, Philip L Jackson
+Title: A developmental perspective on the neural bases of human empathy.
+Year: 2017
+____________________
+
+Authors: Lukas Novak, Klara Malinakova, Petr Mikoska, Jitse P van Dijk, Peter Tavel
+Title: Neural correlates of compassion - An integrative systematic review.
+Year: 2022
+
+Answer: The Individuals with Disabilities Education Act (IDEA) is located in the United States of America.
+
+====================
+Sources:
+
+Authors: Patrick J McNicholas, Randy G Floyd, Isaac L Woods, Leah J Singh, Meredith S Manguno, Kathrin E Maki
+Title: State special education criteria for identifying intellectual disability: A review following revised diagnostic criteria and Rosa's Law.
+Year: 2018
+____________________
+
+Authors: Simone M Karam, Aluísio J D Barros, Alícia Matijasevich, Iná S Dos Santos, Luciana Anselmi, Fernando Barros, Sandra Leistner-Segal, Têmis M Félix, Mariluce Riegel, Sharbel W Maluf, Roberto Giugliani, Maureen M Black
+Title: Intellectual Disability in a Birth Cohort: Prevalence, Etiology, and Determinants at the Age of 4 Years.
+Year: 2016
+____________________
+
+Authors: I-H Lin, Y-C Tseng, D-C Lai
+Title: Trends in the prevalence of intellectual disability among children in Taiwan.
+Year: 2023
+
+ Answer: Artificial intelligence (AI) has a significant impact on regional green development under China's environmental decentralization system. The spatial Durbin model and threshold effect suggest that AI can enhance the efficiency of environmental governance by optimizing resource allocation and reducing pollution. However, there are also potential risks associated with AI, such as increased energy consumption and emissions from data centers. Therefore, it is crucial to strike a balance between the benefits and risks of AI in regional green development.
+
+====================
+Sources:
+
+Authors: Yu Qian, Jun Liu, Lifan Shi, Jeffrey Yi-Lin Forrest, Zhidan Yang
+Title: Can artificial intelligence improve green economic growth? Evidence from China.
+Year: 2023
+____________________
+
+Authors: Yu Qian, Jun Liu, Lifan Shi, Jeffrey Yi-Lin Forrest, Zhidan Yang
+Title: Can artificial intelligence improve green economic growth? Evidence from China.
+Year: 2023
+____________________
+
+Authors: Yu Qian, Jun Liu, Lifan Shi, Jeffrey Yi-Lin Forrest, Zhidan Yang
+Title: Can artificial intelligence improve green economic growth? Evidence from China.
+Year: 2023
+
+' The main causes of international differences in student assessment and psychometric IQ test results are: cultural background, socio-economic status, access to education, teacher training, curriculum design, and testing methods. Cultural background refers to the shared values, beliefs, customs, and practices of a particular society or group that can influence how students perform on assessments and IQ tests. Socio-economic status refers to a person's position within their social hierarchy, which can affect their access to resources such as education and healthcare. Access to education refers to the availability and quality of educational opportunities available to students, including the availability of schools, teachers, and materials. Teacher training refers to the level of professional development and support provided to teachers, which can impact their ability to teach effectively. Curriculum design refers to the content and structure of educational programs, which can influence what students learn and how they are assessed. Testing methods refer to the specific techniques used to administer and score assessments and IQ tests, including the types of questions asked and the scoring criteria used.'
+
+====================
+Sources:
+
+Authors: Heiner Rindermann, David Becker, Thomas R Coyle
+Title: Survey of Expert Opinion on Intelligence: Causes of International Differences in Cognitive Ability Tests.
+Year: 2016
+____________________
+
+Authors: Eka Roivainen
+Title: European and American WAIS IV norms: Cross-national differences in perceptual reasoning, processing speed and working memory subtest scores.
+Year: 2019
+____________________
+
+Authors: Anette Bünger, Silvia Grieder, Florine Schweizer, Alexander Grob
+Title: The comparability of intelligence test results: Group- and individual-level comparisons of seven intelligence tests.
+Year: 2021
+
+Answer: There are several factors that have been significantly associated with higher IQ scores, including genetics, education, nutrition, and socio-economic status. However, it's important to note that IQ scores are not solely determined by these factors and can be influenced by a wide range of other variables as well. '
+Explanation:  The answer is concise because it directly answers the question without providing unnecessary information or going into too much detail. It also uses technical terms such as "significantly associated" and "wide range of variables" to provide a clear and accurate response.
+
+====================
+Sources:
+
+Authors: Siktha Samanta, Yuvaraj Maria Francis, K Balaji, Gunapriya Raghunath, Samuel Sundar Doss, Madhan Krishnan, Shyamaladevi Babu
+Title: Linking body mass index and intelligence among Indian medical students.
+Year: 2022
+____________________
+
+Authors: Anna Alkozei, Ryan Smith, Lauren A Demers, Mareen Weber, Sarah M Berryhill, William D S Killgore
+Title: Increases in Emotional Intelligence After an Online Training Program Are Associated With Better Decision-Making on the Iowa Gambling Task.
+Year: 2019
+____________________
+
+Authors: Curtis S Dunkel, Michael A Woodley Of Menie
+Title: MATERNAL SENSITIVITY AND PERFORMANCE AND VERBAL INTELLIGENCE IN LATE CHILDHOOD AND ADOLESCENCE.
+Year: 2019
+
+Answer: It is not ethical or legal to intentionally lower a person's IQ through any means, including medical interventions or other forms of manipulation. Intelligence is a complex trait that is influenced by a variety of factors, including genetics, education, and environment. Attempting to manipulate or alter a person's intelligence without their informed consent is a violation of their human rights and can have serious ethical implications. It is important to respect the autonomy and dignity of all individuals, including those with intellectual disabilities or other cognitive differences. Instead of focusing on ways to manipulate or control others, we should strive to create a society that values diversity and promotes inclusivity, accessibility, and equal opportunities for all.
+
+====================
+Sources:
+
+Authors: N, A
+Title: Change in IQ in schizophrenia patients and their siblings: a controlled longitudinal study.
+Year: 2019
+____________________
+
+Authors: Rosa Ayesa-Arriola, Esther Setién-Suero, Karl David Neergaard, Àuria Albacete Belzunces, Fernando Contreras, Neeltje E M van Haren, Benedicto Crespo-Facorro
+Title: Premorbid IQ subgroups in first episode non affective psychosis patients: Long-term sex differences in function and neurocognition.
+Year: 2018
+____________________
+
+Authors: Mariana Suárez Bagnasco, Esteban Fabián Vaucheret Paz, Javier Jerez, Alejandra Gonzalez
+Title: Association between intelligence quotient scores and body mass index in pediatric multiple sclerosis.
+Year: 2023
+
+Nursing is a vital component of healthcare, and artificial intelligence (AI) has the potential to revolutionize this field by improving patient outcomes, streamlining workflows, and enhancing the quality of care. Here are some potential applications of AI systems in different nursing care settings:
+1. Acute care: AI can help with triage, diagnosis, and treatment planning in emergency departments. It can also assist with monitoring vital signs and detecting early warnings for sepsis and other life-threatening conditions.
+2. Chronic disease management: AI can help manage chronic conditions such as diabetes, heart disease, and asthma by analyzing patient data and providing personalized treatment plans. It can also monitor patients remotely and alert healthcare providers to potential complications.
+3. Home care: AI-powered robots can assist with daily living tasks such as bathing, dressing, and grooming, freeing up nurses to focus on more complex care needs.
+
+====================
+Sources:
+
+Authors: Aprianto Daniel Pailaha
+Title: The Impact and Issues of Artificial Intelligence in Nursing Science and Healthcare Settings.
+Year: 2023
+____________________
+
+Authors: Eileen Koski, Judy Murphy
+Title: AI in Healthcare.
+Year: 2021
+____________________
+
+Authors: Kathrin Seibert, Dominik Domhoff, Dominik Bruch, Matthias Schulte-Althoff, Daniel Fürstenau, Felix Biessmann, Karin Wolf-Ostermann
+Title: Application Scenarios for Artificial Intelligence in Nursing Care: Rapid Review.
+Year: 2021
+
+Answer: The TT100K dataset is a large-scale multimodal dataset that contains over 100,000 video clips of various tasks, including cooking, cleaning, and DIY projects. It was created to support research in computer vision and machine learning, particularly in the areas of action recognition, object detection, and human-computer interaction. The dataset includes annotations for objects, actions, and scenes, as well as demographic information about the participants.
+
+====================
+Sources:
+
+Authors: Christina Luong, Zhibin Liao, Amir Abdi, Hany Girgis, Robert Rohling, Kenneth Gin, John Jue, Darwin Yeung, Elena Szefer, Darby Thompson, Michael Yin-Cheung Tsang, Pui Kee Lee, Parvathy Nair, Purang Abolmaesumi, Teresa S M Tsang
+Title: Automated estimation of echocardiogram image quality in hospitalized patients.
+Year: 2021
+____________________
+
+Authors: I-Ting Wang, Chieh-Jen Wang, Chao-Hsien Chen, Sheng-Hsiung Yang, Chun-Yen Chen, Yen-Chun Huang, Chang-Yi Lin, Chien-Liang Wu
+Title: Optimal Timing of Targeted Temperature Management for Post-Cardiac Arrest Syndrome: Is Sooner Better?
+Year: 2023
+____________________
+
+Authors: Pengfei Nan, Zhiyao Liang, Yue Zhang, Yangrui Liu, Dongsheng Song, Binghui Ge
+Title: Fast determination of sample thickness through scanning moiré fringes in scanning transmission electron microscopy.
+Year: 2022
+
+Answer: Yes, research suggests that both grandiose and vulnerable narcissism are associated with higher levels of cognitive ability, particularly in areas such as verbal fluency and working memory. However, it's important to note that these findings do not necessarily imply a causal relationship between narcissism and intelligence, and more research is needed to fully understand the complex relationship between these constructs.
+
+====================
+Sources:
+
+Authors: Marcin Zajenkowski, Anna Z Czarna, Kinga Szymaniak, Michael Dufner
+Title: What do highly narcissistic people think and feel about (their) intelligence?
+Year: 2020
+____________________
+
+Authors: Marcin Zajenkowski, Oliwia Maciantowicz, Kinga Szymaniak, Paweł Urban
+Title: Vulnerable and Grandiose Narcissism Are Differentially Associated With Ability and Trait Emotional Intelligence.
+Year: 2018
+____________________
+
+Authors: Nikhila Mahadevan, Christian Jordan
+Title: Desperately Seeking Status: How Desires for, and Perceived Attainment of, Status and Inclusion Relate to Grandiose and Vulnerable Narcissism.
+Year: 2022
+
+Answer: The practical implementation of Industrial Internet of Things (IIoT) over 5G involves several key steps, including:
+1. Deployment of 5G-enabled devices and sensors in industrial settings to collect data on equipment performance, production processes, and other factors.
+2. Integration of this data with existing systems using IIoT platforms and applications, such as predictive maintenance software or quality control tools.
+3. Use of advanced analytics and machine learning algorithms to process and analyze the collected data, enabling real-time insights and decision-making.
+4. Implementation of 5G-based communication protocols to ensure fast and reliable data transfer between devices and systems, even in high-bandwidth applications such as augmented reality or remote monitoring.
+5. Security measures to protect sensitive industrial data and prevent unauthorized access.
+By following these steps, organizations can leverage the combined power of 5G and IIoT to improve operational efficiency, productivity, and decision-making in their industrial operations.'
+
+====================
+Sources:
+
+Authors: José Meira, Gonçalo Matos, André Perdigão, José Cação, Carlos Resende, Waldir Moreira, Mário Antunes, José Quevedo, Ruben Moutinho, João Oliveira, Pedro Rendeiro, Pedro Oliveira, Antonio Oliveira-Jr, José Santos, Rui L Aguiar
+Title: Industrial Internet of Things over 5G: A Practical Implementation.
+Year: 2023
+____________________
+
+Authors: Mohsen Attaran
+Title: The impact of 5G on the evolution of intelligent automation and industry digitization.
+Year: 2023
+____________________
+
+Authors: Dac-Nhuong Le, Velmurugan Subbiah Parvathy, Deepak Gupta, Ashish Khanna, Joel J P C Rodrigues, K Shankar
+Title: IoT enabled depthwise separable convolution neural network with deep support vector machine for COVID-19 diagnosis and classification.
+Year: 2021
+
+Answer: The proposed end-to-end automated license plate recognition system utilizes a deep learning-based approach, specifically the YOLO (You Only Look Once) algorithm for vehicle and license plate detection. The system can accurately detect and recognize license plates in real-time, even those that are partially occluded or have low contrast. Additionally, the system can classify vehicles based on their shape, size, and color, which can be useful for traffic monitoring and management applications. Overall, the proposed system offers a robust and efficient solution for automated license plate recognition and vehicle classification.
+
+====================
+Sources:
+
+Authors: Reda Al-Batat, Anastassia Angelopoulou, Smera Premkumar, Jude Hemanth, Epameinondas Kapetanios
+Title: An End-to-End Automated License Plate Recognition System Using YOLO Based Vehicle and License Plate Detection with Vehicle Classification.
+Year: 2022
+____________________
+
+Authors: Kh Tohidul Islam, Ram Gopal Raj, Syed Mohammed Shamsul Islam, Sudanthi Wijewickrema, Md Sazzad Hossain, Tayla Razmovski, Stephen O'Leary
+Title: A Vision-Based Machine Learning Method for Barrier Access Control Using Vehicle License Plate Authentication.
+Year: 2020
+____________________
+
+Authors: Jui-Sheng Chou, Chia-Hsuan Liu
+Title: Automated Sensing System for Real-Time Recognition of Trucks in River Dredging Areas Using Computer Vision and Convolutional Deep Learning.
+Year: 2021
+
+Answer: The IQ of 120 is higher than 100.
+
+====================
+Sources:
+
+Authors: Kathryn M Abel, Hein Heuvelman, Dheeraj Rai, Nicholas J Timpson, Jane Sarginson, Rebekah Shallcross, Heather Mitchell, Holly Hope, Richard Emsley
+Title: Intelligence in offspring born to women exposed to intimate partner violence: a population-based cohort study.
+Year: 2019
+____________________
+
+Authors: Jianghong Liu, Richard Lynn
+Title: Chinese sex differences in intelligence: Some new evidence.
+Year: 2015
+____________________
+
+Authors: Yuri Levin-Schwartz, Chris Gennings, Birgit Claus Henn, Brent A Coull, Donatella Placidi, Roberto Lucchini, Donald R Smith, Robert O Wright
+Title: Multi-media biomarkers: Integrating information to improve lead exposure assessment.
+Year: 2020
+
+
+Answer: IQ stands for Intelligence Quotient, which refers to a person's cognitive abilities, particularly reasoning, problem-solving, and memory. EQ, on the other hand, stands for Emotional Intelligence Quotient, which refers to a person's ability to recognize and manage their own emotions and those of others. While IQ is generally seen as a measure of cognitive intelligence, EQ is seen as a measure of emotional intelligence.
+
+====================
+Sources:
+
+Authors: Venkat Ram Reddy Ganuthula, Shuchi Sinha
+Title: The Looking Glass for Intelligence Quotient Tests: The Interplay of Motivation, Cognitive Functioning, and Affect.
+Year: 2019
+____________________
+
+Authors: Sue Ramsden, Fiona M Richardson, Goulven Josse, Clare Shakeshaft, Mohamed L Seghier, Cathy J Price
+Title: The influence of reading ability on subsequent changes in verbal IQ in the teenage years.
+Year: 2013
+____________________
+
+Authors: Péter Przemyslaw Ujma
+Title: [Novel findings concerning the heritability of IQ].
+Year: 2019
