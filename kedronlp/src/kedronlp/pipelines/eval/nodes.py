@@ -157,21 +157,12 @@ def eval_list(query_list, modelling_params, top_k_params):
             
             author_names_filter = {}
             if author_names:
-                if len(author_names) == 1:
-                    author_name = author_names[0]
-                    author_names_filter = {
-                        "Authors": {
-                            "$eq": author_name
-                        }
+                author_names = ", ".join(author_names)
+                author_names_filter = {
+                    "Authors": {
+                        "$eq": author_names
                     }
-                else:
-                    author_permutations = list(itertools.permutations(author_names))
-                    author_permutations = [", ".join(authors) for authors in author_permutations]
-                    author_names_filter = {
-                        "Authors": {
-                            "$in": author_permutations
-                        }
-                    }
+                }
 
             paper_titles_filter = {}
             if paper_titles:
@@ -189,6 +180,8 @@ def eval_list(query_list, modelling_params, top_k_params):
                 filter = filter["$and"][0]
             elif len(filter["$and"]) == 0:
                 filter = None
+        else:
+            filter = None
 
         #basic similarity search
         if top_k_params["retrieval_strategy"] == "similarity":
@@ -197,7 +190,7 @@ def eval_list(query_list, modelling_params, top_k_params):
         #diversity enforcing similarity search
         if top_k_params["retrieval_strategy"] == "max_marginal_relevance":
             # enforces more diversity of the top_k documents
-            docs = vectordb.max_marginal_relevance_search(user_input, k=top_k_params["top_k"])
+            docs = vectordb.max_marginal_relevance_search(user_input, k=top_k_params["top_k"], filter=filter)
 
         #hybrid similarity search including BM25 for keyword
         if top_k_params["retrieval_strategy"] == "ensemble_retrieval":
@@ -207,7 +200,12 @@ def eval_list(query_list, modelling_params, top_k_params):
             bm25_retriever.k = top_k_params["top_k"]
 
             #initiate similarity retriever
-            similarity_retriever = vectordb.as_retriever(search_kwargs={"k": top_k_params["top_k"], "search_type": top_k_params["advanced_dense_retriever"]})
+            similarity_retriever = vectordb.as_retriever(
+                search_kwargs={
+                    "k": top_k_params["top_k"],
+                    "search_type": top_k_params["advanced_dense_retriever"],
+                    "filter": filter,
+                })
 
             #initiate ensemble (uses reciprocal rank fusion in the background with default settings)
             ensemble_retriever = EnsembleRetriever(
@@ -225,7 +223,7 @@ def eval_list(query_list, modelling_params, top_k_params):
                 llm=llm,
                 include_original = top_k_params["mq_include_original"]
             )
-            docs = multiquery_llm_retriever.get_relevant_documents(query=user_input)
+            docs = multiquery_llm_retriever.get_relevant_documents(query=user_input, metadata=filter)
 
         top_k_docs = pd.DataFrame([doc.page_content for doc in docs])
         top_k_docs = top_k_docs.drop_duplicates().head(top_k_params["top_k"])
