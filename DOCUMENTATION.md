@@ -105,7 +105,7 @@ The Reciprocal Fusion Rank formula combines rankings from the dense retrieval st
 
 $$RRF(d \in D) = \sum_{r \in R}\frac{1}{k+r(d)}$$
 
-Out of this eventually ranked set of retrieved documents the ´top_k´ are extracted.
+Out of this eventually ranked set of retrieved documents the `top_k` are extracted.
 
 Since  medical terminology can pose various challenges, no retrieval strategy exhibits a clear conceptual superiority apriori, although intuition suggested that a combination of context and specificity is possibly best suited to the wide-ranging and oftentimes critical queries in the medical domain [^7]. Through deploying, testing and comparing these different retrieving strategies, we thus aimed to identify the retriever which meets the requirements the best using a diverse manually annotated validation set.
 
@@ -113,10 +113,10 @@ Since  medical terminology can pose various challenges, no retrieval strategy ex
 #### LLM models used
 
 #### Prompting strategies
-Once the ´top_k´ documents are extracted, they are formatted together with the initial (possibly corrected) query into a prompt that is inputted into our model. Due to model size limitations that became evident in the first runs of the pipeline, short and precise prompts were selected. Except for this restriction upfront, all other decisions were based on end-to-end testing of different prompt variants. These variants were: 
+Once the `top_k` documents are extracted, they are formatted together with the initial (possibly corrected) query into a prompt that is inputted into our model. Due to model size limitations that became evident in the first runs of the pipeline, short and precise prompts were selected. Except for this restriction upfront, all other decisions were based on end-to-end testing of different prompt variants. These variants were: 
 1. A standard prompt
 2. Chain of thought
-3. Inputting abstract information only (controlled in the ´abstract_only´ parameter:
+3. Inputting abstract information only (controlled in the `abstract_only` parameter:
 4. Inputting abstracts enriched with metadata information:
 
 
