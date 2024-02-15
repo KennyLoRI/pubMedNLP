@@ -88,14 +88,15 @@ $$\text{MMR} = Arg max_{D_i \in R\setminus S} [\lambda (\text{Cosine Similarity}
 I.e.,  $\lambda$ controls the trade-off between relevance and diversity. If $lambda = 1$ a cosine similarity output is obtained. For $lambda = 0$ maximum diversity is enforced [^4].
 
 #### 2) Ensemble Retrieval Strategy
-Our ensemble retriever combines dense retrieval (based on either cosine similarity or max marginal relevance) with BM25, a term-frequency-based retrieval operation specifically suited for providing exact term-based matches. The underlying idea of running both retrievers in parallel is to ensure that both exact term-based relevance, as well as context-based relevance, are captured and later combined via the reciprocal fusion rank. The BM25 score for a document D given a query Q is calculated as:   
+Our ensemble retriever combines dense retrieval (based on either cosine similarity or max marginal relevance) with BM25, a term-frequency-based retrieval operation specifically suited for providing exact term-based matches. It has been shown that Okapi BM25 can perform worse than some alternatives such as BM25L, when confronted with longer documents [^6]. Nevertheless, we chose this algorithm as the second retriever since with [TODO: INSERT NUMBER OF TOKENS] neither our abstracts and especially not the chunked paragraphs fall into the category of "very long documents" as Yuanhua et. al classified the problematic cases. The underlying idea of running both retrievers in parallel is to ensure that both exact term-based relevance, as well as context-based relevance, are captured and later combined via the reciprocal fusion rank. The BM25 score for a document D given a query Q consisting of $q_i$ terms with i = 1, ..., n is:   
 
-$$\text{BM25}(Q, D) = \sum_{i} \frac{{(f_{i} \cdot (k_{1} + 1))}}{{(f_{i} + k_{1} \cdot (1 - b + b \cdot \frac{{\text{docLength}}}{{\text{avgDocLength}}}))}} \cdot \frac{{(qf_{i} \cdot (k_{2} + 1))}}{{(qf_{i} + k_{2})}}$$
+$$\text{BM25}(Q, D) = \sum^n_{i \in Q} IDF(q_i) \cdot \frac{{tf(q_i,D)*(k_1+1)}}{{tf(q_i, D) + k_{1} \cdot (1 - b + b \cdot \frac{{\text{docLength}}}{{\text{avgDocLength}}})}}$$
 
 Where:
-- $f_{i}$ is the term frequency of term $\(i\)$ in the document.
-- $qf_{i}$ is the term frequency of term $\(i\)$ in the query.
-- $k_{1}$ and $\(k_{2}\)$ are tuning parameters.
+- $tf(q_i,d)$ is the term frequency of term $\(i\)$ in the document d.
+- $IDF(q_i) = ln(\frac{N-n(q_i)+0,5}{n(q_i) + 0.5}+1)$ is the inverse document frequency weight of the term $q_i$
+- $N$ is the total number of documents in the collection and $n(q_i)$ the number of documents containing $q_i$.
+- $k_{1}$ is a tuning parameter (k = 0: no use of term frequency, large k: raw term frequency.
 - $b$ is a parameter controlling the impact of document length normalization.
 - $\text{docLength}$ is the length of the document.
 - $\text{avgDocLength}$ is the average document length in the corpus.
@@ -144,3 +145,7 @@ Recap main contributions, highlight achievements, and reflect on limitations. Su
 [^3]: Gao, Yunfan, et al. "Retrieval-augmented generation for large language models: A survey." arXiv preprint arXiv:2312.10997 (2023).
 
 [^4]: Carbonell, Jaime, and Jade Goldstein. "The use of MMR, diversity-based reranking for reordering documents and producing summaries." Proceedings of the 21st annual international ACM SIGIR conference on Research and development in information retrieval. 1998.
+
+[^5]: Brown, Dorian. "Rank_bm25". Retrieved from: https://github.com/dorianbrown/rank_bm25. Date: 15.02.2024
+
+[^6]: Lv, Yuanhua, and ChengXiang Zhai. "When documents are very long, bm25 fails!." Proceedings of the 34th international ACM SIGIR conference on Research and development in Information Retrieval. 2011.
