@@ -123,7 +123,8 @@ Once the `top_k` documents are extracted, they are formatted together with the i
 ## Experimental setup and results
 
 ### Data
-The data for this study was sourced from the PubMed database, a comprehensive repository of biomedical publications. The inclusion criteria for articles encompassed those that explicitly addressed or discussed topics related to intelligence between 2013/01/01 and 2023/11/01.
+The data for this study was sourced from the PubMed database, a comprehensive repository of publications in biomedical research. 
+The inclusion criteria for articles encompassed those that explicitly addressed or discussed topics related to intelligence between 2013/01/01 and 2023/11/01.
 ![Figure 2](project_docs/abstract_frequency_figures.png)
 The retrieved data set consisted of 193.827 retrieved documents of which 6.36 contained no abstracts. In addition to the abstracts, we extracted various possibly relevant metadata which included the title of the document, the name of its authors, their affiliations, high and low-level topic descriptors, the journal in which it was published as well as the year and month of its publication. On average the data obtained consisted of 6.3 sentences and 183 tokens per abstract. Overall, large abstracts were the exception, as can be seen in Figure 2. Only 0.3% of the abstracts exhibited a token length larger than 512, the maximum input length in the applied embedding model. 
 Chunking each abstract into 2.7 paragraphs further increased the dataset's granularity. This makes the average paragraph contain approximately 2.33 sentences, thus resulting in a well-balanced context scope. 
@@ -154,10 +155,14 @@ The most severe and yet unavoidable limitation of our proposed system is that of
 
 Furthermore, during development, some of our initial ideas were not implementable since the underlying code functionality could not be guaranteed due to errors in the source code of Langchain (s. [issue](https://github.com/langchain-ai/langchain/issues/15959) ). This specifically accounts for our idea to implement and test a [multi-query retrieval strategy](https://python.langchain.com/docs/modules/data_connection/retrievers/MultiQueryRetriever), which uses an LLM to generate queries based on the user input, retrieves documents for each query and then outputs the intersection set of all retrieved documents as the final retrieved set. However, given the already-discussed model limitation, it is likely that even if the issue had been fixed, no improvements would have been gained by deploying the strategy since the generated questions likely would not have been superior to the original user query. 
 
-
 ### Future Work
-
-Recap main contributions, highlight achievements, and reflect on limitations. Suggest potential extensions or improvements for future work.
+Aside from implementing the previously mentioned issues of young and impressibly growing open-source software, a possible avenue for further research is the usage of event processing methodologies, to extract and build a more sophisticated filter strategy, that further strengthens the RAG system in its critical retrieval stage. Further fields of possible extension of this study are vast, including but not limited to:
+1. Benchmarking different retrieval strategies on well-established data sets
+2. Assessing the ability of rag systems to answer questions that demand linguistic causal knowledge throughout the whole pipeline
+3. Implementing novel retrieval strategies such as embedding llm-generated questions per abstract instead of the abstract itself to then retrieve the underlying abstract via the query-question-embedding match.
+   
+   
+TODO: Recap main contributions, highlight achievements, and reflect on limitations. Suggest potential extensions or improvements for future work.
 
 ## References
 [^1]: B. Deepa and K. Ramesh, "Production Level Data Pipeline Environment for Machine Learning Models," 2021 7th International Conference on Advanced Computing and Communication Systems (ICACCS), Coimbatore, India, 2021, pp. 404-407, doi: 10.1109/ICACCS51430.2021.9442035.
