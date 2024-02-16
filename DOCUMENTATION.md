@@ -124,7 +124,11 @@ Once the `top_k` documents are extracted, they are formatted together with the i
 
 ### Data
 ![Figure 2](project_docs/abstract_frequency_figures.png)
-The retrieved data set consisted of 193.827 retrieved documents of which 6.36 contained no abstracts. In addition to the abstracts, we extracted various possibly relevant metadata which included the title of the document, the name of its authors, their affiliations, high and low-level topic descriptors, the journal in which it was published as well as the year and month of its publication. On average the data obtained consisted of 6.3 sentences and 183 tokens per abstract. Overall, large abstracts were the exception than the norm, as can be seen in Figure 2. Only 0.3% of the abstracts exhibited a token length larger than 512, which was the maximum input length in the applied embedding model. As a result of our chunking methodology, each abstract was segmented into 2.7 paragraphs on average. 
+The retrieved data set consisted of 193.827 retrieved documents of which 6.36 contained no abstracts. In addition to the abstracts, we extracted various possibly relevant metadata which included the title of the document, the name of its authors, their affiliations, high and low-level topic descriptors, the journal in which it was published as well as the year and month of its publication. On average the data obtained consisted of 6.3 sentences and 183 tokens per abstract. Overall, large abstracts were the exception, as can be seen in Figure 2. Only 0.3% of the abstracts exhibited a token length larger than 512, the maximum input length in the applied embedding model. 
+Chunking each abstract into 2.7 paragraphs further increased the dataset's granularity. This makes the average paragraph contain approximately 2.33 sentences, thus resulting in a well-balanced context scope. 
+![Figure 2](project_docs/years_and_ngrams.png)
+Considering the timeframe of our extracted abstracts, it is not surprising that nearly all articles have an attributed publishing year between 2013 and 2023. The very few articles that fall into the categories of 2024 and 2012 can most likely be traced back to inaccuracies in the Entrez API or Pubmed itself. Within the time range of 2013/01/01 and 2023/11/01, the retrieved data exhibits a heavily left-skewed publication year distribution. As can be seen in Figure 3, a possible explanation of this increased publication growth is the general rise of research in AI. 
+
 
 #### ChromaDB vector store
  
