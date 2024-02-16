@@ -54,8 +54,8 @@ In the following paragraphs, we will highlight the noticeable aspects of each of
 
 ### Data Processing Pipeline
 #### Data Extraction
-Data extraction was performed in the "extract_data_node" via the Entrez Programming Utilities (API). Provided by the National Center for Biotechnology Information (NCBI) Entrez offers relatively easy, although limited access to retrieve data from various NCBI databases, including PubMed [^2]. The procedure of obtaining the data mainly included two steps: 
-1. Using Entrez's research function to retrieve article IDs that match the project requirements i.e. articles referring to the keyword "Intelligence" and published between 2013/01/01 and 2023/11/01.
+Extracting the data for this study was performed via the Entrez Programming Utilities API. Provided by the National Center for Biotechnology Information (NCBI) Entrez offers free, although limited access to retrieve data from various NCBI databases, including PubMed [^2]. The procedure of obtaining the data mainly included two steps: 
+1. Using Entrez's research function to retrieve article IDs from Pubmed that match the project requirements (more details: data section).
 2. Using Entrez's efetch function to retrieve detailed information for each of the retrieved IDs, and writing the retrieved results returned from the handle into a dataframe.
 
 To avoid API limitations and stability issues for large-scoped retrieval, we conducted these two steps in a batch-wise manner. First, we used a sliding window of 30 days for which we retrieved the article IDs iterating over the whole timeframe on a month-by-month basis. Second, when having obtained the full ID list, we fetched the abstracts including their metadata for chunks of 500. 
@@ -123,6 +123,7 @@ Once the `top_k` documents are extracted, they are formatted together with the i
 ## Experimental setup and results
 
 ### Data
+The data for this study was sourced from the PubMed database, a comprehensive repository of biomedical publications. The inclusion criteria for articles encompassed those that explicitly addressed or discussed topics related to intelligence between 2013/01/01 and 2023/11/01.
 ![Figure 2](project_docs/abstract_frequency_figures.png)
 The retrieved data set consisted of 193.827 retrieved documents of which 6.36 contained no abstracts. In addition to the abstracts, we extracted various possibly relevant metadata which included the title of the document, the name of its authors, their affiliations, high and low-level topic descriptors, the journal in which it was published as well as the year and month of its publication. On average the data obtained consisted of 6.3 sentences and 183 tokens per abstract. Overall, large abstracts were the exception, as can be seen in Figure 2. Only 0.3% of the abstracts exhibited a token length larger than 512, the maximum input length in the applied embedding model. 
 Chunking each abstract into 2.7 paragraphs further increased the dataset's granularity. This makes the average paragraph contain approximately 2.33 sentences, thus resulting in a well-balanced context scope. 
