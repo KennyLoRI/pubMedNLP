@@ -64,17 +64,12 @@ For the current architecture sketch & assigned responsibilities see: https://mir
 
 2. **Activate the Q&A System:**
    ```bash
-   kedro run --pipeline=modelling
+   kedro run --pipeline=chat
    ```
 3. **Interact with the system:**
    - Ask your question
    ```bash
    Please enter your question (use *word* for abbreviations or special terms): [your_question]
-   ```
-   - The system will answer and terminate the session
-   - Start with step 2 again and activate the system
-   ```bash
-   kedro run --pipeline=modelling
    ```
    - Ask another question (and so on)
 
