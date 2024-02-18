@@ -33,9 +33,13 @@
 We affirm that we did the project on our own.
 
 ## Introduction
+The increasing growth of published medical research poses a severe challenge for many healthcare practitioners and clinicians to meet demanding day-to-day tasks while staying informed about the fast-moving scientific progress in their domain [^9][^10]. Open databases such as PubMed partly face this challenge, by collecting, storing and maintaining this growing amount of biomedical knowledge. While healthcare professionals indeed refer to PubMed to obtain up-to-date answers to the questions they encounter in their day-to-day practice, with over 1 million new publications per year, extracting the relevant information to a question at hand can often be too time-consuming [^8]. Many questions that cannot be answered within a range of 3 minutes get neglected, possibly to the disadvantage of the affected patient [11]. 
+Question Answering Systems that use updated online information such as Pubmed as a database to provide summarized information to detailed questions could help to fill this crucial gap between a desired answer  and the amount of time necessary to obtain it. While first systems demonstrated this possibility[^12], they encountered severe challenges such as "(1) answer generation from potentially conflicting evidence, (2) utilization of semantic knowledge throughout the QA process, and (3) incorporation of logic and reasoning mechanisms for answer inference"[^12]. Recent advances in Large Language Models give reason to assume that these previous hurdles can now be overcome [^14].  
+Although being pretrained on a vast corpus of data, Large Language Models (LLMs) applied directly for Q&A applications fail when being confronted with user requests that move beyond the scope of the model's pretraining data [^15]. An especially severe problem, if the most recent information or highly specific expert knowledge is desired. 
 
-Although being pretrained on a vast corpus of data, Large Language Models (LLMs) applied for Q&A applications face severe challenges when being confronted with out-of-scope user requests. Especially in highly sensitive domains, such as the medical domain, sharing data with companies that have the resources to train these models is oftentimes not an option. Retrieval augmented generation systems can lead out of this pitfall by providing a way, to use the power of LLMs on one's data without sharing it.
-The purpose of this project was to create such a system based on 190k scientific abstracts from the Pubmed database, to test and evaluate the possibility of creating  a privacy-preserving, question-answering application that meets the high standards required in the medical domain.
+TODO: finish last part of introduction
+Retrieval augmented generation systems provide a way, to use LLMs on sensible data without sharing it.
+The purpose of this project was to create such a system based on 190k scientific abstracts from the Pubmed database, to test and evaluate the possibility of creating  a privacy-preserving, question-answering application that meets the high standards required in the medical domain. 
 
 ## Related Work
 ### A short overview on Retrieval Augmented Generation
@@ -178,3 +182,19 @@ TODO: Recap main contributions, highlight achievements, and reflect on limitatio
 [^6]: Lv, Yuanhua, and ChengXiang Zhai. "When documents are very long, bm25 fails!." Proceedings of the 34th international ACM SIGIR conference on Research and development in Information Retrieval. 2011.
 
 [^7]: Agrawal, Shweta, and Sanjiv Kumar Jain. "Medical text and image processing: applications, issues and challenges." Machine Learning with Health Care Perspective: Machine Learning and Healthcare (2020): 237-262.
+
+[^8]: Landhuis, Esther. "Scientific literature: Information overload." Nature 535.7612 (2016): 457-458.
+
+[^9]: Bougioukas, Konstantinos I., et al. "How to keep up to date with medical information using web‐based resources: A systematised review and narrative synthesis." Health Information & Libraries Journal 37.4 (2020): 254-292.
+
+[^10]: Andrews, James E., et al. "Information-seeking behaviors of practitioners in a primary care practice-based research network (PBRN)." Journal of the Medical Library Association 93.2 (2005): 206.
+
+[^11]: Daei, Azra, et al. "Clinical information seeking behavior of physicians: A systematic review." International journal of medical informatics 139 (2020): 104144.
+
+[^12]: Gobeill, Julien, et al. "Question answering for biology and medicine." 2009 9th International Conference on Information Technology and Applications in Biomedicine. IEEE, 2009.
+
+[^13]: Athenikos, Sofia J., and Hyoil Han. "Biomedical question answering: A survey." Computer methods and programs in biomedicine 99.1 (2010): 1-24.
+
+[^14]: Min, Bonan, et al. "Recent advances in natural language processing via large pre-trained language models: A survey." ACM Computing Surveys 56.2 (2023): 1-40.
+
+[^15]: Zhuang, Yuchen, et al. "Toolqa: A dataset for llm question answering with external tools." Advances in Neural Information Processing Systems 36 (2024).
