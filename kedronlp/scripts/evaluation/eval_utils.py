@@ -3,8 +3,8 @@ import torch
 import regex as re
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
-from kedronlp.embedding_utils import get_langchain_chroma
-from kedronlp.modelling_utils import get_context_details, instantiate_llm, extract_date_range
+from embedding_utils import get_langchain_chroma
+from modelling_utils import get_context_details, instantiate_llm, extract_date_range
 from spellchecker import SpellChecker
 from langchain.schema import Document
 from langchain_community.retrievers import BM25Retriever
@@ -17,30 +17,25 @@ from langchain.chains.query_constructor.base import (
 )
 import ast
 
-def eval_list(query_list, modelling_params, top_k_params):
-    query_list = query_list.split("\n")
+# taken from chat pipeline with small adjustments
+def get_predictions(llm, query_list, modelling_params, top_k_params):
 
     prompt = PromptTemplate(template=modelling_params["prompt_template"], input_variables=["context", "question"])
 
     # create chain
-    llm = instantiate_llm(modelling_params["temperature"],
-                          modelling_params["max_tokens"],
-                          modelling_params["n_ctx"],
-                          modelling_params["top_p"],
-                          modelling_params["n_gpu_layers"],
-                          modelling_params["n_batch"],
-                          modelling_params["verbose"],)
-
     llm_chain = LLMChain(prompt=prompt, llm=llm)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    vectordb = get_langchain_chroma(device=device)
+    vectordb = get_langchain_chroma(device=device, persist_dir=f"../../chroma_store_{top_k_params['granularity']}")
     # Obtain query
     spell = SpellChecker()
     nlp = spacy.load('en_core_web_sm')
 
     query_responses = []
+    contexts = []
     for user_input in query_list:
+        user_input = str(user_input) # make sure it is a string
+        print(f"Provided question: {user_input}")
 
         # Correct query
         if modelling_params["spell_checker"] == True:
@@ -124,9 +119,6 @@ def eval_list(query_list, modelling_params, top_k_params):
         start, end = user_query_filters["publishing_dates"]
         author_names = user_query_filters["author_names"]
         paper_titles = user_query_filters["paper_titles"]
-        # start, end = 2021, 2023
-        # author_names = ["Bill Gates", "Steve Jobs", "Elon Musk"]
-        # paper_titles = ["a paper title", "another paper title"]
 
         filter = {}
         strategy = modelling_params["metadata_strategy"]
@@ -181,6 +173,8 @@ def eval_list(query_list, modelling_params, top_k_params):
                 filter = None
         else:
             filter = None
+
+        print(f"filter: {filter}")
 
         #basic similarity search
         if top_k_params["retrieval_strategy"] == "similarity":
@@ -259,8 +253,12 @@ def eval_list(query_list, modelling_params, top_k_params):
         else:
             context_dict = get_context_details(context=context, print_context=False)
 
-        query_responses.append({"response": response, "query": user_input, **context_dict})
-    
-    query_responses = [str(response) for response in query_responses]
-    query_responses = "\n".join(query_responses)
-    return query_responses
+        query_responses.append(response)
+        retrieved_passages = []
+        for a_context in context:
+            pos = a_context.rfind(": ")
+            passage = a_context[pos+2:]
+            retrieved_passages.append(passage)
+        contexts.append(retrieved_passages)
+
+    return query_responses, contexts

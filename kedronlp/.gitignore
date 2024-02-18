@@ -15,7 +15,11 @@ data/01_raw/*.csv
 /data/06_models/llama-2-7b-chat.Q5_K_M.gguf
 *.csv
 chroma_store
+chroma_store_paragraphs
+chroma_store_abstracts
 .env
+BLEURT-20
+!Evaluation.csv
 
 ##########################
 # Common files

@@ -32,7 +32,7 @@ def chat_loop(modelling_params, top_k_params):
     llm_chain = LLMChain(prompt=prompt, llm=llm)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    vectordb = get_langchain_chroma(device=device)
+    vectordb = get_langchain_chroma(device=device, persist_dir="chroma_store_paragraphs")
 
     # Obtain query
     spell = SpellChecker()
