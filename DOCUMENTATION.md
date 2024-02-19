@@ -139,18 +139,21 @@ Once the `top_k` documents are extracted, they are formatted together with the i
 
 ## Experimental setup and results
 
-### Data
+### Knowledgebase datasets
 The data for this study was sourced from the PubMed database, a comprehensive repository of publications in biomedical research. 
 The inclusion criteria for articles encompassed those that explicitly addressed or discussed topics related to intelligence between 2013/01/01 and 2023/11/01.
 ![Figure 2](project_docs/abstract_frequency_figures.png)
-The retrieved data set consisted of 193.827 retrieved documents of which 6.36 contained no abstracts. In addition to the abstracts, we extracted various possibly relevant metadata which included the title of the document, the name of its authors, their affiliations, high and low-level topic descriptors, the journal in which it was published as well as the year and month of its publication. On average the data obtained consisted of 6.3 sentences and 183 tokens per abstract. Overall, large abstracts were the exception, as can be seen in Figure 2. Only 0.3% of the abstracts exhibited a token length larger than 512, the maximum input length in the applied embedding model. 
-Chunking each abstract into 2.7 paragraphs further increased the dataset's granularity. This makes the average paragraph contain approximately 2.33 sentences, thus resulting in a well-balanced context scope. 
+The retrieved data set consisted of 193.827 retrieved documents of which 6.36 contained no abstracts. In addition to the abstracts, we extracted various possibly relevant metadata which included the title of the document, the name of its authors, their affiliations, high and low-level topic descriptors, the journal in which it was published as well as the year and month of its publication. On average the data obtained consisted of 6.3 sentences and 183 tokens per abstract. Overall, large abstracts were the exception, as can be seen in Figure 2. Only 0.3% of the abstracts exhibited a token length larger than 512, the maximum input length in the applied embedding model. To test if this has an impact on our system's performance, we created a second data set out of this first one, by chunking each abstract into 2.7 paragraphs which we then treated as separate documents. This increased granularity makes the average document in the second dataset contain approximately 2.33 sentences, thus resulting in a more granular context scope. As part of our evaluation procedure, we compare the system's performance once using the first dataset (full abstracts) and once using the second dataset (paragraphs).
 ![Figure 2](project_docs/years_and_ngrams.png)
 Considering the timeframe of our extracted abstracts, it is not surprising that nearly all articles have an attributed publishing year between 2013 and 2023. The very few articles that fall into the categories of 2024 and 2012 can most likely be traced back to inaccuracies in the Entrez API or Pubmed itself. Within the time range of 2013/01/01 and 2023/11/01, the retrieved data exhibits a heavily left-skewed publication year distribution. As can be seen in Figure 3, a possible explanation for this increased publication growth is the general rise of research in "artificial intelligence" (count:30176) which is the most common bigram among all abstracts, followed by "machine learning", "deep learning", "intelligence, ai" and "neural, network(s)". 
-Nevertheless, the dataset goes beyond the scope of artificial intelligence research. Aside from typical academic bigrams such as "present study", biomedical-related bigrams such as "decision making" (count: 7019), "health, care" (count: 5563), "physical, activity" (count: 4698) or even specific vocabulary such as "autism, spectrum" (count: 2132) or "computed, tomography" demonstrate the variety of the retrieved abstracts. 
-TODO: perform bigram analysis on kmeans clusters. 
+Nevertheless, the dataset goes beyond the scope of artificial intelligence research. Aside from typical academic bigrams such as "present study", biomedical-related bigrams such as "decision making" (count: 7019), "health, care" (count: 5563), "physical, activity" (count: 4698) or even specific vocabulary such as "autism, spectrum" (count: 2132) or "computed, tomography" demonstrate the variety of the retrieved abstracts. Consequently, the dataset is suitable to represent a typical knowledge base for a RAG system in the medical domain.
 
-#### ChromaDB vector store
+#### Evaluation data set
+Due to the specific inclusion criteria set forth by the organizational team of the lecture, already existing evaluation datasets such as PubmedQA [^23] were inapplicable since it could not be guaranteed that the necessary context to answer these questions was present in the dataset retrieved. Two other strategies were possible out of which we tested both. Both strategies were based on randomly choosing abstracts that match the inclusion criteria from Pubmed. Using these abstracts the manual strategy consisted of manually crafting question and answer pairs. Although laborious, this task was the more fruitful one. The second strategy consisted of using the abstract as a context together with a prompt as an input into LLM1 (Gemini) to generate a question and then use the question as well as the abstract as the context for LLM2 (Chat GPT 3.5) to generate an answer. Out of 25 generated question-answer pairs only 6 passed qualitative human control checks of: 
+a) answerableness by a human with the correct context)
+b) meaningfulness of the question
+c) correctness of the answer
+
  
 ### Evaluation Method
 To reproducibly determine the best possible system with the given components, we ran a grid-search script that tests [TODO: INSERT NUMBER OF COMBINATIONS] combinations end-to-end, computing their performance measured by the [TODO: INSERT USED METRICS] scores on our validation set consisting of [TODO: INSERT NUMBER OF QUESTIONS IN THE VALIDATION SET]. 
@@ -230,3 +233,5 @@ TODO: Recap main contributions, highlight achievements, and reflect on limitatio
 [^21]: Zakka, Cyril, et al. "Almanac—Retrieval-Augmented Language Models for Clinical Medicine." NEJM AI 1.2 (2024): AIoa2300068.
 
 [^22]: Lozano, Alejandro, et al. "Clinfo. ai: An Open-Source Retrieval-Augmented Large Language Model System for Answering Medical Questions using Scientific Literature." PACIFIC SYMPOSIUM ON BIOCOMPUTING 2024. 2023.
+
+[^23]: Jin, Qiao, et al. "Pubmedqa: A dataset for biomedical research question answering." arXiv preprint arXiv:1909.06146 (2019)
