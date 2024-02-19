@@ -156,6 +156,8 @@ b) meaningfulness of the question
 c) correctness of the answer
 
 Given these reliability issues, the fully automated approach was completely abandoned. Both the manual as well as the semi-automated approach led to adequate pairs leading to one fully human and one partly LLM-generated data set on which the resulting system can be compared. 
+
+![Figure 3](project_docs/semiAutoQuestionTypes.png)
 After the same quality checks, the resulting semi-automated dataset consisted of 53 question-answer pairs of which the majority were yes/no question-answer pairs (9), followed by comparative (8) and "what" (8) as well as "how" (6) and "open-ended" (6) questions. 
  
 ### Evaluation Method
