@@ -1,0 +1,1 @@
+Semi-automatically created evaluation data set for 60 randomly selected abstracts can be accessed [here](https://docs.google.com/spreadsheets/d/1dJ0guA25GjstcgXSWf7s__3HeZmJ_WFFYExRb36rfe0/edit?usp=sharing)
