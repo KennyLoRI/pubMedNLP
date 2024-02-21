@@ -61,15 +61,18 @@ def chat_loop(modelling_params, top_k_params):
 
         # Correct query
         if modelling_params["spell_checker"] == True:
-            # Identify words the user wants to be passed in as they are
-            pattern = r'\*(.*?)\*'  # Regular expression to match words enclosed in **
-            # Use re.findall to extract all matches
-            excemption_words = re.findall(pattern, user_input)
-            # Apply spell correction excluding asterisked words
-            corrected_list = [spell.correction(token) if token.strip('*') not in excemption_words and None else token.strip("*") for token in user_input.split()]
+            # Treat highlighted words and qustion mark specifically
+            pattern = r'\*(.*?)\*'  # Regular expression to match words enclosed in *
+            highlighted_words = re.findall(pattern, user_input)
+            question_mark = '?' if '?' in user_input else ''
 
-            correct_query = ' '.join(corrected_list)
-            print(f"query after spellchecker: {correct_query}")
+            # Apply spell correction excluding asterisked words
+            try:
+                corrected_list = [token.strip('?').strip('*') if token.strip('?').strip(
+                    '*') not in highlighted_words else token.strip('?').strip('*') for token in user_input.split()]
+                correct_query = ' '.join(corrected_list) + question_mark
+            except:
+                correct_query = user_input
         else:
             correct_query = user_input
 

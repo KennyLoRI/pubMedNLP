@@ -4,7 +4,7 @@ extract_params:
   end_date: '2023/11/01'
 
 top_k_params:
-  top_k: 3 # will also be used for ensemble_strategy
+  top_k: 4 # will also be used for ensemble_strategy
   retrieval_strategy: "similarity" #alternatives: "similarity", "max_marginal_relevance", "ensemble_retrieval"
   advanced_dense_retriever: "similarity" #alternative "mmr" # is only relevant when ensemble_retrieval or multi_query_retrieval are selected as retrieval strategy
   mq_include_original: False #boolean indicating if by multiquery retrieval the original query should be included
@@ -13,10 +13,18 @@ modelling_params:
   spell_checker: True
   abstract_only: True
   prompt_template: '''
-    You are an AI assistant that answers questions using as few words as possible and only based on the following context:
-    {context}
-    Question: {question}
-  '''
+You are a biomedical AI assistant to answer medical questions
+mostly about PubMed articles based on provided context.
+If the question is not from the biomedical domain, tell the user that
+the question is out of domain and cannot be answered by you.
+As an AI assistant, answer the question accurately,
+precisely and concisely. Only include information in your answer,
+which is necessary to answer the question. Be as short and concise as possible.
+Do NOT mention that your answer is based on the provided paper or context.
+Use the following context if applicable: {context}
+The question: {question}
+Your answer:
+'''
   temperature: 0
   max_tokens: 1000
   n_ctx: 2048
