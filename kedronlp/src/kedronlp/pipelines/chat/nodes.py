@@ -17,6 +17,7 @@ from langchain.chains.query_constructor.base import (
 )
 import ast
 import os
+from time import time
 
 def chat_loop(modelling_params, top_k_params):
     prompt = PromptTemplate(template=modelling_params["prompt_template"], input_variables=["context", "question"])
@@ -44,6 +45,7 @@ def chat_loop(modelling_params, top_k_params):
     if top_k_params["retrieval_strategy"] == "ensemble_retrieval":
         print(f"initiating ensemble retriever... (takes time due to inefficient workaround - no chroma bm25 integration yet)")
         #initiate BM25 retriever
+        start_init_bm25 = time()
         lang_docs = [Document(page_content=doc) for doc in vectordb.get().get("documents", [])] # TODO: status quo is an inefficient workaround - no chroma bm25 integration yet
         bm25_retriever = BM25Retriever.from_documents(lang_docs)
         bm25_retriever.k = top_k_params["top_k"]
@@ -60,9 +62,9 @@ def chat_loop(modelling_params, top_k_params):
             retrievers=[bm25_retriever, similarity_retriever],
             weights=[0.5, 0.5],
         )
+        end_init_bm25 = time()
+        print(f"total time required to initialize ensemble retriever: {end_init_bm25-start_init_bm25:.2f}s")
 
-    # Obtain query
-    spell = SpellChecker()
     nlp = spacy.load('en_core_web_sm')
 
     #print user information
@@ -72,7 +74,7 @@ def chat_loop(modelling_params, top_k_params):
     
     ***********
     - To get the most out of this system, enclose special abbreviations or medical terms in asterisks (*word*). 
-    Example question: What is the *TT100K* dataset?
+    Example question: What is *TT100K*?
     - To leave the chat please type 'exit' in the input
     - Keep in mind, no chat history is implemented to save context space of the LLM
     - Due to the limitation of ChromaDB not being able to save lists as metadata, the order of author names
@@ -88,19 +90,21 @@ def chat_loop(modelling_params, top_k_params):
 
         # Correct query
         if modelling_params["spell_checker"] == True:
-            # Identify words the user wants to be passed in as they are
-            pattern = r'\*(.*?)\*'  # Regular expression to match words enclosed in **
-            # Use re.findall to extract all matches
-            excemption_words = re.findall(pattern, user_input)
-            # Apply spell correction excluding asterisked words
-            corrected_list = [spell.correction(token) if token.strip('*') not in excemption_words and None else token.strip("*") for token in user_input.split()]
+            # Treat highlighted words and qustion mark specifically
+            pattern = r'\*(.*?)\*'  # Regular expression to match words enclosed in *
+            highlighted_words = re.findall(pattern, user_input)
+            question_mark = '?' if '?' in user_input else ''
 
-            correct_query = ' '.join(corrected_list)
+            # Apply spell correction excluding asterisked words
+            try:
+                corrected_list = [token.strip('?').strip('*') if token.strip('?').strip(
+                    '*') not in highlighted_words else token.strip('?').strip('*') for token in user_input.split()]
+                correct_query = ' '.join(corrected_list) + question_mark
+            except:
+                correct_query = user_input
             print(f"query after spellchecker: {correct_query}")
         else:
             correct_query = user_input
-
-        
 
         # Extract metadata-filter intention out of query
         if modelling_params["metadata_strategy"] == "parser":
