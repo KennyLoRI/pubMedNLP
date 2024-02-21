@@ -16,25 +16,16 @@ from langchain.chains.query_constructor.base import (
     AttributeInfo,
 )
 import ast
-from time import time
 import os
 
 # taken from chat pipeline with small adjustments
-def get_predictions(llm, query_list, modelling_params, top_k_params):
+def get_predictions(llm, query_list, modelling_params, top_k_params, retriever):
 
     prompt = PromptTemplate(template=modelling_params["prompt_template"], input_variables=["context", "question"])
 
     # create chain
     llm_chain = LLMChain(prompt=prompt, llm=llm)
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-    vectordb_path = f"../../chroma_store_{top_k_params['granularity']}"
-    assert(os.path.isdir(vectordb_path))
-    
-    vectordb = get_langchain_chroma(device=device, persist_dir=vectordb_path)
-    # Obtain query
-    spell = SpellChecker()
     nlp = spacy.load('en_core_web_sm')
 
     query_responses = []
@@ -45,14 +36,18 @@ def get_predictions(llm, query_list, modelling_params, top_k_params):
 
         # Correct query
         if modelling_params["spell_checker"] == True:
-            # Identify words the user wants to be passed in as they are
-            pattern = r'\*(.*?)\*'  # Regular expression to match words enclosed in **
-            # Use re.findall to extract all matches
-            excemption_words = re.findall(pattern, user_input)
-            # Apply spell correction excluding asterisked words
-            corrected_list = [spell.correction(token) if token.strip('*') not in excemption_words and None else token.strip("*") for token in user_input.split()]
+            # Treat highlighted words and qustion mark specifically
+            pattern = r'\*(.*?)\*'  # Regular expression to match words enclosed in *
+            highlighted_words = re.findall(pattern, user_input)
+            question_mark = '?' if '?' in user_input else ''
 
-            correct_query = ' '.join(corrected_list)
+            # Apply spell correction excluding asterisked words
+            try:
+                corrected_list = [token.strip('?').strip('*') if token.strip('?').strip(
+                    '*') not in highlighted_words else token.strip('?').strip('*') for token in user_input.split()]
+                correct_query = ' '.join(corrected_list) + question_mark
+            except:
+                correct_query = user_input
         else:
             correct_query = user_input
 
@@ -117,18 +112,18 @@ def get_predictions(llm, query_list, modelling_params, top_k_params):
                     "query": correct_query
                 }
             )
-            
-        user_query = correct_query
-        user_query_filters = str(structured_query)
 
-        user_query_filters = ast.literal_eval(user_query_filters)
-        start, end = user_query_filters["publishing_dates"]
-        author_names = user_query_filters["author_names"]
-        paper_titles = user_query_filters["paper_titles"]
+        metadata_strategy = modelling_params["metadata_strategy"]
+            
+        user_input = correct_query
 
         filter = {}
-        strategy = modelling_params["metadata_strategy"]
-        if strategy == "parser" or strategy == "llm_detection":
+        if metadata_strategy == "parser" or metadata_strategy == "llm_detection":
+            user_query_filters = str(structured_query)
+            user_query_filters = ast.literal_eval(user_query_filters)
+            start, end = user_query_filters["publishing_dates"]
+            author_names = user_query_filters["author_names"]
+            paper_titles = user_query_filters["paper_titles"]
             publishing_dates_filter = {}
             if start != None:
                 gte_start = {
@@ -184,33 +179,16 @@ def get_predictions(llm, query_list, modelling_params, top_k_params):
 
         #basic similarity search
         if top_k_params["retrieval_strategy"] == "similarity":
-            docs = vectordb.similarity_search(user_input, k=top_k_params["top_k"], filter=filter)
+            docs = retriever.similarity_search(user_input, k=top_k_params["top_k"], filter=filter)
 
         #diversity enforcing similarity search
         if top_k_params["retrieval_strategy"] == "max_marginal_relevance":
             # enforces more diversity of the top_k documents
-            docs = vectordb.max_marginal_relevance_search(user_input, k=top_k_params["top_k"], filter=filter)
+            docs = retriever.max_marginal_relevance_search(user_input, k=top_k_params["top_k"], filter=filter)
 
         #hybrid similarity search including BM25 for keyword
         if top_k_params["retrieval_strategy"] == "ensemble_retrieval":
-            #initiate BM25 retriever
-            lang_docs = [Document(page_content=doc) for doc in vectordb.get().get("documents", [])] # TODO: status quo is an inefficient workaround - no chroma bm25 integration yet
-            bm25_retriever = BM25Retriever.from_documents(lang_docs)
-            bm25_retriever.k = top_k_params["top_k"]
-
-            #initiate similarity retriever
-            similarity_retriever = vectordb.as_retriever(
-                search_kwargs={
-                    "k": top_k_params["top_k"],
-                    "search_type": top_k_params["advanced_dense_retriever"],
-                    "filter": filter,
-                })
-
-            #initiate ensemble (uses reciprocal rank fusion in the background with default settings)
-            ensemble_retriever = EnsembleRetriever(
-                retrievers=[bm25_retriever, similarity_retriever], weights=[0.5, 0.5]
-            )
-            docs = ensemble_retriever.get_relevant_documents(user_input)
+            docs = retriever.get_relevant_documents(user_input, metadata=filter)
 
         # Given a query, use an LLM to write a set of queries (default: 3).
         # Retrieve docs for each query. Return the unique union of all retrieved docs.
@@ -218,7 +196,7 @@ def get_predictions(llm, query_list, modelling_params, top_k_params):
             # TODO: not working yet, since generate_queries function of .from_llm falsely creates empty strings.
             # Note: Generated queries were not of high quality since the used llm is not super powerful.
             multiquery_llm_retriever = MultiQueryRetriever.from_llm(
-                retriever = vectordb.as_retriever(),
+                retriever = retriever.as_retriever(),
                 llm=llm,
                 include_original = top_k_params["mq_include_original"]
             )
@@ -226,8 +204,6 @@ def get_predictions(llm, query_list, modelling_params, top_k_params):
 
         top_k_docs = pd.DataFrame([doc.page_content for doc in docs])
         top_k_docs = top_k_docs.drop_duplicates().head(top_k_params["top_k"])
-
-        user_input = user_query
 
         # obtain context for prompt
         context = top_k_docs.values.flatten().tolist()
@@ -242,13 +218,13 @@ def get_predictions(llm, query_list, modelling_params, top_k_params):
             continue
 
         # extract and structure context for input
-        input_dict = get_context_details(context=context, print_context = False, as_input_dict = True, user_input = user_input, abstract_only = modelling_params["abstract_only"])
+        input_dict = get_context_details(context=context, top_k_params=top_k_params, print_context = False, as_input_dict = True, user_input = user_input, abstract_only = modelling_params["abstract_only"])
         # Reading & Responding
         response = llm_chain.invoke(input_dict)["text"]
 
         # If response is empty, save the retrieved context but print apologies statement
         if not response or len(response.strip()) == 0:
-            context_dict = get_context_details(context=context, print_context=False)
+            context_dict = get_context_details(context=context, top_k_params=top_k_params, print_context=False)
 
             response = """Answer: Unfortunately I have no information on your question at hand. 
             This might be the case since I only consider abstracts from Pubmed that match the keyword intelligence. 
@@ -257,7 +233,7 @@ def get_predictions(llm, query_list, modelling_params, top_k_params):
 
         # print and save context details
         else:
-            context_dict = get_context_details(context=context, print_context=False)
+            context_dict = get_context_details(context=context, top_k_params=top_k_params, print_context=False)
 
         query_responses.append(response)
         retrieved_passages = []

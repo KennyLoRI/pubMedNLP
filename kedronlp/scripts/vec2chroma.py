@@ -71,6 +71,12 @@ for row in reader:
             value = value
         metadata[key] = value
 
+    # preprocess paragraph, leave abstract as is
+    if args.granularity == "paragraphs":
+        split = row[doc_key].split("Paragraph-")
+        new_doc = split[0] + "Abstract" + split[1][1:]
+        row[doc_key] = new_doc
+
     metadatas.append(metadata)
     ids.append(id)
     embeddings.append(ast.literal_eval(row["embedding"]))

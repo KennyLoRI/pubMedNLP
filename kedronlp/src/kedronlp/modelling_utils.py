@@ -15,7 +15,12 @@ def extract_abstract(context, question):
   return input_dict
 
 #function to print context information
-def get_context_details(context, print_context = True, as_input_dict = False, user_input = None, abstract_only = False):
+def get_context_details(context, top_k_params, print_context = True, as_input_dict = False, user_input = None, abstract_only = False):
+  if top_k_params["granularity"] == "paragraphs":
+    granularity = "Paragraph"
+  elif top_k_params["granularity"] == "abstracts":
+    granularity = "Abstract"
+
   abstract_pattern = re.compile(r"Abstract: (.+?)(?=\n)")
   authors_pattern = re.compile(r'Authors: (.+?)\n')
   title_pattern = re.compile(r'Title: (.+?)\n')
@@ -60,7 +65,7 @@ def get_context_details(context, print_context = True, as_input_dict = False, us
       else:
         context_strings = []
         for i, (pub_year, title, abstract) in enumerate(zip(year_list, title_list, abstracts_list)):
-            paper_info = f"Paper {i}:\nTitle: {title}\nPublication Year: {pub_year}\nAbstract: {abstract}\n\n"
+            paper_info = f"Paper {i}:\nTitle: {title}\nPublication Year: {pub_year}\n{granularity}: {abstract}\n\n"
             context_strings.append(paper_info)
         structured_context = ' '.join(context_strings)
         context = {"context": structured_context, "question": user_input}
