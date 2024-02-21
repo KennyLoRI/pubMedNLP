@@ -2,55 +2,59 @@ from eval_utils import get_predictions
 from modelling_utils import instantiate_llm
 from scorer import Scorer
 import pandas as pd
-from random import randint
+import random
 import numpy as np
+import math
 
 prompt_template = """
-You are a biomedical AI assistant to answer medical questions
-mostly about PubMed articles based on provided context.
+You are a biomedical AI assistant to answer medical questions 
+mostly about PubMed articles based on provided context. 
 If the question is not from the biomedical domain, tell the user that 
-the question is out of domain and can't be answered by you.
+the question is out of domain and can't be answered by you. 
 As an AI assistant, answer the question accurately, 
-precisely and concisely. Only include information in your answer,
-which is necessary to answer the question. Be as short and concise as possible.
-Do NOT mention that your answer is based on the provided paper or context.
+precisely and concisely. Only include information in your answer, 
+which is necessary to answer the question. Be as short and concise as possible. 
+Do NOT mention that your answer is based on the provided paper or context. 
 Use the following context if applicable: {context} 
 The question: {question} 
 Your answer: 
 """
 
-temperatures = [0, 0.25, 0.5]
-retrieval_strategies = ["similarity", "max_marginal_relevance", "ensemble_retrieval"]
+temperatures = [0, 0.5]
+retrieval_strategies = ["similarity", "max_marginal_relevance"] #"ensemble_retrieval"]
 advanced_dense_retrievers = ["similarity", "mmr"]
-granularities = ["paragraphs"]  # , "abstracts"]
+granularities = ["paragraphs", "abstracts"]
 top_ks = [2, 3]
-metadata_strategies = ["parser", "llm_detection", "none"]
+metadata_strategies = ["parser", "none"]
 spell_checker_options = [True, False]
+abstract_only_options = [True, False]
 
 combinations = []
 for temperature in temperatures:
     for spell_checker in spell_checker_options:
-        for metadata_strategy in metadata_strategies:
-            for granularity in granularities:
-                for top_k in top_ks:
-                    if granularity == "paragraphs":
-                        top_k *= 2
-                    for retrieval_strategy in retrieval_strategies:
-                        for advanced_dense_retriever in advanced_dense_retrievers:
-                            combinations.append(
-                                {
-                                    "temperature": temperature,
-                                    "spell_checker": spell_checker,
-                                    "metadata_strategy": metadata_strategy,
-                                    "granularity": granularity,
-                                    "top_k": top_k,
-                                    "retrieval_strategy": retrieval_strategy,
-                                    "advanced_dense_retriever": advanced_dense_retriever,
-                                }
-                            )
-                            if retrieval_strategy != "ensemble_retrieval":
-                                combinations[-1]["advanced_dense_retriever"] = "none"
-                                break
+        for abstract_only in abstract_only_options:
+            for metadata_strategy in metadata_strategies:
+                for granularity in granularities:
+                    for top_k in top_ks:
+                        if granularity == "paragraphs":
+                            top_k *= 2
+                        for retrieval_strategy in retrieval_strategies:
+                            for advanced_dense_retriever in advanced_dense_retrievers:
+                                combinations.append(
+                                    {
+                                        "temperature": temperature,
+                                        "spell_checker": spell_checker,
+                                        "abstract_only": abstract_only,
+                                        "metadata_strategy": metadata_strategy,
+                                        "granularity": granularity,
+                                        "top_k": top_k,
+                                        "retrieval_strategy": retrieval_strategy,
+                                        "advanced_dense_retriever": advanced_dense_retriever,
+                                    }
+                                )
+                                if retrieval_strategy != "ensemble_retrieval":
+                                    combinations[-1]["advanced_dense_retriever"] = "none"
+                                    break
 
 df = pd.read_csv("Evaluation.csv")
 types = df["Question Type"].unique()
@@ -61,14 +65,18 @@ for a_type in types:
     ]
     test_set[a_type] = questions_answers.to_dict(orient="records")
 
+# calculate split for validation set, equals about 40% of all data
+splits = [math.ceil(len(test_set[a_type])/4) for a_type in test_set.keys()]
+
 validation_set = []
-for a_type, qas_list in test_set.items():
-    if len(qas_list) > 1:
-        qas = qas_list.pop(randint(0, len(qas_list) - 1))
-        validation_set.append(qas)
+for a_type, split in zip(test_set.keys(), splits):
+    if len(test_set[a_type]) > 1:
+        for i in range(split):
+            qas = test_set[a_type].pop(random.randint(0, len(test_set[a_type]) - 1))
+            validation_set.append(qas)
 
 # for testing
-validation_set = validation_set[5:10]
+validation_set = random.sample(validation_set, 3)
 test_set = {a_type: [qa_list[0]] for a_type, qa_list in test_set.items()}
 
 print(f"validation set length: {len(validation_set)}")
@@ -79,7 +87,6 @@ scorer = Scorer()
 # validation, find best set of parameters
 combination_scores = []
 last_temperature = -1
-i = 0
 for combination in combinations:
 
     combination["mq_include_original"] = False
@@ -90,7 +97,6 @@ for combination in combinations:
     combination["n_gpu_layers"] = -1
     combination["n_batch"] = 512
     combination["verbose"] = True
-    combination["abstract_only"] = False
 
     # temperature change --> reinitiate llm
     if combination["temperature"] != last_temperature:
@@ -105,6 +111,10 @@ for combination in combinations:
         )
         last_temperature = combination["temperature"]
 
+    for param, value in combination.items():
+        print(f"{param}: {value}")
+    print()
+
     questions = [qas["Question"] for qas in validation_set]
     references = [qas["Answer"] for qas in validation_set]
     predictions, _ = get_predictions(llm, questions, combination, combination)
@@ -112,10 +122,9 @@ for combination in combinations:
     combination_scores.append(
         {
             "combination": combination,
-            "scores": scorer.get_scores(predictions=predictions, references=references),
+            "scores": scores,
         }
     )
-    breakpoint()
 
 
 def weighted_score(combination_score):
@@ -200,6 +209,7 @@ with open("ranked_combinations.txt", "w") as file:
     relevant_combination_keys = [
         "temperature",
         "spell_checker",
+        "abstract_only",
         "metadata_strategy",
         "granularity",
         "top_k",

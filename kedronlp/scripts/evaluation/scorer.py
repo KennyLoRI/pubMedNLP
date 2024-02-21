@@ -8,7 +8,7 @@ class Scorer:
         self.bleu = evaluate.load("bleu")
         self.rouge = evaluate.load("rouge")
         self.bertscore = evaluate.load("bertscore")
-        checkpoint = "BLEURT-20"
+        checkpoint = "BLEURT-20-D12"
         self.bleurt = score.BleurtScorer(checkpoint)
 
     def get_scores(self, predictions, references):

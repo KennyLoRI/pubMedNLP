@@ -18,7 +18,7 @@ chroma_store
 chroma_store_paragraphs
 chroma_store_abstracts
 .env
-BLEURT-20
+BLEURT-20*
 !Evaluation.csv
 
 ##########################
