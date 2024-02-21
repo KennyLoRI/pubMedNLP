@@ -17,6 +17,7 @@ from langchain.chains.query_constructor.base import (
 )
 import ast
 from time import time
+import os
 
 # taken from chat pipeline with small adjustments
 def get_predictions(llm, query_list, modelling_params, top_k_params):
@@ -27,7 +28,11 @@ def get_predictions(llm, query_list, modelling_params, top_k_params):
     llm_chain = LLMChain(prompt=prompt, llm=llm)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    vectordb = get_langchain_chroma(device=device, persist_dir=f"../../chroma_store_{top_k_params['granularity']}")
+
+    vectordb_path = f"../../chroma_store_{top_k_params['granularity']}"
+    assert(os.path.isdir(vectordb_path))
+    
+    vectordb = get_langchain_chroma(device=device, persist_dir=vectordb_path)
     # Obtain query
     spell = SpellChecker()
     nlp = spacy.load('en_core_web_sm')

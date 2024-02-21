@@ -16,6 +16,7 @@ from langchain.chains.query_constructor.base import (
     AttributeInfo,
 )
 import ast
+import os
 
 def chat_loop(modelling_params, top_k_params):
     prompt = PromptTemplate(template=modelling_params["prompt_template"], input_variables=["context", "question"])
@@ -32,7 +33,33 @@ def chat_loop(modelling_params, top_k_params):
     llm_chain = LLMChain(prompt=prompt, llm=llm)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    vectordb = get_langchain_chroma(device=device, persist_dir="chroma_store_paragraphs")
+
+    vectordb_path = f"chroma_store_{top_k_params['granularity']}"
+    if not os.path.isdir(vectordb_path):
+        print("vector database does not exist! It should exist inside 'PubMedNLP/kedronlp'!")
+        exit()
+    
+    vectordb = get_langchain_chroma(device=device, persist_dir=vectordb_path)
+
+    if top_k_params["retrieval_strategy"] == "ensemble_retrieval":
+        print(f"initiating ensemble retriever... (takes time due to inefficient workaround - no chroma bm25 integration yet)")
+        #initiate BM25 retriever
+        lang_docs = [Document(page_content=doc) for doc in vectordb.get().get("documents", [])] # TODO: status quo is an inefficient workaround - no chroma bm25 integration yet
+        bm25_retriever = BM25Retriever.from_documents(lang_docs)
+        bm25_retriever.k = top_k_params["top_k"]
+
+        #initiate similarity retriever
+        similarity_retriever = vectordb.as_retriever(
+            search_type=top_k_params["advanced_dense_retriever"],
+            search_kwargs={
+                "k": top_k_params["top_k"],
+            })
+
+        #initiate ensemble (uses reciprocal rank fusion in the background with default settings)
+        ensemble_retriever = EnsembleRetriever(
+            retrievers=[bm25_retriever, similarity_retriever],
+            weights=[0.5, 0.5],
+        )
 
     # Obtain query
     spell = SpellChecker()
@@ -213,24 +240,7 @@ def chat_loop(modelling_params, top_k_params):
 
         #hybrid similarity search including BM25 for keyword
         if top_k_params["retrieval_strategy"] == "ensemble_retrieval":
-            #initiate BM25 retriever
-            lang_docs = [Document(page_content=doc) for doc in vectordb.get().get("documents", [])] # TODO: status quo is an inefficient workaround - no chroma bm25 integration yet
-            bm25_retriever = BM25Retriever.from_documents(lang_docs)
-            bm25_retriever.k = top_k_params["top_k"]
-
-            #initiate similarity retriever
-            similarity_retriever = vectordb.as_retriever(
-                search_kwargs={
-                    "k": top_k_params["top_k"],
-                    "search_type": top_k_params["advanced_dense_retriever"],
-                    "filter": filter,
-                })
-
-            #initiate ensemble (uses reciprocal rank fusion in the background with default settings)
-            ensemble_retriever = EnsembleRetriever(
-                retrievers=[bm25_retriever, similarity_retriever], weights=[0.5, 0.5]
-            )
-            docs = ensemble_retriever.get_relevant_documents(user_input)
+            docs = ensemble_retriever.get_relevant_documents(user_input, metadata=filter)
 
         # Given a query, use an LLM to write a set of queries (default: 3).
         # Retrieve docs for each query. Return the unique union of all retrieved docs.

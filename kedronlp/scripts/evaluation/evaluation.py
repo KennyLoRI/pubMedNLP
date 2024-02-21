@@ -26,35 +26,32 @@ advanced_dense_retrievers = ["similarity", "mmr"]
 granularities = ["paragraphs", "abstracts"]
 top_ks = [2, 3]
 metadata_strategies = ["parser", "none"]
-spell_checker_options = [True, False]
 abstract_only_options = [True, False]
 
 combinations = []
 for temperature in temperatures:
-    for spell_checker in spell_checker_options:
-        for abstract_only in abstract_only_options:
-            for metadata_strategy in metadata_strategies:
-                for granularity in granularities:
-                    for top_k in top_ks:
-                        if granularity == "paragraphs":
-                            top_k *= 2
-                        for retrieval_strategy in retrieval_strategies:
-                            for advanced_dense_retriever in advanced_dense_retrievers:
-                                combinations.append(
-                                    {
-                                        "temperature": temperature,
-                                        "spell_checker": spell_checker,
-                                        "abstract_only": abstract_only,
-                                        "metadata_strategy": metadata_strategy,
-                                        "granularity": granularity,
-                                        "top_k": top_k,
-                                        "retrieval_strategy": retrieval_strategy,
-                                        "advanced_dense_retriever": advanced_dense_retriever,
-                                    }
-                                )
-                                if retrieval_strategy != "ensemble_retrieval":
-                                    combinations[-1]["advanced_dense_retriever"] = "none"
-                                    break
+    for abstract_only in abstract_only_options:
+        for metadata_strategy in metadata_strategies:
+            for granularity in granularities:
+                for top_k in top_ks:
+                    if granularity == "paragraphs":
+                        top_k *= 2
+                    for retrieval_strategy in retrieval_strategies:
+                        for advanced_dense_retriever in advanced_dense_retrievers:
+                            combinations.append(
+                                {
+                                    "temperature": temperature,
+                                    "abstract_only": abstract_only,
+                                    "metadata_strategy": metadata_strategy,
+                                    "granularity": granularity,
+                                    "top_k": top_k,
+                                    "retrieval_strategy": retrieval_strategy,
+                                    "advanced_dense_retriever": advanced_dense_retriever,
+                                }
+                            )
+                            if retrieval_strategy != "ensemble_retrieval":
+                                combinations[-1]["advanced_dense_retriever"] = "none"
+                                break
 
 df = pd.read_csv("Evaluation.csv")
 types = df["Question Type"].unique()
@@ -97,6 +94,7 @@ for combination in combinations:
     combination["n_gpu_layers"] = -1
     combination["n_batch"] = 512
     combination["verbose"] = True
+    combination["spell_checker"] = True
 
     # temperature change --> reinitiate llm
     if combination["temperature"] != last_temperature:
@@ -208,7 +206,6 @@ ranked_retriever_top_k_recalls = sorted(retriever_top_k_recalls, key=lambda x: x
 with open("ranked_combinations.txt", "w") as file:
     relevant_combination_keys = [
         "temperature",
-        "spell_checker",
         "abstract_only",
         "metadata_strategy",
         "granularity",
