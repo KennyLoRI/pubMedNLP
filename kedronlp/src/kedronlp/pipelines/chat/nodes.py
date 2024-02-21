@@ -276,13 +276,13 @@ def chat_loop(modelling_params, top_k_params):
             continue
 
         # extract and structure context for input
-        input_dict = get_context_details(context=context, print_context = False, as_input_dict = True, user_input = user_input, abstract_only = modelling_params["abstract_only"])
+        input_dict = get_context_details(context=context, top_k_params=top_k_params, print_context = False, as_input_dict = True, user_input = user_input, abstract_only = modelling_params["abstract_only"])
         # Reading & Responding
         response = llm_chain.invoke(input_dict)["text"]
 
         # If response is empty, save the retrieved context but print apologies statement
         if not response or len(response.strip()) == 0:
-            context_dict = get_context_details(context=context, print_context=False)
+            context_dict = get_context_details(context=context, top_k_params=top_k_params, print_context=False)
 
             print("""Answer: Unfortunately I have no information on your question at hand. 
             This might be the case since I only consider abstracts from Pubmed that match the keyword intelligence. 
@@ -296,4 +296,4 @@ def chat_loop(modelling_params, top_k_params):
 
         # print and save context details
         else:
-            context_dict = get_context_details(context=context)
+            context_dict = get_context_details(context=context, top_k_params=top_k_params)
