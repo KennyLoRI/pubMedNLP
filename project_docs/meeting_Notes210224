@@ -1,0 +1,11 @@
+Particiants: Daniel, Kenny
+Topics: Evaluation Strategy - solving persisting issues and bugs. 
+
+Key Takeaways: 
+- Modify ensemble retriever logic such that it does not have to be reinitialized
+- Run gridsearch without spellchecker for efficiency since evaluation dataset does not contain typos and its not necessary
+- Spellchecker stabilized
+- Langchain update causing ensemble retriever to crash - fixed
+- Other evaluation set-up discussion
+- Deadline for starting the gridsearch on a cluster: Friday 23.02.2024. 
+
