@@ -2,7 +2,6 @@ from sentence_transformers import util
 from eval_utils import get_predictions
 from get_retriever import get_retriever
 from modelling_utils import instantiate_llm
-from embedding_utils import PubMedBert
 from scorer import Scorer
 import pandas as pd
 import random
@@ -254,8 +253,7 @@ with open("ranked_question_types_scores.txt", "w") as file:
 
 
 # evaluation retriever
-# * each qa pair only has one source, so recall can only be 0 or 1 for each pair
-# * calculate embedding distance between retrieved source and gold source, keep shortest distance
+# each qa pair only has one source, so recall can only be 0 or 1 for each pair
 all_qas = []
 for question_type, qas_list in test_set.items():
     all_qas.extend(qas_list)
@@ -263,7 +261,6 @@ questions = [str(qas["Question"]) for qas in all_qas if str(qas["Source"]) != "n
 references = [str(qas["Answer"]) for qas in all_qas if str(qas["Source"]) != "nan"]
 sources = [str(qas["Source"]) for qas in all_qas if str(qas["Source"]) != "nan"]
 
-model = PubMedBert(device=device)
 retrievers_results = []
 for retrieval_strategy in retrieval_strategies:
     best_combination["retrieval_strategy"] = retrieval_strategy
@@ -277,7 +274,6 @@ for retrieval_strategy in retrieval_strategies:
         _, contexts = get_predictions(llm, questions, best_combination, best_combination, retriever)
 
         recalls = []
-        min_distances = []
         for retrieved_sources, gold_source in zip(contexts, sources):
             in_gold = 0
             for source in retrieved_sources:
@@ -289,34 +285,20 @@ for retrieval_strategy in retrieval_strategies:
                     break
             recalls.append(in_gold)
 
-            retrieved_sources_embeddings = model.encode(retrieved_sources)
-            gold_source_embedding = model.encode(gold_source)
-            distances = util.cos_sim(retrieved_sources_embeddings, gold_source_embedding)
-            min_distances.append(torch.min(distances).item())
-
         recall = np.around(np.mean(recalls), 4)
-        min_distance = np.around(np.mean(min_distances), 4)
 
         retrievers_results.append({
             "retriever_strategy": retrieval_strategy,
             "advanced_dense_retriever": advanced_dense_retriever,
             "avg_recall": recall,
-            "avg_cos_distance": min_distance,
         })
         if break_after:
             break
 
 ranked_retrievers_recalls = sorted(retrievers_results, key=lambda x: x["avg_recall"], reverse=True)
-ranked_retrievers_distance = sorted(retrievers_results, key=lambda x: x["avg_cos_distance"], reverse=True)
 
 with open("ranked_retrievers_recalls.txt", "w") as file:
     for i, retriever_combination in enumerate(ranked_retrievers_recalls):
-        file.write(f"retriever_combination {i}:\n")
-        for key, value in retriever_combination.items():
-            file.write(f"\t{key}: {value}\n")
-
-with open("ranked_retrievers_distance.txt", "w") as file:
-    for i, retriever_combination in enumerate(ranked_retrievers_distance):
         file.write(f"retriever_combination {i}:\n")
         for key, value in retriever_combination.items():
             file.write(f"\t{key}: {value}\n")
