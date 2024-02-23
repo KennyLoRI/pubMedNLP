@@ -16,11 +16,11 @@ class Scorer:
             predictions=predictions,
             references=references
         )["bleu"]
-        roguescore = sum(self.rouge.compute(
+        rougescore = np.mean(list(self.rouge.compute(
             predictions=predictions,
             references=references,
-            use_aggregator=True
-        ).values())
+            use_aggregator=True,
+        ).values()))
         bertscore = np.mean(
             self.bertscore.compute(
                 predictions=predictions,
@@ -34,7 +34,7 @@ class Scorer:
 
         return {
             "bleuscore": bleuscore,
-            "roguescore": roguescore,
+            "rougescore": rougescore,
             "bertscore": bertscore,
             "bleurtscore": bleurtscore,
         }
