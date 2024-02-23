@@ -214,7 +214,7 @@ def get_predictions(llm, query_list, modelling_params, top_k_params, retriever):
                 This might be the case since I only consider abstracts from Pubmed that match the keyword intelligence. 
                 Furthermore, I only consider papers published between 2013 and 2023. 
                 In case your question matches these requirements please try reformulating your query"""
-            query_responses.append({"response": response, "query": user_input})
+            query_responses.append(response)
             continue
 
         # extract and structure context for input
@@ -224,16 +224,11 @@ def get_predictions(llm, query_list, modelling_params, top_k_params, retriever):
 
         # If response is empty, save the retrieved context but print apologies statement
         if not response or len(response.strip()) == 0:
-            context_dict = get_context_details(context=context, top_k_params=top_k_params, print_context=False)
 
             response = """Answer: Unfortunately I have no information on your question at hand. 
             This might be the case since I only consider abstracts from Pubmed that match the keyword intelligence. 
             Furthermore, I only consider papers published between 2013 and 2023. 
             In case your question matches these requirements please try reformulating your query"""
-
-        # print and save context details
-        else:
-            context_dict = get_context_details(context=context, top_k_params=top_k_params, print_context=False)
 
         query_responses.append(response)
         retrieved_passages = []
