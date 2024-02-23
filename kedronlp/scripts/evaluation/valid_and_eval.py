@@ -85,9 +85,9 @@ for a_type, split in zip(test_set.keys(), splits):
             qas = test_set[a_type].pop(random.randint(0, len(test_set[a_type]) - 1))
             validation_set.append(qas)
 
-# for testing
-validation_set = random.sample(validation_set, 2)
-test_set = {a_type: [qa_list[0]] for a_type, qa_list in test_set.items()}
+# # for testing
+# validation_set = random.sample(validation_set, 2)
+# test_set = {a_type: [qa_list[0]] for a_type, qa_list in test_set.items()}
 
 print(f"validation set length: {len(validation_set)}")
 print(f"test set length: {sum([len(qas_list) for _, qas_list in test_set.items()])}")
