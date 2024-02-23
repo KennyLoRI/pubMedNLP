@@ -98,7 +98,9 @@ print(f"validation set length: {len(validation_set)}")
 print(f"test set length: {sum([len(qas_list) for _, qas_list in test_set.items()])}")
 
 scorer = Scorer()
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+device = torch.device("cpu") # because cuda out of memory very likely, vectordb and PubMedBert in RAM, LLM is still on GPU
 
 # usage of "last_*" parameters for performing reinitialization only if necessary for efficiency
 last_temperature = -1
