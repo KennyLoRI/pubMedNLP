@@ -153,7 +153,6 @@ for combination in tqdm(combinations):
             "scores": scores,
         }
     )
-    break
 
 del llm
 del retriever
@@ -255,7 +254,7 @@ def eval_question_types(combination, file_name):
         file.write(f"\tweighted score: {overall_weighted_score:.4f}\n")
 
 # evaluation of question types with best combination
-#eval_question_types(best_combination, "best_comb_question_types_scores")
+eval_question_types(best_combination, "best_comb_question_types_scores")
 
 # also compare best combination with ensemble retriever
 if best_combination["retrieval_strategy"] == "similarity":
@@ -266,7 +265,7 @@ elif best_combination["retrieval_strategy"] == "max_marginal_relevance":
 best_combination["retrieval_strategy"] = "ensemble_retrieval"
 best_combination["advanced_dense_retriever"] = advanced_dense_retriever
 
-#eval_question_types(best_combination, "ensemble_question_types_scores")
+eval_question_types(best_combination, "ensemble_question_types_scores")
 
 # evaluation of retrievers
 # each qa pair only has one source, so recall can only be 0 or 1 for each pair
