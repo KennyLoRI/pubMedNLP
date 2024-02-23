@@ -1,4 +1,3 @@
-from sentence_transformers import util
 from eval_utils import get_predictions
 from get_retriever import get_retriever
 from modelling_utils import instantiate_llm
@@ -98,13 +97,16 @@ print(f"test set length: {sum([len(qas_list) for _, qas_list in test_set.items()
 scorer = Scorer()
 
 # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-device = torch.device("cpu") # because cuda out of memory very likely, vectordb and PubMedBert in RAM, LLM is still on GPU
+device = torch.device("cpu") # because cuda out of memory very likely, vectordb in RAM, LLM is still on GPU
 
 # usage of "last_*" parameters for performing reinitialization only if necessary for efficiency
 last_temperature = -1
 last_top_k = -1
 last_granularity = ""
 last_strategy = ""
+
+retriever = None
+llm = None
 
 # validation, find best set of parameters
 combination_scores = []
@@ -122,7 +124,7 @@ for combination in tqdm(combinations):
 
     # temperature change --> reinitiate llm
     if combination["temperature"] != last_temperature:
-        llm = None
+        del llm
         llm = instantiate_llm(
             combination["temperature"],
             combination["max_tokens"],
@@ -139,7 +141,7 @@ for combination in tqdm(combinations):
         and (last_strategy != "ensemble_retrieval"\
         or last_top_k != combination["top_k"]))\
         or last_granularity != combination["granularity"]:
-        retriever = None
+        del retriever
         retriever = get_retriever(combination, device)
         last_top_k = combination["top_k"]
         last_granularity = combination["granularity"]
@@ -197,7 +199,7 @@ with open("ranked_combinations.txt", "w") as file:
 
 best_combination = ranked_combinations[0]["combination"]
 
-llm = None
+del llm
 llm = instantiate_llm(
     best_combination["temperature"],
     best_combination["max_tokens"],
@@ -207,7 +209,7 @@ llm = instantiate_llm(
     best_combination["n_batch"],
     best_combination["verbose"],
 )
-retriever = None
+del retriever
 retriever = get_retriever(best_combination, device)
 
 # evaluation end2end
@@ -269,7 +271,7 @@ for retrieval_strategy in retrieval_strategies:
         if retrieval_strategy != "ensemble_retrieval":
             break_after = True
             best_combination["advanced_dense_retriever"] = "none"
-        retriever = None
+        del retriever
         retriever = get_retriever(best_combination, device)
         _, contexts = get_predictions(llm, questions, best_combination, best_combination, retriever)
 
