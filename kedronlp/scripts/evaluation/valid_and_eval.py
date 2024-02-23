@@ -8,7 +8,9 @@ import numpy as np
 import math
 import torch
 from tqdm import tqdm
-from copy import deepcopy
+from time import time
+
+start_valid_and_eval = time()
 
 prompt_template = """
 You are a biomedical AI assistant to answer medical questions
@@ -29,22 +31,22 @@ Your answer:
 """
 
 temperatures = [0, 0.5]
-retrieval_strategies = ["ensemble_retrieval", "similarity", "max_marginal_relevance"]
-advanced_dense_retrievers = ["similarity", "mmr"]
+retrieval_strategies = ["similarity", "max_marginal_relevance"]
 granularities = ["paragraphs", "abstracts"]
 top_ks = [2, 3]
 metadata_strategies = ["parser", "none"]
 abstract_only_options = [True, False]
 
 combinations = []
-for retrieval_strategy in retrieval_strategies:
-    for temperature in temperatures:
-        for abstract_only in abstract_only_options:
-            for metadata_strategy in metadata_strategies:
-                for granularity in granularities:
-                    for top_k in top_ks:
-                        if granularity == "paragraphs":
-                            top_k *= 2
+
+for temperature in temperatures:
+    for granularity in granularities:
+        for top_k in top_ks:
+            if granularity == "paragraphs":
+                top_k *= 2
+            for abstract_only in abstract_only_options:
+                for metadata_strategy in metadata_strategies:
+                    for retrieval_strategy in retrieval_strategies:
                         combination = {
                                 "temperature": temperature,
                                 "abstract_only": abstract_only,
@@ -54,19 +56,15 @@ for retrieval_strategy in retrieval_strategies:
                                 "retrieval_strategy": retrieval_strategy,
                                 "advanced_dense_retriever": "none",
                             }
-                        if retrieval_strategy != "ensemble_retrieval":
-                            combinations.append(combination)
-                        elif retrieval_strategy == "ensemble_retrieval":
-                            for advanced_dense_retriever in advanced_dense_retrievers:
-                                combination_with_advanced = deepcopy(combination)
-                                combination_with_advanced["advanced_dense_retriever"] = advanced_dense_retriever
-                                combinations.append(combination_with_advanced)
+                        combinations.append(combination)
+
 
 handmade_df = pd.read_csv("eval_questions_handmade.csv")
 handmade_columns = list(handmade_df.columns)
 semigenerated_df = pd.read_csv("eval_questions_semi_generated.csv")
 semigenerated_df = semigenerated_df[handmade_columns]
 df = pd.concat([handmade_df, semigenerated_df], ignore_index=True).fillna("")
+df = df.sample(frac=1).reset_index(drop=True) # shuffle rows
 
 types = df["Question Type"].unique()
 print(f"Available Question Types:\n{types}")
@@ -87,9 +85,9 @@ for a_type, split in zip(test_set.keys(), splits):
             qas = test_set[a_type].pop(random.randint(0, len(test_set[a_type]) - 1))
             validation_set.append(qas)
 
-# # for testing
-# validation_set = random.sample(validation_set, 10)
-# test_set = {a_type: [qa_list[0]] for a_type, qa_list in test_set.items()}
+# for testing
+validation_set = random.sample(validation_set, 2)
+test_set = {a_type: [qa_list[0]] for a_type, qa_list in test_set.items()}
 
 print(f"validation set length: {len(validation_set)}")
 print(f"test set length: {sum([len(qas_list) for _, qas_list in test_set.items()])}")
@@ -97,13 +95,11 @@ print(f"test set length: {sum([len(qas_list) for _, qas_list in test_set.items()
 scorer = Scorer()
 
 # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-device = torch.device("cpu") # because cuda out of memory very likely, vectordb in RAM, LLM is still on GPU
+device = torch.device("cpu") # because 'cuda out of memory' is very likely, vectordb in RAM, LLM is still on GPU
 
 # usage of "last_*" parameters for performing reinitialization only if necessary for efficiency
 last_temperature = -1
-last_top_k = -1
 last_granularity = ""
-last_strategy = ""
 
 retriever = None
 llm = None
@@ -136,16 +132,11 @@ for combination in tqdm(combinations):
         )
         last_temperature = combination["temperature"]
 
-    # retrievel strategy change, top_k change or granularity change --> reinitiate retriever
-    if (combination["retrieval_strategy"] == "ensemble_retrieval"\
-        and (last_strategy != "ensemble_retrieval"\
-        or last_top_k != combination["top_k"]))\
-        or last_granularity != combination["granularity"]:
+    # granularity change --> reinitiate retriever
+    if last_granularity != combination["granularity"]:
         del retriever
         retriever = get_retriever(combination, device)
-        last_top_k = combination["top_k"]
         last_granularity = combination["granularity"]
-        last_strategy = combination["retrieval_strategy"]
 
     print()
     for param, value in combination.items():
@@ -162,7 +153,10 @@ for combination in tqdm(combinations):
             "scores": scores,
         }
     )
+    break
 
+del llm
+del retriever
 
 def weighted_score(scores):
     weighted_score = (
@@ -176,9 +170,7 @@ def weighted_score(scores):
 
 ranked_combinations = sorted(combination_scores, key=lambda x: weighted_score(x["scores"]), reverse=True)
 
-# output evaluation results to files
-with open("ranked_combinations.txt", "w") as file:
-    relevant_combination_keys = [
+relevant_combination_keys = [
         "temperature",
         "abstract_only",
         "metadata_strategy",
@@ -187,6 +179,9 @@ with open("ranked_combinations.txt", "w") as file:
         "retrieval_strategy",
         "advanced_dense_retriever",
     ]
+
+# output evaluation results to files
+with open("ranked_combinations.txt", "w") as file:
     for i, combination in enumerate(ranked_combinations):
         file.write(f"combination {i}:\n")
         for key in relevant_combination_keys:
@@ -195,11 +190,14 @@ with open("ranked_combinations.txt", "w") as file:
         for score_type, score in combination["scores"].items():
             file.write(f"\t{score_type}: {score:.4f}\n")
         file.write(f"\toverall weighted score: {weighted_score(combination['scores']):.4f}\n")
+        file.write("\n\n")
 
 
 best_combination = ranked_combinations[0]["combination"]
 
-del llm
+
+# evaluation end2end
+# determine scores for all different question types and overall score
 llm = instantiate_llm(
     best_combination["temperature"],
     best_combination["max_tokens"],
@@ -209,52 +207,68 @@ llm = instantiate_llm(
     best_combination["n_batch"],
     best_combination["verbose"],
 )
-del retriever
-retriever = get_retriever(best_combination, device)
-
-# evaluation end2end
-# determine scores for all different question types and overall score
-question_types_scores = {}
-for question_type, qas_list in test_set.items():
-    questions = [str(qas["Question"]) for qas in qas_list]
-    references = [str(qas["Answer"]) for qas in qas_list]
-    sources = [str(qas["Source"]) for qas in qas_list]
-    predictions, _ = get_predictions(llm, questions, best_combination, best_combination, retriever)
-    question_types_scores[question_type] = scorer.get_scores(
-        predictions=predictions, references=references
-    )
-
-ranked_question_types_scores = dict(sorted(question_types_scores.items(), key=lambda x: weighted_score(x[1]), reverse=True))
 
 
-overall_bleuscore = np.mean([scores["bleuscore"] for _, scores in ranked_question_types_scores.items()])
-overall_rougescore = np.mean([scores["rougescore"] for _, scores in ranked_question_types_scores.items()])
-overall_bertscore = np.mean([scores["bertscore"] for _, scores in ranked_question_types_scores.items()])
-overall_bleurtscore = np.mean([scores["bleurtscore"] for _, scores in ranked_question_types_scores.items()])
-overall_weighted_score = weighted_score(
-    {
-        "bleuscore": overall_bleuscore,
-        "rougescore": overall_rougescore,
-        "bertscore": overall_bertscore,
-        "bleurtscore": overall_bleurtscore,
-    })
+def eval_question_types(combination, file_name):
+    retriever = get_retriever(combination, device)
+    question_types_scores = {}
+    for question_type, qas_list in test_set.items():
+        questions = [str(qas["Question"]) for qas in qas_list]
+        references = [str(qas["Answer"]) for qas in qas_list]
+        predictions, _ = get_predictions(llm, questions, combination, combination, retriever)
+        question_types_scores[question_type] = scorer.get_scores(
+            predictions=predictions, references=references
+        )
+    del retriever
 
-with open("ranked_question_types_scores.txt", "w") as file:
-    for question_type, scores in ranked_question_types_scores.items():
-        file.write(f"{question_type}:\n")
-        for score_type, score in scores.items():
-            file.write(f"\t{score_type}: {score:.4f}\n")
-        file.write(f"weighted score: {weighted_score(scores):.4f}")
+    ranked_question_types_scores = dict(sorted(question_types_scores.items(), key=lambda x: weighted_score(x[1]), reverse=True))
+
+
+    overall_bleuscore = np.mean([scores["bleuscore"] for _, scores in ranked_question_types_scores.items()])
+    overall_rougescore = np.mean([scores["rougescore"] for _, scores in ranked_question_types_scores.items()])
+    overall_bertscore = np.mean([scores["bertscore"] for _, scores in ranked_question_types_scores.items()])
+    overall_bleurtscore = np.mean([scores["bleurtscore"] for _, scores in ranked_question_types_scores.items()])
+    overall_weighted_score = weighted_score(
+        {
+            "bleuscore": overall_bleuscore,
+            "rougescore": overall_rougescore,
+            "bertscore": overall_bertscore,
+            "bleurtscore": overall_bleurtscore,
+        })
+
+    with open(f"{file_name}.txt", "w") as file:
+        file.write(f"combination:\n")
+        for key in relevant_combination_keys:
+            file.write(f"\t{key}: {combination[key]}\n")
         file.write("\n\n")
-    file.write(f"overall results:\n")
-    file.write(f"\tbleuscore: {overall_bleuscore:.4f}\n")
-    file.write(f"\trougescore: {overall_rougescore:.4f}\n")
-    file.write(f"\tbertscore: {overall_bertscore:.4f}\n")
-    file.write(f"\tbleurtscore: {overall_bleurtscore:.4f}\n")
-    file.write(f"\tweighted score: {overall_weighted_score:.4f}\n")
+        for question_type, scores in ranked_question_types_scores.items():
+            file.write(f"{question_type}:\n")
+            for score_type, score in scores.items():
+                file.write(f"\t{score_type}: {score:.4f}\n")
+            file.write(f"weighted score: {weighted_score(scores):.4f}")
+            file.write("\n\n")
+        file.write(f"overall results:\n")
+        file.write(f"\tbleuscore: {overall_bleuscore:.4f}\n")
+        file.write(f"\trougescore: {overall_rougescore:.4f}\n")
+        file.write(f"\tbertscore: {overall_bertscore:.4f}\n")
+        file.write(f"\tbleurtscore: {overall_bleurtscore:.4f}\n")
+        file.write(f"\tweighted score: {overall_weighted_score:.4f}\n")
 
+# evaluation of question types with best combination
+#eval_question_types(best_combination, "best_comb_question_types_scores")
 
-# evaluation retriever
+# also compare best combination with ensemble retriever
+if best_combination["retrieval_strategy"] == "similarity":
+    advanced_dense_retriever = "similarity"
+elif best_combination["retrieval_strategy"] == "max_marginal_relevance":
+    advanced_dense_retriever = "mmr"
+
+best_combination["retrieval_strategy"] = "ensemble_retrieval"
+best_combination["advanced_dense_retriever"] = advanced_dense_retriever
+
+#eval_question_types(best_combination, "ensemble_question_types_scores")
+
+# evaluation of retrievers
 # each qa pair only has one source, so recall can only be 0 or 1 for each pair
 all_qas = []
 for question_type, qas_list in test_set.items():
@@ -263,11 +277,16 @@ questions = [str(qas["Question"]) for qas in all_qas if str(qas["Source"]) != "n
 references = [str(qas["Answer"]) for qas in all_qas if str(qas["Source"]) != "nan"]
 sources = [str(qas["Source"]) for qas in all_qas if str(qas["Source"]) != "nan"]
 
+retrieval_strategies = ["ensemble_retrieval", "similarity", "max_marginal_relevance"]
+advanced_dense_retrievers = ["similarity", "mmr"]
+
+retriever = None
 retrievers_results = []
 for retrieval_strategy in retrieval_strategies:
     best_combination["retrieval_strategy"] = retrieval_strategy
     for advanced_dense_retriever in advanced_dense_retrievers:
         best_combination["advanced_dense_retriever"] = advanced_dense_retriever
+        break_after = False
         if retrieval_strategy != "ensemble_retrieval":
             break_after = True
             best_combination["advanced_dense_retriever"] = "none"
@@ -305,6 +324,9 @@ with open("ranked_retrievers_recalls.txt", "w") as file:
         for key, value in retriever_combination.items():
             file.write(f"\t{key}: {value}\n")
 
+end_valid_and_eval = time()
+
 print("#"*10)
 print("done! Ignore error below! This is due to some deinitialization errors of bleuRT.", flush=True)
+print(f"total valid and eval time: {(end_valid_and_eval-start_valid_and_eval)/60:.2f}min", flush=True)
 print("#"*10)

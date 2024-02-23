@@ -1,0 +1,16 @@
+retriever_combination 0:
+	retriever_strategy: ensemble_retrieval
+	advanced_dense_retriever: similarity
+	avg_recall: 0.625
+retriever_combination 1:
+	retriever_strategy: ensemble_retrieval
+	advanced_dense_retriever: mmr
+	avg_recall: 0.625
+retriever_combination 2:
+	retriever_strategy: max_marginal_relevance
+	advanced_dense_retriever: similarity
+	avg_recall: 0.5
+retriever_combination 3:
+	retriever_strategy: similarity
+	advanced_dense_retriever: similarity
+	avg_recall: 0.375

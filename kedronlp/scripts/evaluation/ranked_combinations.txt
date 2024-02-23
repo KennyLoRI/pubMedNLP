@@ -1,0 +1,16 @@
+combination 0:
+	temperature: 0
+	abstract_only: True
+	metadata_strategy: parser
+	granularity: paragraphs
+	top_k: 4
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 0:
+	bleuscore: 0.0000
+	rougescore: 0.0246
+	bertscore: 0.8035
+	bleurtscore: 0.3453
+	overall weighted score: 0.4620
+
+
