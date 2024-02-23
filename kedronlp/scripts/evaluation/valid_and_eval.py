@@ -79,7 +79,6 @@ for a_type in types:
     ]
     test_set[a_type] = questions_answers.to_dict(orient="records")
 
-breakpoint()
 # calculate split for validation set, equals about 40% of all data
 splits = [math.ceil(len(test_set[a_type])/2.5) for a_type in test_set.keys()]
 
