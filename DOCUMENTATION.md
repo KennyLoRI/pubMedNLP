@@ -41,7 +41,7 @@ We affirm that we did the project on our own.
 The increasing growth of published medical research poses a severe challenge for many healthcare practitioners and clinicians to meet demanding day-to-day tasks while staying informed about the fast-moving scientific progress in their domain [^9][^10]. Open databases such as PubMed partly face this challenge, by collecting, storing and maintaining this growing amount of biomedical knowledge. While healthcare professionals indeed refer to PubMed to obtain up-to-date answers to the questions they encounter in their day-to-day practice, with over 1 million new publications per year, extracting the relevant information to a question at hand can often be too time-consuming [^8]. Many questions that cannot be answered within a range of 3 minutes get neglected, possibly to the disadvantage of the affected patient [^11]. 
 Question Answering Systems that use updated online information such as Pubmed as a database to provide summarized information to detailed questions could help to fill this crucial gap between a desired answer  and the amount of time necessary to obtain it. While first systems demonstrated this possibility[^12], they encountered severe challenges such as "(1) answer generation from potentially conflicting evidence, (2) utilization of semantic knowledge throughout the QA process, and (3) incorporation of logic and reasoning mechanisms for answer inference"[^12]. Recent advances in Large Language Models give reason to assume that these previous hurdles can now be overcome [^14].  
 Although being pretrained on a vast corpus of data, Large Language Models (LLMs) applied directly for Q&A applications fail when being confronted with user requests that move beyond the scope of the model's pretraining data [^15]. This is an especially severe problem, if solutions to knowledge-intense tasks are desired, requiring the most recent information or highly specific expert knowledge [^16]. Retrieval-augmented (RAG) systems address this limitation by combining the strengths of both retrieval-based and generative models. In these systems, a retrieval component is used to identify and retrieve relevant information from an external knowledge source, such as a database or a collection of documents, which can be updated regularly to ensure access to the most recent information [^17]. The retrieved information is then fed into a generative model to create a coherent and accurate response to the user's request.
-In this project, we test the possibility of creating a lean RAG system containing state-of-the-art components, that solves knowledge-intensive question-answering tasks and meets the high standards of the medical domain. To evaluate the performance of this system we created an evaluation set consisting of 53 semiautomatically and 60 manually crafted question-answer pairs. For evaluation we employed a two-staged grid search process, assessing the full pipeline end-to-end for over X combinations [TODO: Insert the number of combinations] as well as different retrieval options. The outcomes of the resulting best-evaluated system emphasized the potential of such a lightweight.
+In this project, we test the possibility of creating a lean RAG system containing state-of-the-art components, which solves knowledge-intensive question-answering tasks and meets the high standards of the medical domain. To evaluate the performance of this system we created an evaluation set consisting of 53 semiautomatically and 60 manually crafted question-answer pairs. For evaluation we employed a two-staged grid search process, assessing the full pipeline end-to-end for over 64 combinations. The outcomes of the resulting best-evaluated system emphasized the potential of such a lightweight.
 The remainder of this report is structured as follows. We first begin to give a brief overview of previously published work related to our project and highlight our main contributions in that regard. Second, we explain our employed methodologies in high detail, beginning with a general overview and then moving on to explaining the logic behind each noticeable component of the developed pipelines step-by-step. This technical section is succeeded by a description of the employed datasets for information retrieval and evaluation. The subsequent fourth section of this report discusses our approach to evaluating and identifying the best possible system with the developed components and analyses its performance on the previously described evaluation dataset. In the last section, we discuss the limitations of our proposed system, which were either identified during evaluation or development, informing opportunities for future work both in research and open-source software contribution.
 
 ## Related Work
@@ -150,10 +150,10 @@ Since  medical terminology can pose various challenges, no retrieval strategy ex
 
 ### Obtaining LLM output
 #### LLM models used
+[TODO] Write a short paragraph about Pubmed Bert and llama2.cpp @Kenny
 
 #### Prompting strategies
-Once the `top_k` documents are extracted, they are formatted together with the initial (possibly corrected) query into a prompt that is inputted into our model. Due to the usage of a quantized model and the accompanying limitations which became evident in the first runs of the pipeline, a relatively short and precise prompt was selected. While this selected prompt was fixed during evaluation to restrict the amount of grid search combinations, we tested the impact of including  abstract information only versus also including metadata information into the input prompt. This was of course only necessary due to the limitations of our model since it was not evident whether it could handle the increasing complexity of the input prompt with the metadata included. 
-[TODO: Insert Input Prompt]
+Once the `top_k` documents are extracted, they are formatted together with the initial (possibly corrected) query into a prompt that is inputted into our model. Due to the usage of a quantized model and the accompanying limitations which became evident in the first runs of the pipeline, a relatively short and precise prompt was selected. While this selected prompt was fixed during evaluation to restrict the amount of grid search combinations, we tested the impact of including  abstract information only versus also including metadata information into the input prompt. This was of course only necessary due to the limitations of our model since it was not evident whether it could handle the increasing complexity of the input prompt with the metadata included. Further details will be discussed in the subsequent section on the experimental set-up of the study. 
 
 
 ## Experimental setup and results
@@ -178,7 +178,7 @@ Given these reliability issues, the fully automated approach was completely aban
 
 ![Figure 3](project_docs/sa_man_question_typs.png)
 After quality checks, the resulting semi-automated dataset consisted of 53 question-answer pairs of which the majority were yes/no question-answer pairs (9), followed by comparative (8) and what (8) as well as how (6) and open-ended (6) questions. 
-The manually generated question dataset contains 60  question-answer pairs, of which the majority were factoid (asking 'which' and 'what') (26) and descriptive (7) questions, followed by open-ended (6), yes/no (6), how (6), comparative (4), hypothetical (4) and multiple-choice (1) questions. Consequently, the total dataset consisted of 113 question-answer pairs for evaluation, assessing different difficulties and question types, with a focus on factoid questions. Especially in the manually generated dataset, emphasis was put on diversity within each of the mentioned categories, especially for those of type factoid.  [Todo: mention the full variety of questions in the manual dataset]. 
+The manually generated question dataset contains 60  question-answer pairs, of which the majority were factoid (asking 'which' and 'what') (26) and descriptive (7) questions, followed by open-ended (6), yes/no (6), how (6), comparative (4), hypothetical (4) and multiple-choice (1) questions. Consequently, the total dataset consisted of 113 question-answer pairs for evaluation, assessing different difficulties and question types, with a focus on factoid questions. Especially in the manually generated dataset, emphasis was put on diversity within each of the mentioned categories, especially for those of type factoid.  [Todo: explain the full variety of questions in the manual dataset] @Kenny. 
 
 ### Evaluation Method
 To reproducibly determine the best possible system with the given components, we ran a grid-search validation script that tests various combinations end-to-end, computing their performance on a validation set consisting of 47 questions, equaling about ~40% of the whole available data, sampled from all possible categories of the question. The remaining 66 questions were used as a test set for evaluation of the system performance on different question categories as well as evaluation of the retrievers. The performance for validation and question type evaluation was measured by BLEU, ROUGE, BERTScore and BleuRT scores. The retriever evaluation performance was measured by recall, where for one example the recall is either 1 or 0, depending on whether one of the retrieved sources is the gold source, which is always one abstract.
@@ -201,7 +201,7 @@ For validation the following parameters and different options were used for the 
 | top_k | for abstracts: [2, 3] -- for paragraphs: [4, 6] |
 | retrieval_strategy | [Similarity, Max Marginal Relevance (MMR)]
 
-TODO: Explain all options
+TODO: Explain all options [Kenny]
 
 For all experiments, the following prompt was used:
 
@@ -225,10 +225,9 @@ Your answer:
 
 The keyword 'context' contains the provided texts of the retrieved documents of the vector search and the keyword 'question' is the user query.
 
-TODO: Explain Evaluation of question types with and without ensemble retriever and retriever evaluation
+TODO: Explain evaluation of question types with and without ensemble retriever and retriever evaluation @Daniel
 
 ### Results
-
 #### End-to-End Validation Results
 | temperature | abstract_only | metadata_strategy | granularity | top_k | retrieval_strategy | BLEU | ROUGE | BERTScore | BleuRT | Weighted Score |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -239,12 +238,13 @@ TODO: Explain Evaluation of question types with and without ensemble retriever a
 | 0.5 | True | none | abstracts | 3 | MMR | 5.59% | 18.44% | 76.19% | 42.96% | 50.06% |
 
 #### End-to-End Evaluation Results
-
+TODO: @Daniel
 
 #### Retriever Evaluation Results
+TODO: @Daniel
 
 ### Analysis
-Include qualitative analysis. Discuss system performance in different contexts and compare with baselines.
+TODO: Include qualitative analysis. Discuss system performance in different contexts and compare with baselines. @Daniel
 
 ## Conclusion
 In this study, we successfully created a locally running question-answering system, fully based on free-of-charge open-sourced technology. Although challenges persist, this study demonstrates the potential of such systems to manage knowledge-intensive tasks such as medical question answering based on the effective distillation and dissemination of a highly specialised external knowledge base in modern healthcare. Thus, by bridging the gap between a desired question and a reliable, referenced and therefore controllable answer, patient care can be improved and healthcare practitioners relieved without the dangers of data breaches, emphasising the capacity of AI advancements to benefit humanity. 
