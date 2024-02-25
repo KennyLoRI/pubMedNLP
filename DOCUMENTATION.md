@@ -83,7 +83,26 @@ To enable the model to make use of specific granular information which gets retr
 
 For generating embeddings a suitable Embedding Model had to be chosen. Because the embeddings of tokens might vary depending on the context, in this case a biomedical domain, a general BERT based model like DistilBERT [^28] which was considered earlier in the project would not be appropriate. Especially as specific medical terms which are very common in biomedical papers might not be included in the vocabulary. Instead, the sentence transformer [S-PubMedBert-MS-MARCO](https://huggingface.co/pritamdeka/S-PubMedBert-MS-MARCO) was used which is based on [BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext](https://huggingface.co/microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext), a model by Microsoft specifically trained on abstracts found in PubMed. The sentence transformer has been fine-tuned over the MS-MARCO dataset and is able to generate embeddings for whole sentences instead of tokens.
 
+The abstracts and the paragraphs embeddings were created with a fundamentally different approach. The abstract were left as there are, including all metadata information like Title, Year and Authors, which were embedded together with the actual abstract text. An example of a document based on an abstract which is embedded with all possible metadata options can be seen in the following:
 
+```
+Title: Disorders of communication: dysarthria.
+Authors: Pam Enderby
+Affiliations: NA
+Qualifier: NA
+Major Qualifier: NA
+Descriptor: Dysarthria, Humans, Speech
+Major Descriptor: Dysarthria
+Journal: Handbook of clinical neurology
+Language: eng
+Year: 2013
+Month: NA
+Abstract: Dysarthria is a motor speech disorder which can be classified according to the underlying neuropathology and is associated with disturbances of respiration, laryngeal function, airflow direction, and articulation resulting in difficulties of speech quality and intelligibility. There are ...
+```
+
+For paragraphs however, the metadata information was removed and only the paragraph text was embedded. The idea here is to achieve as much granularity as possible, as the metadata can significantly shift and deteriorate the actual meaning of the text, if the metadata takes a large area of the possible embedding space. To still facilitate search for specific metadata aspects like Title and Authors, which are essentially removed from the paragraph embedding space, the removed metadata was added to the vector database separately to each embedding where filters can be applied to narrow down the search space, which are constructed from rule-based filters, which in turn where created from extracting user query intentions. However, even though metadata has been removed from the paragraphs for the embedding, the metadata is still included in the document text when retrieving the most similar document embeddings, so that the LLM can make use of more context if necessary. Whether metadata is included in the document text inserted in the prompt for the LLM, both for abstract based embeddings or paragraph based embedding, can be controlled by the parameter `abstract_only` in the `parameters.yml` file.
+
+For document retrieval the vector database [ChromaDB](https://docs.trychroma.com/) was used. Early in the project the database [elasticsearch](https://www.elastic.co/elasticsearch) which also implements vector search was considered, but quickly dropped, as [ChromaDB](https://docs.trychroma.com/) is directly integrated in [LangChain](https://python.langchain.com/docs/get_started/introduction), the main framework used for implementing the chat application. This direct integration made the use of Chroma very accessible and easy out of the box. Each inserted embedding in Chroma was together added with a document text, which gets retrieved when searching for the most appropriate embedding, and optionally metadata, which can be used to narrow down the search space with filters like previously mentioned.
 
 ### Data Modelling Pipeline for Text Generation
 ### Obtaining and postprocessing user input
