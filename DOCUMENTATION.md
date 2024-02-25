@@ -157,11 +157,9 @@ c) correctness of the answer
 
 Given these reliability issues, the fully automated approach was completely abandoned. Both the manual as well as the semi-automated approach led to adequate pairs leading to one fully human and one partly LLM-generated data set on which the resulting system can be compared. 
 
-![Figure 3](project_docs/semiAutoQuestionTypes.png)
-After quality checks, the resulting semi-automated dataset consisted of 53 question-answer pairs of which the majority were yes/no question-answer pairs (9), followed by comparative (8) and "what" (8) as well as "how" (6) and "open-ended" (6) questions. 
- 
-![Figure 4](project_docs/handmadeQuestionTypes.png)
-The handmade question dataset comprises of 60 total question answer pairs, of which the majority were of the type factoid (26) and descriptive (7) questions, followed by open-ended (6), yes/no (6), how (6), comparative (4), hypothetical (4) and multiple-choice (1) questions. 
+![Figure 3](project_docs/sa_man_question_typs.png)
+After quality checks, the resulting semi-automated dataset consisted of 53 question-answer pairs of which the majority were yes/no question-answer pairs (9), followed by comparative (8) and what (8) as well as how (6) and open-ended (6) questions. 
+The manually generated question dataset contains 60  question-answer pairs, of which the majority were factoid (asking 'which' and 'what') (26) and descriptive (7) questions, followed by open-ended (6), yes/no (6), how (6), comparative (4), hypothetical (4) and multiple-choice (1) questions. Consequently, the total dataset consisted of 113 question-answer pairs for evaluation, assessing different difficulties and question types, with a focus on factoid questions. Especially in the manually generated dataset, emphasis was put on diversity within each of the mentioned categories, especially for those of type factoid.  [Todo: mention the full variety of questions in the manual dataset]. 
 
 ### Evaluation Method
 To reproducibly determine the best possible system with the given components, we ran a grid-search script that tests [TODO: INSERT NUMBER OF COMBINATIONS] combinations end-to-end, computing their performance measured by the [TODO: INSERT USED METRICS] scores on our validation set consisting of [TODO: INSERT NUMBER OF QUESTIONS IN THE VALIDATION SET]. 
