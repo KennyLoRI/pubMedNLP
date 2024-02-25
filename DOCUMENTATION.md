@@ -4,7 +4,7 @@
 
 ### Team Members
 - [Kenneth Styppa](mailto:kenneth.styppa@web.de) (3735069, Scientific Computing)
-- [Full Name 2](mailto:email2@example.com) (Matriculation Number, Course of Study)
+- [Daniel Bogacz](mailto:daniel.bogacz@stud.uni-heidelberg.de) (3669985, Data and Computer Science)
 - [Arjan Siddhpura](mailto:arjan.siddhpura@stud.uni-heidelberg.com) (3707267, Bachelor Informatik)
 
 ### Member Contribution
@@ -19,9 +19,13 @@
 - Creating the semi-automatic evaluation set
 - Organizational project orchestration
 
-#### Full Name 2
-- Contribution Description 2
-- Challenges Faced 2
+#### Daniel Bogacz
+- Model Research and Selection (PubMedBert and LLama.cpp)
+- Abstract Splitting into Paragraphs
+- Creation of Embeddings for Abstracts and Paragraphs
+- ChromaDB embedding insertion and interface for access in langchain
+- Rule-based Filter Implementation using Intentions
+- Validation and Evaluation Scripts
 
 #### Full Name 3
 - Contribution Description 3
@@ -72,16 +76,21 @@ Extracting the data for this study was performed via the Entrez Programming Util
 To avoid API limitations and stability issues for large-scoped retrieval, we conducted these two steps in a batch-wise manner. First, we used a sliding window of 30 days for which we retrieved the article IDs iterating over the whole timeframe on a month-by-month basis. Second, when having obtained the full ID list, we fetched the abstracts including their metadata for chunks of 500. 
 
 #### Text Preprocessing and Chunking
-Having extracted the relevant abstracts, the next step is to split them into right-sized fragments to ensure the relevance of the retrieved results downstream in the retriever step of the system. Finding this optimal chunk size is a trade-off between context and specificity. It is generally acknowledged that neither too small nor too large chunk sizes are desirable since they "[...]may lead to sub-optimal outcomes" [^3]. With an average of 6.3 sentences and 183 tokens per abstract, the  size of our documents was moderate. In addition, the maximum input length of 512 tokens in our embedding model, was only violated in 0.3% of the cases. Consequently, it was not evident whether embedding the full abstracts already suffers from the problems of large chunk sizes.  To test this end-to-end, we employed two embedding strategies. One embeds the full abstracts while the other employs a semantic chunking approach that approximately leads to two chunks per abstract and embeds those. To eventually determine the optimal chunk size for our production systems we compared the full systems performance with either of these strategies. 
+Having extracted the relevant abstracts, the next step is to split them into right-sized fragments to ensure the relevance of the retrieved results downstream in the retriever step of the system. Finding this optimal chunk size is a trade-off between context and specificity. It is generally acknowledged that neither too small nor too large chunk sizes are desirable since they "[...]may lead to sub-optimal outcomes" [^3]. With an average of 6.3 sentences and 183 tokens per abstract, the  size of our documents was moderate. In addition, the maximum input length of 512 tokens in our embedding model, was only violated in 0.3% of the cases. Consequently, it was not evident whether embedding the full abstracts already suffers from the problems of large chunk sizes.  To test this end-to-end, we employed two embedding strategies. One embeds the full abstracts while the other employs a semantic chunking approach. To eventually determine the optimal chunk size for our production systems we compared the full systems performance with either of these strategies. 
 
-#### Document Embedding
-TODO: Write this section (inform about what information we inputted as a string into the BERT embedder. Also, write a few sentences on Chroma DB. 
+#### Abstract Chunking and Document Embedding
+To enable the model to make use of specific granular information which gets retrieved from the vector database, a weighted embedding splitting point search approach was used. This method was heavily inspired by the medium article "How to chunk text into paragraphs using python" by N Polovinkin [^27]. First, a cosine similarity matrix of all sentences in the abstract was created, to identify which sentences are more or less similar to each other. Then, starting from the entries right from the diagonal, a weighted sum to the next sentences is calculated for each sentence. The closer the next sentence is from the starting point sentence, the heigher the importance weighted by an inverted sigmoid function. This way, the similarity from each sentence to the next sentences is computed. This weighted sum for each sentence can be interpreted as a function. From this function, local minimums or splitting points are found, which can be interpreted as suitable points of paragraphs, as these local minimas are points, where the next sentences are disimilar to the corresponding sentence in the function. With the splitting points the abstracts were split into chunks, where each chunk is now represented as a distinct document itself. When no suitable local minimum could be identified, the abstract was not modified. Each abstract was split into 2.36 paragraphs on average, effectively doubling the amount of documents for the vector database. This results in more memory required to initialize the vector database, where memory for local setups on standard laptops and computers is already a scarce resource, and also longer search times for similar documents. These more demanding computing requirements is a trade-off for potentially more accurate retrieval of information and therefore better generated answers by the LLM. Another caveat in this approach are the very small embedding distances between the sentences in the abstracts. Even though determining the splitting points proved to be successfull, the embedding similarities of the sentences were already very high for all sentences, residing between 0.8 to 0.98. So even though all the sentences were very similar already between each other, the splitting points have been identified based on rather minor embedding distances between the sentences.
+
+For generating embeddings a suitable Embedding Model had to be chosen. Because the embeddings of tokens might vary depending on the context, in this case a biomedical domain, a general BERT based model like DistilBERT [^28] which was considered earlier in the project would not be appropriate. Especially as specific medical terms which are very common in biomedical papers might not be included in the vocabulary. Instead, the sentence transformer [S-PubMedBert-MS-MARCO](https://huggingface.co/pritamdeka/S-PubMedBert-MS-MARCO) was used which is based on [BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext](https://huggingface.co/microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext), a model by Microsoft specifically trained on abstracts found in PubMed. The sentence transformer has been fine-tuned over the MS-MARCO dataset and is able to generate embeddings for whole sentences instead of tokens.
+
+
+
 ### Data Modelling Pipeline for Text Generation
 ### Obtaining and postprocessing user input
 The user's question was obtained via a simple command line input prompt. This input was forwarded to a spellchecking procedure [^25]. Spellchecking was necessary to ensure the applicability of BM25 which is based on exact term matches. Since the medical vocabulary is likely to contain words that could be falsely corrected (e.g. "ccRCC" gets corrected to "circa"), the correction was performed only token-wise, giving the user the ability to include specific words in asterisks which will then be ignored by the spellchecker. After the query has been corrected it is passed into a module that performs named entity recognition using "en_core_web_sm" from Spacy in conjunction with handcrafted linguistic rules to extract author names as well as time ranges indicated in the user query as filter options during the subsequent retrieval stage.
 
 ### Document retrieval 
-For retrieving the relevant documents to a user's input query we first filtered out all documents that matched the filter statements extracted in the previous step, e.g. only publications with a publication year between 2020 and 2023. This narrowed down the database for the actual retrieval operation that followed subsequently. Our retriever node employed two main retrieving strategies that were each tested and compared in the evaluation phase of the project and can be easily switched on and off in the `parameters.yml file`. Independent of which strategy is chosen, the number of retrieved documents was controlled by the top_k parameter in the `parameters.yml` file.
+For retrieving the relevant documents to a user's input query we first filtered out all documents that matched the filter statements extracted in the previous step, e.g. only publications with a publication year between 2020 and 2023. This narrowed down the database for the actual retrieval operation that followed subsequently. Our retriever node employed two main retrieving strategies that were each tested and compared in the evaluation phase of the project and can be easily switched on and off in the `parameters.yml` file. Independent of which strategy is chosen, the number of retrieved documents was controlled by the top_k parameter in the `parameters.yml` file.
 
 The following paragraphs will briefly introduce each of the employed strategies. 
 #### 1) Dense Retrieval Strategies
@@ -242,3 +251,7 @@ We thank Prof. Gertz for this exceptionally engaging course and Satya for her ti
 [^25]: Toolify AI. "Build a Powerful Spell Checker in Python." Toolify AI, n.d., https://www.toolify.ai/ai-news/build-a-powerful-spell-checker-in-python-1547702., accessed 21.02.2024
 
 [^26]: Norvig, Peter. "How to Write a Spelling Corrector" Peter Norvig's Website, 2016, https://norvig.com/spell-correct.html. accessed 21.02.2024
+
+[^27]: N Polovinkin. "How to chunk text into paragraphs using python", 2022, https://medium.com/@npolovinkin/how-to-chunk-text-into-paragraphs-using-python-8ae66be38ea6#b5bb. accessed 25.02.2024
+
+[^28] Sanh, Victor, et al. "DistilBERT, a distilled version of BERT: smaller, faster, cheaper and lighter." arXiv preprint arXiv:1910.01108 (2019).

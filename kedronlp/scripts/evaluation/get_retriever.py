@@ -6,12 +6,10 @@ from langchain.retrievers import EnsembleRetriever
 from time import time
 
 def get_retriever(top_k_params, device):
-
     vectordb_path = f"../../chroma_store_{top_k_params['granularity']}"
     assert(os.path.isdir(vectordb_path))
 
     vectordb = get_langchain_chroma(device=device, persist_dir=vectordb_path)
-    retriever = vectordb
 
     if top_k_params["retrieval_strategy"] == "ensemble_retrieval":
         print(f"\ninitiating ensemble retriever... (takes long due to inefficient workaround - no chroma bm25 integration yet)")
@@ -36,6 +34,8 @@ def get_retriever(top_k_params, device):
         end = time()
         print(f"total time required to initialize ensemble retriever: {end-start:.2f}s")
         retriever = ensemble_retriever
+    else:
+        retriever = vectordb
 
     return retriever
 

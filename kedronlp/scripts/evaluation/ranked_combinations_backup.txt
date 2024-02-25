@@ -1,0 +1,1024 @@
+combination 0:
+	temperature: 0.5
+	abstract_only: True
+	metadata_strategy: parser
+	granularity: abstracts
+	top_k: 2
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 0:
+	bleuscore: 0.1080
+	rougescore: 0.1995
+	bertscore: 0.8647
+	bleurtscore: 0.4143
+	overall weighted score: 0.5423
+
+
+combination 1:
+	temperature: 0.5
+	abstract_only: True
+	metadata_strategy: none
+	granularity: abstracts
+	top_k: 2
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 1:
+	bleuscore: 0.0777
+	rougescore: 0.1928
+	bertscore: 0.8650
+	bleurtscore: 0.4132
+	overall weighted score: 0.5384
+
+
+combination 2:
+	temperature: 0
+	abstract_only: True
+	metadata_strategy: none
+	granularity: abstracts
+	top_k: 2
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 2:
+	bleuscore: 0.0858
+	rougescore: 0.1939
+	bertscore: 0.8640
+	bleurtscore: 0.4116
+	overall weighted score: 0.5382
+
+
+combination 3:
+	temperature: 0
+	abstract_only: True
+	metadata_strategy: parser
+	granularity: abstracts
+	top_k: 2
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 3:
+	bleuscore: 0.0900
+	rougescore: 0.1935
+	bertscore: 0.8620
+	bleurtscore: 0.4087
+	overall weighted score: 0.5366
+
+
+combination 4:
+	temperature: 0
+	abstract_only: True
+	metadata_strategy: none
+	granularity: abstracts
+	top_k: 2
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 4:
+	bleuscore: 0.0907
+	rougescore: 0.1710
+	bertscore: 0.8626
+	bleurtscore: 0.4065
+	overall weighted score: 0.5338
+
+
+combination 5:
+	temperature: 0.5
+	abstract_only: True
+	metadata_strategy: none
+	granularity: abstracts
+	top_k: 2
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 5:
+	bleuscore: 0.0856
+	rougescore: 0.1707
+	bertscore: 0.8638
+	bleurtscore: 0.4060
+	overall weighted score: 0.5336
+
+
+combination 6:
+	temperature: 0
+	abstract_only: True
+	metadata_strategy: parser
+	granularity: abstracts
+	top_k: 2
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 6:
+	bleuscore: 0.0906
+	rougescore: 0.1686
+	bertscore: 0.8599
+	bleurtscore: 0.4037
+	overall weighted score: 0.5314
+
+
+combination 7:
+	temperature: 0.5
+	abstract_only: True
+	metadata_strategy: parser
+	granularity: abstracts
+	top_k: 3
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 7:
+	bleuscore: 0.0742
+	rougescore: 0.1581
+	bertscore: 0.8589
+	bleurtscore: 0.4089
+	overall weighted score: 0.5304
+
+
+combination 8:
+	temperature: 0.5
+	abstract_only: False
+	metadata_strategy: parser
+	granularity: abstracts
+	top_k: 3
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 8:
+	bleuscore: 0.0761
+	rougescore: 0.1647
+	bertscore: 0.8563
+	bleurtscore: 0.4063
+	overall weighted score: 0.5291
+
+
+combination 9:
+	temperature: 0.5
+	abstract_only: False
+	metadata_strategy: none
+	granularity: abstracts
+	top_k: 2
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 9:
+	bleuscore: 0.0793
+	rougescore: 0.1646
+	bertscore: 0.8616
+	bleurtscore: 0.4001
+	overall weighted score: 0.5291
+
+
+combination 10:
+	temperature: 0.5
+	abstract_only: False
+	metadata_strategy: parser
+	granularity: abstracts
+	top_k: 2
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 10:
+	bleuscore: 0.0776
+	rougescore: 0.1739
+	bertscore: 0.8591
+	bleurtscore: 0.4006
+	overall weighted score: 0.5290
+
+
+combination 11:
+	temperature: 0
+	abstract_only: False
+	metadata_strategy: none
+	granularity: abstracts
+	top_k: 2
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 11:
+	bleuscore: 0.0797
+	rougescore: 0.1734
+	bertscore: 0.8602
+	bleurtscore: 0.3983
+	overall weighted score: 0.5287
+
+
+combination 12:
+	temperature: 0
+	abstract_only: True
+	metadata_strategy: none
+	granularity: abstracts
+	top_k: 3
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 12:
+	bleuscore: 0.0852
+	rougescore: 0.1695
+	bertscore: 0.8628
+	bleurtscore: 0.3944
+	overall weighted score: 0.5283
+
+
+combination 13:
+	temperature: 0
+	abstract_only: False
+	metadata_strategy: none
+	granularity: paragraphs
+	top_k: 4
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 13:
+	bleuscore: 0.0586
+	rougescore: 0.1709
+	bertscore: 0.8645
+	bleurtscore: 0.3977
+	overall weighted score: 0.5278
+
+
+combination 14:
+	temperature: 0.5
+	abstract_only: True
+	metadata_strategy: parser
+	granularity: abstracts
+	top_k: 2
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 14:
+	bleuscore: 0.0790
+	rougescore: 0.1704
+	bertscore: 0.8583
+	bleurtscore: 0.3987
+	overall weighted score: 0.5277
+
+
+combination 15:
+	temperature: 0
+	abstract_only: False
+	metadata_strategy: parser
+	granularity: abstracts
+	top_k: 2
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 15:
+	bleuscore: 0.0809
+	rougescore: 0.1722
+	bertscore: 0.8579
+	bleurtscore: 0.3957
+	overall weighted score: 0.5267
+
+
+combination 16:
+	temperature: 0
+	abstract_only: True
+	metadata_strategy: parser
+	granularity: abstracts
+	top_k: 3
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 16:
+	bleuscore: 0.0895
+	rougescore: 0.1691
+	bertscore: 0.8610
+	bleurtscore: 0.3911
+	overall weighted score: 0.5267
+
+
+combination 17:
+	temperature: 0.5
+	abstract_only: False
+	metadata_strategy: none
+	granularity: abstracts
+	top_k: 2
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 17:
+	bleuscore: 0.0632
+	rougescore: 0.1651
+	bertscore: 0.8589
+	bleurtscore: 0.4005
+	overall weighted score: 0.5266
+
+
+combination 18:
+	temperature: 0
+	abstract_only: False
+	metadata_strategy: none
+	granularity: abstracts
+	top_k: 3
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 18:
+	bleuscore: 0.0639
+	rougescore: 0.1442
+	bertscore: 0.8543
+	bleurtscore: 0.4093
+	overall weighted score: 0.5262
+
+
+combination 19:
+	temperature: 0.5
+	abstract_only: False
+	metadata_strategy: parser
+	granularity: abstracts
+	top_k: 3
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 19:
+	bleuscore: 0.0632
+	rougescore: 0.1560
+	bertscore: 0.8554
+	bleurtscore: 0.4038
+	overall weighted score: 0.5256
+
+
+combination 20:
+	temperature: 0
+	abstract_only: False
+	metadata_strategy: parser
+	granularity: paragraphs
+	top_k: 4
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 20:
+	bleuscore: 0.0579
+	rougescore: 0.1687
+	bertscore: 0.8617
+	bleurtscore: 0.3942
+	overall weighted score: 0.5250
+
+
+combination 21:
+	temperature: 0.5
+	abstract_only: False
+	metadata_strategy: parser
+	granularity: abstracts
+	top_k: 2
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 21:
+	bleuscore: 0.0711
+	rougescore: 0.1480
+	bertscore: 0.8529
+	bleurtscore: 0.4041
+	overall weighted score: 0.5247
+
+
+combination 22:
+	temperature: 0.5
+	abstract_only: True
+	metadata_strategy: none
+	granularity: abstracts
+	top_k: 3
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 22:
+	bleuscore: 0.0574
+	rougescore: 0.1411
+	bertscore: 0.8540
+	bleurtscore: 0.4073
+	overall weighted score: 0.5244
+
+
+combination 23:
+	temperature: 0.5
+	abstract_only: False
+	metadata_strategy: none
+	granularity: abstracts
+	top_k: 3
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 23:
+	bleuscore: 0.0654
+	rougescore: 0.1613
+	bertscore: 0.8584
+	bleurtscore: 0.3958
+	overall weighted score: 0.5243
+
+
+combination 24:
+	temperature: 0.5
+	abstract_only: True
+	metadata_strategy: none
+	granularity: abstracts
+	top_k: 3
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 24:
+	bleuscore: 0.0604
+	rougescore: 0.1529
+	bertscore: 0.8567
+	bleurtscore: 0.4006
+	overall weighted score: 0.5242
+
+
+combination 25:
+	temperature: 0
+	abstract_only: False
+	metadata_strategy: parser
+	granularity: abstracts
+	top_k: 3
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 25:
+	bleuscore: 0.0653
+	rougescore: 0.1438
+	bertscore: 0.8524
+	bleurtscore: 0.4043
+	overall weighted score: 0.5236
+
+
+combination 26:
+	temperature: 0
+	abstract_only: True
+	metadata_strategy: none
+	granularity: abstracts
+	top_k: 3
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 26:
+	bleuscore: 0.0801
+	rougescore: 0.1602
+	bertscore: 0.8576
+	bleurtscore: 0.3896
+	overall weighted score: 0.5229
+
+
+combination 27:
+	temperature: 0
+	abstract_only: True
+	metadata_strategy: parser
+	granularity: abstracts
+	top_k: 3
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 27:
+	bleuscore: 0.0823
+	rougescore: 0.1600
+	bertscore: 0.8558
+	bleurtscore: 0.3874
+	overall weighted score: 0.5215
+
+
+combination 28:
+	temperature: 0
+	abstract_only: False
+	metadata_strategy: none
+	granularity: paragraphs
+	top_k: 4
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 28:
+	bleuscore: 0.0552
+	rougescore: 0.1622
+	bertscore: 0.8634
+	bleurtscore: 0.3858
+	overall weighted score: 0.5214
+
+
+combination 29:
+	temperature: 0
+	abstract_only: False
+	metadata_strategy: none
+	granularity: abstracts
+	top_k: 2
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 29:
+	bleuscore: 0.0597
+	rougescore: 0.1442
+	bertscore: 0.8572
+	bleurtscore: 0.3952
+	overall weighted score: 0.5214
+
+
+combination 30:
+	temperature: 0.5
+	abstract_only: False
+	metadata_strategy: none
+	granularity: abstracts
+	top_k: 3
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 30:
+	bleuscore: 0.0647
+	rougescore: 0.1452
+	bertscore: 0.8553
+	bleurtscore: 0.3952
+	overall weighted score: 0.5212
+
+
+combination 31:
+	temperature: 0.5
+	abstract_only: False
+	metadata_strategy: none
+	granularity: paragraphs
+	top_k: 4
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 31:
+	bleuscore: 0.0537
+	rougescore: 0.1603
+	bertscore: 0.8605
+	bleurtscore: 0.3887
+	overall weighted score: 0.5211
+
+
+combination 32:
+	temperature: 0
+	abstract_only: False
+	metadata_strategy: none
+	granularity: abstracts
+	top_k: 3
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 32:
+	bleuscore: 0.0675
+	rougescore: 0.1418
+	bertscore: 0.8546
+	bleurtscore: 0.3949
+	overall weighted score: 0.5207
+
+
+combination 33:
+	temperature: 0.5
+	abstract_only: True
+	metadata_strategy: parser
+	granularity: abstracts
+	top_k: 3
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 33:
+	bleuscore: 0.0610
+	rougescore: 0.1486
+	bertscore: 0.8523
+	bleurtscore: 0.3968
+	overall weighted score: 0.5206
+
+
+combination 34:
+	temperature: 0.5
+	abstract_only: False
+	metadata_strategy: parser
+	granularity: paragraphs
+	top_k: 6
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 34:
+	bleuscore: 0.0420
+	rougescore: 0.1526
+	bertscore: 0.8529
+	bleurtscore: 0.3973
+	overall weighted score: 0.5195
+
+
+combination 35:
+	temperature: 0
+	abstract_only: False
+	metadata_strategy: parser
+	granularity: abstracts
+	top_k: 2
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 35:
+	bleuscore: 0.0595
+	rougescore: 0.1419
+	bertscore: 0.8544
+	bleurtscore: 0.3925
+	overall weighted score: 0.5189
+
+
+combination 36:
+	temperature: 0
+	abstract_only: False
+	metadata_strategy: parser
+	granularity: abstracts
+	top_k: 3
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 36:
+	bleuscore: 0.0681
+	rougescore: 0.1412
+	bertscore: 0.8527
+	bleurtscore: 0.3918
+	overall weighted score: 0.5187
+
+
+combination 37:
+	temperature: 0.5
+	abstract_only: False
+	metadata_strategy: parser
+	granularity: paragraphs
+	top_k: 4
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 37:
+	bleuscore: 0.0490
+	rougescore: 0.1559
+	bertscore: 0.8577
+	bleurtscore: 0.3877
+	overall weighted score: 0.5187
+
+
+combination 38:
+	temperature: 0
+	abstract_only: False
+	metadata_strategy: parser
+	granularity: paragraphs
+	top_k: 4
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 38:
+	bleuscore: 0.0545
+	rougescore: 0.1577
+	bertscore: 0.8604
+	bleurtscore: 0.3827
+	overall weighted score: 0.5185
+
+
+combination 39:
+	temperature: 0.5
+	abstract_only: True
+	metadata_strategy: none
+	granularity: paragraphs
+	top_k: 6
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 39:
+	bleuscore: 0.0346
+	rougescore: 0.1363
+	bertscore: 0.8483
+	bleurtscore: 0.3978
+	overall weighted score: 0.5155
+
+
+combination 40:
+	temperature: 0.5
+	abstract_only: False
+	metadata_strategy: none
+	granularity: paragraphs
+	top_k: 6
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 40:
+	bleuscore: 0.0374
+	rougescore: 0.1463
+	bertscore: 0.8572
+	bleurtscore: 0.3830
+	overall weighted score: 0.5144
+
+
+combination 41:
+	temperature: 0.5
+	abstract_only: True
+	metadata_strategy: none
+	granularity: paragraphs
+	top_k: 6
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 41:
+	bleuscore: 0.0366
+	rougescore: 0.1423
+	bertscore: 0.8515
+	bleurtscore: 0.3885
+	overall weighted score: 0.5139
+
+
+combination 42:
+	temperature: 0.5
+	abstract_only: True
+	metadata_strategy: none
+	granularity: paragraphs
+	top_k: 4
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 42:
+	bleuscore: 0.0304
+	rougescore: 0.1464
+	bertscore: 0.8474
+	bleurtscore: 0.3917
+	overall weighted score: 0.5133
+
+
+combination 43:
+	temperature: 0.5
+	abstract_only: False
+	metadata_strategy: none
+	granularity: paragraphs
+	top_k: 6
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 43:
+	bleuscore: 0.0381
+	rougescore: 0.1380
+	bertscore: 0.8525
+	bleurtscore: 0.3862
+	overall weighted score: 0.5131
+
+
+combination 44:
+	temperature: 0.5
+	abstract_only: False
+	metadata_strategy: none
+	granularity: paragraphs
+	top_k: 4
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 44:
+	bleuscore: 0.0503
+	rougescore: 0.1466
+	bertscore: 0.8575
+	bleurtscore: 0.3757
+	overall weighted score: 0.5130
+
+
+combination 45:
+	temperature: 0
+	abstract_only: False
+	metadata_strategy: none
+	granularity: paragraphs
+	top_k: 6
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 45:
+	bleuscore: 0.0392
+	rougescore: 0.1335
+	bertscore: 0.8501
+	bleurtscore: 0.3885
+	overall weighted score: 0.5127
+
+
+combination 46:
+	temperature: 0
+	abstract_only: False
+	metadata_strategy: parser
+	granularity: paragraphs
+	top_k: 6
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 46:
+	bleuscore: 0.0393
+	rougescore: 0.1319
+	bertscore: 0.8475
+	bleurtscore: 0.3853
+	overall weighted score: 0.5102
+
+
+combination 47:
+	temperature: 0.5
+	abstract_only: True
+	metadata_strategy: none
+	granularity: paragraphs
+	top_k: 4
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 47:
+	bleuscore: 0.0343
+	rougescore: 0.1452
+	bertscore: 0.8470
+	bleurtscore: 0.3828
+	overall weighted score: 0.5099
+
+
+combination 48:
+	temperature: 0.5
+	abstract_only: False
+	metadata_strategy: parser
+	granularity: paragraphs
+	top_k: 4
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 48:
+	bleuscore: 0.0437
+	rougescore: 0.1480
+	bertscore: 0.8558
+	bleurtscore: 0.3703
+	overall weighted score: 0.5096
+
+
+combination 49:
+	temperature: 0.5
+	abstract_only: False
+	metadata_strategy: parser
+	granularity: paragraphs
+	top_k: 6
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 49:
+	bleuscore: 0.0398
+	rougescore: 0.1330
+	bertscore: 0.8512
+	bleurtscore: 0.3771
+	overall weighted score: 0.5086
+
+
+combination 50:
+	temperature: 0
+	abstract_only: True
+	metadata_strategy: none
+	granularity: paragraphs
+	top_k: 6
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 50:
+	bleuscore: 0.0338
+	rougescore: 0.1382
+	bertscore: 0.8459
+	bleurtscore: 0.3821
+	overall weighted score: 0.5084
+
+
+combination 51:
+	temperature: 0
+	abstract_only: True
+	metadata_strategy: none
+	granularity: paragraphs
+	top_k: 6
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 51:
+	bleuscore: 0.0338
+	rougescore: 0.1382
+	bertscore: 0.8459
+	bleurtscore: 0.3821
+	overall weighted score: 0.5084
+
+
+combination 52:
+	temperature: 0
+	abstract_only: True
+	metadata_strategy: none
+	granularity: paragraphs
+	top_k: 4
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 52:
+	bleuscore: 0.0348
+	rougescore: 0.1406
+	bertscore: 0.8466
+	bleurtscore: 0.3781
+	overall weighted score: 0.5074
+
+
+combination 53:
+	temperature: 0
+	abstract_only: True
+	metadata_strategy: none
+	granularity: paragraphs
+	top_k: 4
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 53:
+	bleuscore: 0.0348
+	rougescore: 0.1406
+	bertscore: 0.8466
+	bleurtscore: 0.3781
+	overall weighted score: 0.5074
+
+
+combination 54:
+	temperature: 0.5
+	abstract_only: True
+	metadata_strategy: parser
+	granularity: paragraphs
+	top_k: 6
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 54:
+	bleuscore: 0.0285
+	rougescore: 0.1490
+	bertscore: 0.8442
+	bleurtscore: 0.3794
+	overall weighted score: 0.5072
+
+
+combination 55:
+	temperature: 0.5
+	abstract_only: True
+	metadata_strategy: parser
+	granularity: paragraphs
+	top_k: 6
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 55:
+	bleuscore: 0.0321
+	rougescore: 0.1324
+	bertscore: 0.8461
+	bleurtscore: 0.3807
+	overall weighted score: 0.5072
+
+
+combination 56:
+	temperature: 0
+	abstract_only: False
+	metadata_strategy: none
+	granularity: paragraphs
+	top_k: 6
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 56:
+	bleuscore: 0.0366
+	rougescore: 0.1270
+	bertscore: 0.8509
+	bleurtscore: 0.3753
+	overall weighted score: 0.5068
+
+
+combination 57:
+	temperature: 0
+	abstract_only: True
+	metadata_strategy: parser
+	granularity: paragraphs
+	top_k: 6
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 57:
+	bleuscore: 0.0353
+	rougescore: 0.1377
+	bertscore: 0.8446
+	bleurtscore: 0.3792
+	overall weighted score: 0.5068
+
+
+combination 58:
+	temperature: 0
+	abstract_only: True
+	metadata_strategy: parser
+	granularity: paragraphs
+	top_k: 6
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 58:
+	bleuscore: 0.0353
+	rougescore: 0.1377
+	bertscore: 0.8446
+	bleurtscore: 0.3792
+	overall weighted score: 0.5068
+
+
+combination 59:
+	temperature: 0
+	abstract_only: True
+	metadata_strategy: parser
+	granularity: paragraphs
+	top_k: 4
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 59:
+	bleuscore: 0.0363
+	rougescore: 0.1402
+	bertscore: 0.8453
+	bleurtscore: 0.3754
+	overall weighted score: 0.5059
+
+
+combination 60:
+	temperature: 0
+	abstract_only: True
+	metadata_strategy: parser
+	granularity: paragraphs
+	top_k: 4
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 60:
+	bleuscore: 0.0363
+	rougescore: 0.1400
+	bertscore: 0.8453
+	bleurtscore: 0.3752
+	overall weighted score: 0.5058
+
+
+combination 61:
+	temperature: 0.5
+	abstract_only: True
+	metadata_strategy: parser
+	granularity: paragraphs
+	top_k: 4
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+scores 61:
+	bleuscore: 0.0338
+	rougescore: 0.1427
+	bertscore: 0.8439
+	bleurtscore: 0.3759
+	overall weighted score: 0.5056
+
+
+combination 62:
+	temperature: 0
+	abstract_only: False
+	metadata_strategy: parser
+	granularity: paragraphs
+	top_k: 6
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 62:
+	bleuscore: 0.0360
+	rougescore: 0.1244
+	bertscore: 0.8482
+	bleurtscore: 0.3729
+	overall weighted score: 0.5045
+
+
+combination 63:
+	temperature: 0.5
+	abstract_only: True
+	metadata_strategy: parser
+	granularity: paragraphs
+	top_k: 4
+	retrieval_strategy: similarity
+	advanced_dense_retriever: none
+scores 63:
+	bleuscore: 0.0286
+	rougescore: 0.1142
+	bertscore: 0.8382
+	bleurtscore: 0.3546
+	overall weighted score: 0.4914
+
+

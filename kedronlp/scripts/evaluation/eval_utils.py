@@ -172,10 +172,10 @@ def get_predictions(llm, query_list, modelling_params, top_k_params, retriever):
                 filter = filter["$and"][0]
             elif len(filter["$and"]) == 0:
                 filter = None
+
+            print(f"filter: {filter}")
         else:
             filter = None
-
-        print(f"filter: {filter}")
 
         #basic similarity search
         if top_k_params["retrieval_strategy"] == "similarity":
@@ -232,10 +232,15 @@ def get_predictions(llm, query_list, modelling_params, top_k_params, retriever):
 
         query_responses.append(response)
         retrieved_passages = []
-        for a_context in context:
-            pos = a_context.rfind(": ")
-            passage = a_context[pos+2:]
-            retrieved_passages.append(passage)
+        if modelling_params["abstract_only"]:
+            passages = input_dict["context"].split("\n\n\n\n")
+            for passage in passages:
+                retrieved_passages.append(passage)
+        elif not modelling_params["abstract_only"]:
+            for a_context in context:
+                pos = a_context.rfind(": ")
+                passage = a_context[pos+2:]
+                retrieved_passages.append(passage)
         contexts.append(retrieved_passages)
 
     return query_responses, contexts
