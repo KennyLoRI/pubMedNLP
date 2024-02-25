@@ -98,8 +98,8 @@ for a_type, split in zip(test_set.keys(), splits):
 print(f"validation set length: {len(validation_set)}")
 print(f"test set length: {sum([len(qas_list) for _, qas_list in test_set.items()])}")
 
-# tf.config.set_visible_devices([], 'GPU') # run BleuRT on CPU, save GPU memory
-# scorer = Scorer(device=device)  # run BERTScore on CPU, save GPU memory
+tf.config.set_visible_devices([], 'GPU') # run BleuRT on CPU, save GPU memory
+scorer = Scorer(device=device)  # run BERTScore on CPU, save GPU memory
 
 # usage of "last_*" parameters for performing reinitialization only if necessary for efficiency
 last_temperature = -1
@@ -108,61 +108,61 @@ last_granularity = ""
 retriever = None
 llm = None
 
-# # validation, find best set of parameters
-# combination_scores = []
-# for combination in tqdm(combinations):
+# validation, find best set of parameters
+combination_scores = []
+for combination in tqdm(combinations):
 
-#     combination["mq_include_original"] = False
-#     combination["prompt_template"] = prompt_template
-#     combination["max_tokens"] = 1000
-#     combination["n_ctx"] = 2048
-#     combination["top_p"] = 1
-#     combination["n_gpu_layers"] = -1
-#     combination["n_batch"] = 512
-#     combination["verbose"] = True
-#     combination["spell_checker"] = False
+    combination["mq_include_original"] = False
+    combination["prompt_template"] = prompt_template
+    combination["max_tokens"] = 1000
+    combination["n_ctx"] = 2048
+    combination["top_p"] = 1
+    combination["n_gpu_layers"] = -1
+    combination["n_batch"] = 512
+    combination["verbose"] = True
+    combination["spell_checker"] = False
 
-#     # temperature change --> reinitiate llm
-#     if combination["temperature"] != last_temperature:
-#         del llm
-#         llm = instantiate_llm(
-#             combination["temperature"],
-#             combination["max_tokens"],
-#             combination["n_ctx"],
-#             combination["top_p"],
-#             combination["n_gpu_layers"],
-#             combination["n_batch"],
-#             combination["verbose"],
-#         )
-#         last_temperature = combination["temperature"]
+    # temperature change --> reinitiate llm
+    if combination["temperature"] != last_temperature:
+        del llm
+        llm = instantiate_llm(
+            combination["temperature"],
+            combination["max_tokens"],
+            combination["n_ctx"],
+            combination["top_p"],
+            combination["n_gpu_layers"],
+            combination["n_batch"],
+            combination["verbose"],
+        )
+        last_temperature = combination["temperature"]
 
-#     # granularity change --> reinitiate retriever
-#     if last_granularity != combination["granularity"]:
-#         del retriever
-#         retriever = get_retriever(combination, device)
-#         last_granularity = combination["granularity"]
+    # granularity change --> reinitiate retriever
+    if last_granularity != combination["granularity"]:
+        del retriever
+        retriever = get_retriever(combination, device)
+        last_granularity = combination["granularity"]
 
-#     print()
-#     for param, value in combination.items():
-#         print(f"{param}: {value}", flush=True)
-#     print()
+    print()
+    for param, value in combination.items():
+        print(f"{param}: {value}", flush=True)
+    print()
 
-#     questions = [str(qas["Question"]) for qas in validation_set]
-#     references = [str(qas["Answer"]) for qas in validation_set]
-#     predictions, _ = get_predictions(llm, questions, combination, combination, retriever)
-#     scores = scorer.get_scores(predictions=predictions, references=references)
-#     combination_scores.append(
-#         {
-#             "combination": combination,
-#             "scores": scores,
-#         }
-#     )
+    questions = [str(qas["Question"]) for qas in validation_set]
+    references = [str(qas["Answer"]) for qas in validation_set]
+    predictions, _ = get_predictions(llm, questions, combination, combination, retriever)
+    scores = scorer.get_scores(predictions=predictions, references=references)
+    combination_scores.append(
+        {
+            "combination": combination,
+            "scores": scores,
+        }
+    )
 
-# del llm
-# del retriever
+del llm
+del retriever
 
-# llm = None
-# retriever = None
+llm = None
+retriever = None
 
 def weighted_score(scores):
     weighted_score = (
@@ -174,7 +174,7 @@ def weighted_score(scores):
     return weighted_score
 
 
-# ranked_combinations = sorted(combination_scores, key=lambda x: weighted_score(x["scores"]), reverse=True)
+ranked_combinations = sorted(combination_scores, key=lambda x: weighted_score(x["scores"]), reverse=True)
 
 relevant_combination_keys = [
         "temperature",
@@ -186,37 +186,21 @@ relevant_combination_keys = [
         "advanced_dense_retriever",
     ]
 
-# # output evaluation results to files
-# with open("ranked_combinations.txt", "w") as file:
-#     for i, combination in enumerate(ranked_combinations):
-#         file.write(f"combination {i}:\n")
-#         for key in relevant_combination_keys:
-#             file.write(f"\t{key}: {combination['combination'][key]}\n")
-#         file.write(f"scores {i}:\n")
-#         for score_type, score in combination["scores"].items():
-#             file.write(f"\t{score_type}: {score:.4f}\n")
-#         file.write(f"\toverall weighted score: {weighted_score(combination['scores']):.4f}\n")
-#         file.write("\n\n")
+# output evaluation results to files
+with open("ranked_combinations.txt", "w") as file:
+    for i, combination in enumerate(ranked_combinations):
+        file.write(f"combination {i}:\n")
+        for key in relevant_combination_keys:
+            file.write(f"\t{key}: {combination['combination'][key]}\n")
+        file.write(f"scores {i}:\n")
+        for score_type, score in combination["scores"].items():
+            file.write(f"\t{score_type}: {score:.4f}\n")
+        file.write(f"\toverall weighted score: {weighted_score(combination['scores']):.4f}\n")
+        file.write("\n\n")
 
 
-# best_combination = ranked_combinations[0]["combination"]
+best_combination = ranked_combinations[0]["combination"]
 
-best_combination = {}
-best_combination["mq_include_original"] = False
-best_combination["prompt_template"] = prompt_template
-best_combination["max_tokens"] = 1000
-best_combination["n_ctx"] = 2048
-best_combination["top_p"] = 1
-best_combination["n_gpu_layers"] = -1
-best_combination["n_batch"] = 512
-best_combination["verbose"] = True
-best_combination["spell_checker"] = False
-
-best_combination["temperature"] = 0.5
-best_combination["abstract_only"] = True
-best_combination["metadata_strategy"] = "parser"
-best_combination["granularity"] = "abstracts"
-best_combination["top_k"] = 2
 
 # evaluation end2end
 # determine scores for all different question types and overall score
@@ -277,20 +261,20 @@ def eval_question_types(combination, file_name):
         file.write(f"\tweighted score: {overall_weighted_score:.4f}\n")
 
 # evaluation of question types with best combination
-#eval_question_types(best_combination, "best_comb_question_types_scores")
+eval_question_types(best_combination, "best_comb_question_types_scores")
 
-# # also compare best combination with ensemble retriever
-# if best_combination["retrieval_strategy"] == "similarity":
-#     advanced_dense_retriever = "similarity"
-# elif best_combination["retrieval_strategy"] == "max_marginal_relevance":
-#     advanced_dense_retriever = "mmr"
+# also compare best combination with ensemble retriever
+if best_combination["retrieval_strategy"] == "similarity":
+    advanced_dense_retriever = "similarity"
+elif best_combination["retrieval_strategy"] == "max_marginal_relevance":
+    advanced_dense_retriever = "mmr"
 
-# best_combination["retrieval_strategy"] = "ensemble_retrieval"
-# best_combination["advanced_dense_retriever"] = advanced_dense_retriever
+best_combination["retrieval_strategy"] = "ensemble_retrieval"
+best_combination["advanced_dense_retriever"] = advanced_dense_retriever
 
-#eval_question_types(best_combination, "ensemble_question_types_scores")
+eval_question_types(best_combination, "ensemble_question_types_scores")
         
-# del scorer
+del scorer
 
 # evaluation of retrievers
 # each qa pair only has one source, so recall can only be 0 or 1 for each pair
