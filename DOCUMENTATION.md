@@ -63,7 +63,7 @@ The development of the RAG system was organized into two distinct pipelines, fac
 ### Technical orchestration
 ![Figure 1: Overview of the deployed pipelines](project_docs/pipelinesOverview.png)
 For our technical orchestration, we employed Kedro, an open-source data pipeline framework to create reproducible, maintainable, and modular data science code [^1]. Due to the complexity and the strong interdependence of these components, using Kedro was crucial to enforcing code quality and system stability. Furthermore, the ability to extract system settings such as prompt templates, retrieval strategies and model hyperparameters into the `parameters.yml` file streamlined our evaluation procedure by providing the possibility to perform a grid search over a predefined set of parameters for the full modelling pipeline which we structured into a separate evaluation pipeline. While this enhanced stability of Kedro was a crucial benefit during development and evaluation, the actual deployment of the pipeline as a user-friendly application was structured into a one-node "chat" pipeline since the modular architecture of Kedro forces to re-initialize our model for each new query/pipeline run. This severely disrupts its usage flow and is a conceptual flaw of the basic Kedro setup that is rooted in its construction for general Machine Learning scenarios instead of highly repetitive LLM applications. Using one single chat node that encompasses all steps from the modelling pipeline solves this issue. Still, we want to highlight that this is only a prototyping solution. For a system in production, such redundancies must be avoided. Developing a solution for this problem on top of the current Kedro architecture was, however, beyond the scope of this project. It is our hope nonetheless, that Kedro will support LLM pipeline flows in the future, making this step less burdensome.
-In the following paragraphs, we will highlight the noticeable aspects of each of these pipelines and nodes, providing an overview of the challenges faced and the solutions built. 
+In the following paragraphs, we will highlight the noticeable aspects of each of these pipelines and nodes, providing an overview of the challenges faced and the solutions built. The technically interested reader can find all relevant parameters and system settings mentioned throughout the following detailed explanation in the parameters.yml file of this repository.
 
 ### Data Processing Pipeline
 #### Data Extraction
@@ -126,11 +126,8 @@ Since  medical terminology can pose various challenges, no retrieval strategy ex
 #### LLM models used
 
 #### Prompting strategies
-Once the `top_k` documents are extracted, they are formatted together with the initial (possibly corrected) query into a prompt that is inputted into our model. Due to model size limitations that became evident in the first runs of the pipeline, short and precise prompts were selected. Except for this restriction upfront, all other decisions were based on end-to-end testing of different prompt variants. These variants were: 
-1. A standard prompt
-2. Chain of thought
-3. Inputting abstract information only (controlled in the `abstract_only` parameter:
-4. Inputting abstracts enriched with metadata information:
+Once the `top_k` documents are extracted, they are formatted together with the initial (possibly corrected) query into a prompt that is inputted into our model. Due to the usage of a quantized model and the accompanying limitations which became evident in the first runs of the pipeline, a relatively short and precise prompt was selected. While this selected prompt was fixed during evaluation to restrict the amount of grid search combinations, we tested the impact of including  abstract information only versus also including metadata information into the input prompt. This was of course only necessary due to the limitations of our model, since it was not evident whether it could handle the increasing complexity of the input prompt with the metadata included. 
+[TODO: Insert Input Prompt]
 
 
 ## Experimental setup and results
