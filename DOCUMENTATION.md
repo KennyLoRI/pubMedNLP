@@ -181,15 +181,65 @@ After quality checks, the resulting semi-automated dataset consisted of 53 quest
 The manually generated question dataset contains 60  question-answer pairs, of which the majority were factoid (asking 'which' and 'what') (26) and descriptive (7) questions, followed by open-ended (6), yes/no (6), how (6), comparative (4), hypothetical (4) and multiple-choice (1) questions. Consequently, the total dataset consisted of 113 question-answer pairs for evaluation, assessing different difficulties and question types, with a focus on factoid questions. Especially in the manually generated dataset, emphasis was put on diversity within each of the mentioned categories, especially for those of type factoid.  [Todo: mention the full variety of questions in the manual dataset]. 
 
 ### Evaluation Method
-To reproducibly determine the best possible system with the given components, we ran a grid-search script that tests [TODO: INSERT NUMBER OF COMBINATIONS] combinations end-to-end, computing their performance measured by the [TODO: INSERT USED METRICS] scores on our validation set consisting of [TODO: INSERT NUMBER OF QUESTIONS IN THE VALIDATION SET]. 
+To reproducibly determine the best possible system with the given components, we ran a grid-search validation script that tests various combinations end-to-end, computing their performance on a validation set consisting of 47 questions, equaling about ~40% of the whole available data, sampled from all possible categories of the question. The rest 66 question were used as a test set for evaluation of the system performance on different question categories aswell as evaluation of the retrievers. The performance for validation and question type evaluation was measured by BLEU, ROUGE, BERTScore and BleuRT scores. The retriever evaluation performance was measured by recall, where for one example the recall is either 1 or 0, depending on whether one of the retrieved sources is the gold source, which is always one abstract.
 
-TODO: Define the evaluation metric used, whether existing or self-defined. Motivate the choice and clarify what it reflects.
+We include BLEU and ROUGE in our validation and evaluation metrics due to historic reasons, as they mainly measure lexical overlap, which can be useful for translation tasks but are very misleading when the phrasing of answers is different but essentially correct. The most important scores are BERTScore and BleuRT, which are neural based methods and better suited to measure similarity between generated answer and gold answer. To rank the combinations we define the metric 'Weighted Score' as a combination of the previously mentioned scores which can be computed in the following way:
+
+$$\text{Weighted Score} = \text{BLEU} \cdot 0.1 + \text{ROUGE} \cdot 0.1 + \text{BERTScore} \cdot 0.4 + \text{BleuRT} \cdot 0.4$$
+
+The metric 'Weighted Score' is a combination of multiple other metrics and better represents the significance of the different metrics, making it a very robust and suitable measure to compare the results.
 
 ### Experimental Details
-Specify configurable parameters, explaining their choice and any optimization methods used.
+For validation the following parameters and different options were used for the validation gridsearch, resulting in a total of 64 different combinations which need to be evaluated:
+
+| Parameter | Options used for Evaluation |
+| --- | --- |
+| temperature | [0, 0.5] |
+| abstract_only | [True, False] |
+| metadata_strategy | [parser, none] |
+| granularity | [abstracts, paragraphs] |
+| top_k | for abstracts: [2, 3] -- for paragraphs: [4, 6] |
+| retrieval_strategy | [Similarity, Max Marginal Relevance (MMR)]
+
+TODO: Explain all options
+
+For all experiments the following prompt was used:
+
+```
+You are a biomedical AI assistant to answer medical questions
+mostly about PubMed articles provided as context for you.
+As an AI assistant, answer the question accurately,
+precisely and concisely. 
+Not every article in the provided context is necessarily relevant to the question.
+Carefully examine the provided information in the articles and choose the
+most likely correct information to answer the question.
+If the question is not from the biomedical domain, tell the user that
+the question is out of domain and cannot be answered by you.
+Only include information in your answer, which is necessary to answer the question.
+Be as short as possible with your answer.
+
+Use the following articles to determine the answer: {context}
+The question: {question}
+Your answer:
+```
+
+The keyword 'context' are the provided texts of the retrieved document for the vector search and the keyword 'question' is the user query.
 
 ### Results
-Present results using tables and plots, comparing against baselines if available. Comment on results and analyze their alignment with expectations.
+
+#### End-to-End Validation Results
+| temperature | abstract_only | metadata_strategy | granularity | top_k | retrieval_strategy | BLEU | ROUGE | BERTScore | BleuRT | Weighted Score |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 0.5 | True | parser | abstracts | 2 | MMR | 6.41% | 18.88% | 76.81% | 44.04% | 50.87% |
+| 0 | True | parser | abstracts | 2 | MMR | 6.60% | 19.71% | 76.91% | 43.68% | 50.87% |
+| 0 | True | none | abstracts | 2 | MMR | 6.57% | 19.78% | 76.92% | 43.59% | 50.84% |
+| 0.5 | True | none | abstracts | 2 | MMR | 7.12% | 17.54% | 77.11% | 42.72% | 50.40% |
+| 0.5 | True | none | abstracts | 3 | MMR | 5.59% | 18.44% | 76.19% | 42.96% | 50.06% |
+
+#### End-to-End Evaluation Results
+
+
+#### Retriever Evaluation Results
 
 ### Analysis
 Include qualitative analysis. Discuss system performance in different contexts and compare with baselines.
