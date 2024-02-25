@@ -1,14 +1,20 @@
+from sentence_transformers.util import cos_sim
 from eval_utils import get_predictions
 from get_retriever import get_retriever
 from modelling_utils import instantiate_llm
+from embedding_utils import PubMedBert
 from scorer import Scorer
 import pandas as pd
 import random
 import numpy as np
 import math
 import torch
+import tensorflow as tf
 from tqdm import tqdm
 from time import time
+
+# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+device = torch.device("cpu") # because 'cuda out of memory' is very likely, vectordb on CPU, LLM is still on GPU
 
 start_valid_and_eval = time()
 
@@ -92,10 +98,8 @@ for a_type, split in zip(test_set.keys(), splits):
 print(f"validation set length: {len(validation_set)}")
 print(f"test set length: {sum([len(qas_list) for _, qas_list in test_set.items()])}")
 
-scorer = Scorer()
-
-# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-device = torch.device("cpu") # because 'cuda out of memory' is very likely, vectordb in RAM, LLM is still on GPU
+# tf.config.set_visible_devices([], 'GPU') # run BleuRT on CPU, save GPU memory
+# scorer = Scorer(device=device)  # run BERTScore on CPU, save GPU memory
 
 # usage of "last_*" parameters for performing reinitialization only if necessary for efficiency
 last_temperature = -1
@@ -104,58 +108,61 @@ last_granularity = ""
 retriever = None
 llm = None
 
-# validation, find best set of parameters
-combination_scores = []
-for combination in tqdm(combinations):
+# # validation, find best set of parameters
+# combination_scores = []
+# for combination in tqdm(combinations):
 
-    combination["mq_include_original"] = False
-    combination["prompt_template"] = prompt_template
-    combination["max_tokens"] = 1000
-    combination["n_ctx"] = 2048
-    combination["top_p"] = 1
-    combination["n_gpu_layers"] = -1
-    combination["n_batch"] = 512
-    combination["verbose"] = True
-    combination["spell_checker"] = False
+#     combination["mq_include_original"] = False
+#     combination["prompt_template"] = prompt_template
+#     combination["max_tokens"] = 1000
+#     combination["n_ctx"] = 2048
+#     combination["top_p"] = 1
+#     combination["n_gpu_layers"] = -1
+#     combination["n_batch"] = 512
+#     combination["verbose"] = True
+#     combination["spell_checker"] = False
 
-    # temperature change --> reinitiate llm
-    if combination["temperature"] != last_temperature:
-        del llm
-        llm = instantiate_llm(
-            combination["temperature"],
-            combination["max_tokens"],
-            combination["n_ctx"],
-            combination["top_p"],
-            combination["n_gpu_layers"],
-            combination["n_batch"],
-            combination["verbose"],
-        )
-        last_temperature = combination["temperature"]
+#     # temperature change --> reinitiate llm
+#     if combination["temperature"] != last_temperature:
+#         del llm
+#         llm = instantiate_llm(
+#             combination["temperature"],
+#             combination["max_tokens"],
+#             combination["n_ctx"],
+#             combination["top_p"],
+#             combination["n_gpu_layers"],
+#             combination["n_batch"],
+#             combination["verbose"],
+#         )
+#         last_temperature = combination["temperature"]
 
-    # granularity change --> reinitiate retriever
-    if last_granularity != combination["granularity"]:
-        del retriever
-        retriever = get_retriever(combination, device)
-        last_granularity = combination["granularity"]
+#     # granularity change --> reinitiate retriever
+#     if last_granularity != combination["granularity"]:
+#         del retriever
+#         retriever = get_retriever(combination, device)
+#         last_granularity = combination["granularity"]
 
-    print()
-    for param, value in combination.items():
-        print(f"{param}: {value}", flush=True)
-    print()
+#     print()
+#     for param, value in combination.items():
+#         print(f"{param}: {value}", flush=True)
+#     print()
 
-    questions = [str(qas["Question"]) for qas in validation_set]
-    references = [str(qas["Answer"]) for qas in validation_set]
-    predictions, _ = get_predictions(llm, questions, combination, combination, retriever)
-    scores = scorer.get_scores(predictions=predictions, references=references)
-    combination_scores.append(
-        {
-            "combination": combination,
-            "scores": scores,
-        }
-    )
+#     questions = [str(qas["Question"]) for qas in validation_set]
+#     references = [str(qas["Answer"]) for qas in validation_set]
+#     predictions, _ = get_predictions(llm, questions, combination, combination, retriever)
+#     scores = scorer.get_scores(predictions=predictions, references=references)
+#     combination_scores.append(
+#         {
+#             "combination": combination,
+#             "scores": scores,
+#         }
+#     )
 
-del llm
-del retriever
+# del llm
+# del retriever
+
+# llm = None
+# retriever = None
 
 def weighted_score(scores):
     weighted_score = (
@@ -167,7 +174,7 @@ def weighted_score(scores):
     return weighted_score
 
 
-ranked_combinations = sorted(combination_scores, key=lambda x: weighted_score(x["scores"]), reverse=True)
+# ranked_combinations = sorted(combination_scores, key=lambda x: weighted_score(x["scores"]), reverse=True)
 
 relevant_combination_keys = [
         "temperature",
@@ -179,21 +186,37 @@ relevant_combination_keys = [
         "advanced_dense_retriever",
     ]
 
-# output evaluation results to files
-with open("ranked_combinations.txt", "w") as file:
-    for i, combination in enumerate(ranked_combinations):
-        file.write(f"combination {i}:\n")
-        for key in relevant_combination_keys:
-            file.write(f"\t{key}: {combination['combination'][key]}\n")
-        file.write(f"scores {i}:\n")
-        for score_type, score in combination["scores"].items():
-            file.write(f"\t{score_type}: {score:.4f}\n")
-        file.write(f"\toverall weighted score: {weighted_score(combination['scores']):.4f}\n")
-        file.write("\n\n")
+# # output evaluation results to files
+# with open("ranked_combinations.txt", "w") as file:
+#     for i, combination in enumerate(ranked_combinations):
+#         file.write(f"combination {i}:\n")
+#         for key in relevant_combination_keys:
+#             file.write(f"\t{key}: {combination['combination'][key]}\n")
+#         file.write(f"scores {i}:\n")
+#         for score_type, score in combination["scores"].items():
+#             file.write(f"\t{score_type}: {score:.4f}\n")
+#         file.write(f"\toverall weighted score: {weighted_score(combination['scores']):.4f}\n")
+#         file.write("\n\n")
 
 
-best_combination = ranked_combinations[0]["combination"]
+# best_combination = ranked_combinations[0]["combination"]
 
+best_combination = {}
+best_combination["mq_include_original"] = False
+best_combination["prompt_template"] = prompt_template
+best_combination["max_tokens"] = 1000
+best_combination["n_ctx"] = 2048
+best_combination["top_p"] = 1
+best_combination["n_gpu_layers"] = -1
+best_combination["n_batch"] = 512
+best_combination["verbose"] = True
+best_combination["spell_checker"] = False
+
+best_combination["temperature"] = 0.5
+best_combination["abstract_only"] = True
+best_combination["metadata_strategy"] = "parser"
+best_combination["granularity"] = "abstracts"
+best_combination["top_k"] = 2
 
 # evaluation end2end
 # determine scores for all different question types and overall score
@@ -254,18 +277,20 @@ def eval_question_types(combination, file_name):
         file.write(f"\tweighted score: {overall_weighted_score:.4f}\n")
 
 # evaluation of question types with best combination
-eval_question_types(best_combination, "best_comb_question_types_scores")
+#eval_question_types(best_combination, "best_comb_question_types_scores")
 
-# also compare best combination with ensemble retriever
-if best_combination["retrieval_strategy"] == "similarity":
-    advanced_dense_retriever = "similarity"
-elif best_combination["retrieval_strategy"] == "max_marginal_relevance":
-    advanced_dense_retriever = "mmr"
+# # also compare best combination with ensemble retriever
+# if best_combination["retrieval_strategy"] == "similarity":
+#     advanced_dense_retriever = "similarity"
+# elif best_combination["retrieval_strategy"] == "max_marginal_relevance":
+#     advanced_dense_retriever = "mmr"
 
-best_combination["retrieval_strategy"] = "ensemble_retrieval"
-best_combination["advanced_dense_retriever"] = advanced_dense_retriever
+# best_combination["retrieval_strategy"] = "ensemble_retrieval"
+# best_combination["advanced_dense_retriever"] = advanced_dense_retriever
 
-eval_question_types(best_combination, "ensemble_question_types_scores")
+#eval_question_types(best_combination, "ensemble_question_types_scores")
+        
+# del scorer
 
 # evaluation of retrievers
 # each qa pair only has one source, so recall can only be 0 or 1 for each pair
@@ -276,9 +301,10 @@ questions = [str(qas["Question"]) for qas in all_qas if str(qas["Source"]) != "n
 references = [str(qas["Answer"]) for qas in all_qas if str(qas["Source"]) != "nan"]
 sources = [str(qas["Source"]) for qas in all_qas if str(qas["Source"]) != "nan"]
 
-retrieval_strategies = ["ensemble_retrieval", "similarity", "max_marginal_relevance"]
+retrieval_strategies = ["similarity", "max_marginal_relevance", "ensemble_retrieval"]
 advanced_dense_retrievers = ["similarity", "mmr"]
 
+model = PubMedBert(device=device)
 retriever = None
 retrievers_results = []
 for retrieval_strategy in retrieval_strategies:
@@ -294,7 +320,12 @@ for retrieval_strategy in retrieval_strategies:
         _, contexts = get_predictions(llm, questions, best_combination, best_combination, retriever)
 
         recalls = []
+        min_distances = []
         for retrieved_sources, gold_source in zip(contexts, sources):
+            if len(gold_source) == 0:
+                continue
+
+            # calculate recall
             in_gold = 0
             for source in retrieved_sources:
                 n = 20
@@ -305,27 +336,40 @@ for retrieval_strategy in retrieval_strategies:
                     break
             recalls.append(in_gold)
 
+            # calculate min embedding distance
+            retrieved_sources_embeddings = model.encode(retrieved_sources)
+            gold_source_embedding = model.encode(gold_source)
+            min_distance = torch.min(cos_sim(retrieved_sources_embeddings, gold_source_embedding)).item()
+            min_distances.append(min_distance)
+
         recall = np.around(np.mean(recalls), 4)
+        avg_min_distance = np.around(np.mean(min_distances), 4)
 
         retrievers_results.append({
             "retriever_strategy": retrieval_strategy,
             "advanced_dense_retriever": advanced_dense_retriever,
             "avg_recall": recall,
+            "avg_min_distance": avg_min_distance,
         })
         if break_after:
             break
 
 ranked_retrievers_recalls = sorted(retrievers_results, key=lambda x: x["avg_recall"], reverse=True)
+ranked_retrievers_distance = sorted(retrievers_results, key=lambda x: x["avg_min_distance"])
 
 with open("ranked_retrievers_recalls.txt", "w") as file:
     for i, retriever_combination in enumerate(ranked_retrievers_recalls):
         file.write(f"retriever_combination {i}:\n")
         for key, value in retriever_combination.items():
-            file.write(f"\t{key}: {value}\n")
+            file.write(f"\t{key}: {value}\n\n")
+
+with open("ranked_retrievers_distance.txt", "w") as file:
+    for i, retriever_combination in enumerate(ranked_retrievers_distance):
+        file.write(f"retriever_combination {i}:\n")
+        for key, value in retriever_combination.items():
+            file.write(f"\t{key}: {value}\n\n")
 
 end_valid_and_eval = time()
 
-print("#"*10)
-print("done! Ignore error below! This is due to some deinitialization errors of bleuRT.", flush=True)
+print("done!", flush=True)
 print(f"total valid and eval time: {(end_valid_and_eval-start_valid_and_eval)/60:.2f}min", flush=True)
-print("#"*10)
