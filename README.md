@@ -2,7 +2,7 @@
 Transformer-based Question Answering System trained on PubMed data.
 ![Overview of the deployed pipelines](project_docs/read_me_graphic.png)
 
-#Contributors: 
+## Contributors: 
 - Kenneth Styppa (GitHub alias 'KennyLoRI' and 'Kenneth Styppa')
 - Daniel Bogacz (GitHub alias 'bgzdaniel')
 - Arjan Siddhpura (GitHub alias 'arjansiddhpura')
