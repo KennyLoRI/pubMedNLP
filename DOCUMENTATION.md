@@ -225,6 +225,8 @@ Your answer:
 
 The keyword 'context' are the provided texts of the retrieved document for the vector search and the keyword 'question' is the user query.
 
+TODO: Explain Evaluation of question types with and without ensemble retriever and retriever evaluation
+
 ### Results
 
 #### End-to-End Validation Results
@@ -323,4 +325,4 @@ We thank Prof. Gertz for this exceptionally engaging course and Satya for her ti
 
 [^27]: N Polovinkin. "How to chunk text into paragraphs using python", 2022, https://medium.com/@npolovinkin/how-to-chunk-text-into-paragraphs-using-python-8ae66be38ea6#b5bb. accessed 25.02.2024
 
-[^28] Sanh, Victor, et al. "DistilBERT, a distilled version of BERT: smaller, faster, cheaper and lighter." arXiv preprint arXiv:1910.01108 (2019).
+[^28]: Sanh, Victor, et al. "DistilBERT, a distilled version of BERT: smaller, faster, cheaper and lighter." arXiv preprint arXiv:1910.01108 (2019).
