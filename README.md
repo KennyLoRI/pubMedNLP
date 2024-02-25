@@ -4,20 +4,17 @@ Transformer-based Question Answering System trained on PubMed data.
 
 ## Overview
 
-This project utilizes a combination of Kedro, Langchain, ChromaDB, and llama2.cpp to build a retrieval augmented generation system. The project is structured into a modular pipeline that can be run end-2-end to first obtain the data, preprocess and embed the data, and later perform queries to interact with the retrieved information similar to a Q&A chatbot. Due to the modularity, it is only a matter of a different command line prompt to use the latter, i.e. the readily developed Q&A system. 
-
-For the current architecture sketch & assigned responsibilities see: https://miro.com/welcomeonboard/SmlWR0FzNXJjN0RoNzVEQzE4Z2FFQUUzSjU4cjFDanlYY3dVM0c0cGdkUkUxRkVzc2pFWUI4WjV3dGJNVmtSMnwzMDc0NDU3MzU0NTAzMjI4MzU4fDI=?share_link_id=219933613023
-
+This project utilizes a combination of Kedro, Langchain, ChromaDB, and llama2.cpp to build a retrieval augmented generation system for medical question answering. The project is structured into modular pipelines that can be run end-2-end to first obtain the data, preprocess and embed the data, and later perform queries to interact with the retrieved information similar to a Q&A chatbot. Due to the modularity, it is only a matter of a different command line prompts to use the latter, i.e. the readily developed Q&A system. 
 
 ## Technologies Used
 
 - **Kedro:** Kedro is a development workflow framework that facilitates the creation, visualization, and deployment of modular data pipelines.
 
-- **Langchain:** Langchain is a framework for developing applications powered by language models.
+- **Langchain:** Langchain is a framework for developing applications powered by language models, including information retrievers, text generation pipelines and other wrappers to facilitate a seamless integration of LLM-related open-source software.
 
-- **ChromaDB:** Chroma DB is an open-source vector storage system (vector database) designed for storing and retrieving vector embeddings.
+- **ChromaDB:** Chroma DB is an open-source vector storage system designed for efficiently storing and retrieving vector embeddings.
 
-- **llama2.cpp:** llama2.cpp implements the Meta's LLaMa architecture in efficient C/C++.
+- **llama2.cpp:** llama2.cpp implements Meta's LLaMa2 architecture in efficient C/C++ to enable a fast local runtime.
 
 ## Installation & set-up
 
@@ -72,6 +69,12 @@ For the current architecture sketch & assigned responsibilities see: https://mir
    Please enter your question (use *word* for abbreviations or special terms): [your_question]
    ```
    - Ask another question (and so on)
+  
+### Trouble-shooting: 
+- If you encounter an issue during your usage install pyspellchecker separately and try again:
+  ```bash
+  pip install pyspellchecker
+  ```
 
 ### Optional usage possibilities 
 1. **Visualize the pipeline:**
