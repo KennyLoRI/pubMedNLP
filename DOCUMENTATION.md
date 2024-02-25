@@ -192,7 +192,7 @@ The metric 'Weighted Score' is a combination of multiple other metrics and bette
 ### Experimental Details
 For validation the following parameters and different options were used for the validation gridsearch, resulting in a total of 64 different combinations which need to be evaluated:
 
-| Parameter | Options used for Evaluation |
+| Parameter | Options used for Validation |
 | --- | --- |
 | temperature | [0, 0.5] |
 | abstract_only | [True, False] |
