@@ -1,6 +1,6 @@
 # pubMedNLP
 Transformer-based Question Answering System trained on PubMed data.
-![Overview of the deployed pipelines](project_docs/pipelinesOverview.png)
+![Overview of the deployed pipelines](project_docs/read_me_graphic.png)
 
 ## Overview
 
