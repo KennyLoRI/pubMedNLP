@@ -269,13 +269,54 @@ Other than that, there are no clear winners in terms of parameters besides some 
 Another interesting observation looking at the full results is that the parameter `temperature` with the value 0.5 and the parameter `abstract_only` with the value 'True' perform the highest, but also the lowest in terms of all combinations. Due to higher variance of the generated answers resulting by higher temperature, the overall score might also be influenced by this variance, making results with high temperature very good or suboptimal, and results with low temperature more mediocre. To be able to do a more accurate guess, each combination would need to be validated multiple times, as the generated answers of the model could be different each time, and then combine the score of the multiple validations. But as metioned before, the severly limited computational capacity and time constraints did not allow for more elaborate experiments.
 
 #### End-to-End Evaluation Results
-TODO: @Daniel
+
+The best combination determined in the validation was used to perform an evaluation overall as well as on all question types. The overall BLEU is 6.19%, overall ROUGE is 14.61%, overall BERTScore is 75.54%, overall BleuRT is 40.20% and the overall weighted score is 48.37%. The results for the different question types can be seen below:
+
+| Question Type | BLEU | ROUGE | BERTScore | BleuRT | Weighted Score |
+| --- | --- | --- | --- | --- | --- |
+| Descriptive | 21.47% | 26.68% | 81.28% | 43.39% | 54.68% |
+| How | 5.68% | 18.00% | 79.08% | 40.70% | 50.28% |
+| Comparative | 3.79% | 15.20% | 73.91% | 45.48% | 49.65% |
+| Open-Ended | 5.15% | 13.21% | 76.10% | 40.53% | 48.49% |
+| Multiple-Choice | 0.00% | 12.49% | 76.48% | 38.41% | 47.20% |
+| Yes/No | 5.39% | 12.69% | 71.65% | 40.23% | 46.56% |
+| Factoid | 5.47% | 13.47% | 74.73% | 36.31% | 46.31% |
+| Hypothetical | 2.53% | 5.12% | 71.06% | 36.57% | 43.81% |
+
+For the following results, the best combination was left as is except the retrieval strategy, which was replaced with an ensemble retriever, a combination of BM25 and MMR retrieval. The ensemble retriever could also be configured to use BM25 and Similarity retrieval, but as MMR generally outperformed Similarity in the validation, only the first mentioned configuration of the ensemble retriever was evaluated. The overall BLEU is 7.80%, the overall ROUGE is 17.80%, the overall BERTScore is 77.10%, overall BleuRT is 41.83% and the overall weighted score is 50.13%. As can be seen the results for every metric are better with ensemble retrieval instead of only using MMR. Below are the results for the different question types with the positive or negative gain when using ensemble retrieval:
+
+| Question Type | BLEU | ROUGE | BERTScore | BleuRT | Weighted Score | Weighted Score Gain |
+| --- | --- | --- | --- | --- | --- | --- |
+| How | 9.29% | 26.68% | 81.28% | 43.39% | 54.68% | +4.40% |
+| Descriptive | 20.31% | 27.37% | 80.71% | 41.96% | 53.84% | -0.84% |
+| Multiple-Choice | 6.72% | 27.38% | 81.05% | 44.61% | 53.67% | +6.47% |
+| Open-Ended | 9.14% | 17.33% | 78.28% | 45.11% | 52.00% | +3.51% |
+| Factoid | 6.15% | 16.58% | 76.58% | 40.45% | 49.08% | +2.77% |
+| Comparative | 4.46% | 14.53% | 74.20% | 41.05% | 48.00% | -1.65% |
+| Hypothetical | 2.25% | 6.18% | 72.42% | 38.91% | 45.38% | +1.57% |
+| Yes/No | 4.08% | 11.09% | 70.37% | 36.25% | 44.17% | -2.39% |
+
+In total the positive gains of using an ensemble retrieval strategy outweigh the negative losses in the question categories. The largest loss can be observed in the 'Yes/No' question type, but it is not clear why this is the case. The largest gain can be seen in the question types 'Multiple-Choice', 'How' and 'Open-Ended' which might require a broader context to answer, where the ensemble of two different retrieval strategy shines, weighting the results of both and selecting a more diverse and also more accurate set of documents. The ensemble retrieval might also be better, because it simply succeeds in retrieving the correct documents appropriate to the question. 
+
+To further analyze the impact of the retrieval, all strategies are compared with each other in the following retriever evaluation.
 
 #### Retriever Evaluation Results
-TODO: @Daniel
 
-### Analysis
-TODO: Include qualitative analysis. Discuss system performance in different contexts and compare with baselines. @Daniel
+For the retriever evaluation the best combination but with different retrieval strategies were used. Then, the overall recall of each retriever was determined. This way, the impact of the retriever on the whole system can be evaluated. For each question-answer-source pair the top k retrieved sources from the vector database were compared with the gold source, the source of the question and answer. If any of the retrieved sources matches with the gold source, the recall for this single tuple is considered as 1. Otherwise the recall for this tuple is 0. The overall recall was computed by taking the mean of all recalls of the tuples. Below the results of different retrieval strategies can be seen:
+
+| Retrieval Strategy | Average Recall |
+| --- | --- |
+| Ensemble Retriever (BM25 + MMR) | 61.29% |
+| Ensemble Retriever (BM25 + Similarity) | 58.06% |
+| MMR | 51.61 |
+| Similarity | 48.39% |
+
+The results indicate, that the ensemble retriever is able to retrieve the correct document more often than other retrieval strategies, in this case Similarity or MMR retrieval, as in the best combination, BM25 and MMR, in 61.29% of the questions the gold source was in the top k retrieved documents. This impacts the whole system and as a result also improves answer generating of the LLM, which explains the higher scores for the question type evaluation when using an ensemble retrieval strategy.
+
+#### Dataset Bias in Evaluation
+
+Because the questions in the dataset were not created by biomedical experts, but by students of a different field, in this case computer science, the results might be biased towards non-realistic scenarios. It might be possible the type of questions defined in the dataset are not realistic questions one might pose to a biomedical chatbot. Also, the quality of questions might be negatively impacted, as the questions as well as the answers were created by students not highly knowledgeable in the biomedical domain, resulting in possibly incomplete or vague answers, even though the source was present. The achieved results in this validation and evaluation can still be considered very reliable, as the dataset has been created without considering how the LLM might react or respond, but rather how a human would ask or return an answer.
+
 
 ## Conclusion
 In this study, we successfully created a locally running question-answering system, fully based on free-of-charge open-sourced technology. Although challenges persist, this study demonstrates the potential of such systems to manage knowledge-intensive tasks such as medical question answering based on the effective distillation and dissemination of a highly specialised external knowledge base in modern healthcare. Thus, by bridging the gap between a desired question and a reliable, referenced and therefore controllable answer, patient care can be improved and healthcare practitioners relieved without the dangers of sharing sensible data, emphasising the capacity of AI advancements to benefit humanity. 
