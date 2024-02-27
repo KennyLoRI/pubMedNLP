@@ -53,9 +53,9 @@ This project utilizes a combination of Kedro, Langchain, ChromaDB, and llama2.cp
    pip install -r requirements.txt
    ```
 6. **Download data and model files and place them into the right location:**
-   - Go to Link and download the chromaDB store as well as the llama2.cpp model files. This can take a couple of minutes
-   - Insert the chromaDB store at [your_folder]/kedronlp/[chroma_store] Remark: keep the title chroma_store
-   - Insert the model file into kedronlp/data/06_models and keep the name.
+   - Go to [this](https://drive.google.com/drive/folders/1-6FxGDDKGD-sMwT2Pax7VVMLzuZUH0DG) Google drive link and download the chromaDB store (folder called `chroma_store_abstracts`) as well as the llama2.cpp [model files](https://huggingface.co/TheBloke/Llama-2-7b-Chat-GGUF/blob/main/llama-2-7b-chat.Q5_K_M.gguf).
+   - Insert the chromaDB store at `[your_folder]/kedronlp/`
+   - Insert the model file into `kedronlp/data/06_models/` and keep the name.
 
 ## Usage
 ### Using the Q&A system
@@ -88,10 +88,26 @@ This project utilizes a combination of Kedro, Langchain, ChromaDB, and llama2.cp
    kedro viz
    ```
 2. **Test the preprocessing pipeline:**
-- Note: This is not advised since it may take a long time to extract the abstracts from PubMed and embed them (+ the PubMed API is not altogether stable):
+   - Note: This is not advised since it may take a long time to extract the abstracts from PubMed and embed them (+ the PubMed API is not altogether stable):
   ```bash
   kedro run --pipeline=data_processing
   ```
+3. **Create paragraphs out of abstracts:**
+   - Go to `kedronlp/scripts/`. For this, the file `extract_data.csv` is required. It needs to be placed in `data/01_raw/`. See [here](https://drive.google.com/drive/folders/1-6FxGDDKGD-sMwT2Pax7VVMLzuZUH0DG) for the data.
+   ```bash
+   python create_paragraphs.py
+   ```
+4. **Embedding of abstracts or paragraphs:**
+   - For embedding abstracts the file `extract_data.csv` is required. See [here](https://drive.google.com/drive/folders/1-6FxGDDKGD-sMwT2Pax7VVMLzuZUH0DG) for the data. Go to `kedronlp/scripts/`.
+   ```bash
+   python abstract2vec.py
+   ```
+   - For embedding paragraphs the file `paragraphs.csv` is required. See [here](https://drive.google.com/drive/folders/1-6FxGDDKGD-sMwT2Pax7VVMLzuZUH0DG) for the data. Go to `kedronlp/scripts/`.
+   ```bash
+   python paragraph2vec.py
+   ```
+5. **Loading embeddings to the vector database ChromaDB**
+   TODO: @Daniel
 
 ## Project Structure
 
