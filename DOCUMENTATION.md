@@ -180,8 +180,8 @@ Given these reliability issues, the fully automated approach was completely aban
 After quality checks, the resulting semi-automated dataset consisted of 53 question-answer pairs of which the majority were yes/no question-answer pairs (9), followed by comparative (8) and what (8) as well as how (6) and open-ended (6) questions. 
 The manually generated question dataset contains 60  question-answer pairs, of which the majority were factoid (asking 'which' and 'what') (26) and descriptive (7) questions, followed by open-ended (6), yes/no (6), how (6), comparative (4), hypothetical (4) and multiple-choice (1) questions. Consequently, the total dataset consisted of 113 question-answer pairs for evaluation, assessing different difficulties and question types, with a focus on factoid questions. Especially in the manually generated dataset, emphasis was put on diversity within each of the mentioned categories. Consequently within each category different capacities were necessary to perform well, which included but was not limited to: inferring causal relationships, extrapolating correct scenarios or locating and filling a gap.
 
-### Evaluation Method
-To reproducibly determine the best possible system with the given components, we ran a grid-search validation that tests various combinations of parameters end-to-end, computing their performance on 47 questions, equaling about ~40% of the whole available data, sampled from all possible categories of the question. The remaining 66 questions were used as a test set for evaluation of the system performance on different question categories as well as as seperate evaluation of the retrievers. For evaluating the system performance the best combination determined from the validation was used as well as the best combination but the retriever replaced with an ensemble retriever. The ensemble retriever was not used for the validation, as each initialization of this type of retriever can take up to 5 minutes, due to a costly workaround necessary as ChromaDB does not integrate with the required BM25 retriever yet. The workaround consists of loading all available documents in ChromaDB in to a list and only then can be used as a component in the ensemble retriever.
+### Validation and Evaluation Method
+To reproducibly determine the best possible system with the given components, we ran a grid-search validation that tests various combinations of parameters end-to-end, computing their performance on 47 questions, equaling about ~40% of the whole available data, sampled from all possible categories of the question. The remaining 66 questions were used as a test set for evaluation of the system performance on different question categories as well as as seperate evaluation of the retrievers. For evaluating the system performance the best combination determined from the validation was used as well as the best combination but the retriever replaced with an ensemble retriever. The ensemble retriever was not used for the validation, as each initialization of this type of retriever can take up to 5 minutes, due to a costly workaround necessary as ChromaDB does not integrate with the required BM25 retriever yet. The workaround consists of loading all available documents in ChromaDB in to a list and only then can be used as a component in the ensemble retriever. As a result, the best combination determined in the validation will be compared with the same combination except the retrieval strategy being replaced with the ensemble retrieval, to be able to still evaluate the performance of using an ensemble of retrievers compared to using only one retriever.
 
 The performance for validation and question type evaluation was measured by BLEU, ROUGE, BERTScore and BleuRT scores. The retriever evaluation performance was measured by recall, where for one question-asnwer example the recall is either 1 or 0, depending on whether one of the top k retrieved sources is the gold source, where the gold source is always exactly one abstract.
 
@@ -231,10 +231,17 @@ Your answer:
 
 The keyword 'context' contains the provided texts of the retrieved documents of the vector search and the keyword 'question' is the user query.
 
-TODO: Explain evaluation of question types with and without ensemble retriever and retriever evaluation @Daniel
+In general we would have liked to perform a more extensive validation with more parameters and more diversity in the values. But due to time constraints and the available computational resources the selection of parameters and range of options had to be severly limited, so that the validation can complete in a reasonable timeframe.
+
+For evaluation the best combination of parameters from the validation was used. Additionally another combination based on the best combination was compared, where the retriever was replaced with an ensemble retriever, to see if the performance of system can be improved. Both combinations where then evaluated on the defined test set, and results with the selected metrics gathered on all different question types seperately and all questions together as a whole.
+
+Finally, an evaluation of all suggested retrieval strategies in this project was performed, to more precisely determine the impact of different retrieval options on the system as a whole. For this, the best combination of parameters with different retrieval strategies were evaluated and recall for each strategy calculated. For each question-answer-source tuple, the recall can be either 1 or 0, depending if one of the retrieved top k sources is the gold source.
 
 ### Results
 #### End-to-End Validation Results
+
+Below are the top 5 combinations and metric scores:
+
 | temperature | abstract_only | metadata_strategy | granularity | top_k | retrieval_strategy | BLEU | ROUGE | BERTScore | BleuRT | Weighted Score |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 0.5 | True | parser | abstracts | 2 | MMR | 6.41% | 18.88% | 76.81% | 44.04% | 50.87% |
@@ -242,6 +249,16 @@ TODO: Explain evaluation of question types with and without ensemble retriever a
 | 0 | True | none | abstracts | 2 | MMR | 6.57% | 19.78% | 76.92% | 43.59% | 50.84% |
 | 0.5 | True | none | abstracts | 2 | MMR | 7.12% | 17.54% | 77.11% | 42.72% | 50.40% |
 | 0.5 | True | none | abstracts | 3 | MMR | 5.59% | 18.44% | 76.19% | 42.96% | 50.06% |
+
+In the following are the bottom 5 combinations and metric scores:
+
+| temperature | abstract_only | metadata_strategy | granularity | top_k | retrieval_strategy | BLEU | ROUGE | BERTScore | BleuRT | Weighted Score |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 0.5 | True | none | paragraphs | 6 | MMR | 4.43% | 15.59% | 74.16% | 40.35% | 47.81% |
+| 0.5 | True | parser | paragraphs | 4 | MMR | 3.95% | 15.02% | 74.47% | 40.29% | 47.80% |
+| 0.5 | True | none | paragraphs | 4 | Similarity | 3.90% | 14.35% | 74.17% | 39.59% | 47.33% |
+| 0.5 | False | none | paragraphs | 6 | Similarity | 4.84% | 14.17% | 75.34% | 38.13% | 47.29% |
+| 0.5 | True | parser | paragraphs | 4 | Similarity | 4.05% | 13.50% | 74.07% | 37.44% | 46.36% |
 
 #### End-to-End Evaluation Results
 TODO: @Daniel
