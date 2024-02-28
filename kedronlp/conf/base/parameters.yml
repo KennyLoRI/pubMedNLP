@@ -4,11 +4,11 @@ extract_params:
   end_date: '2023/11/01'
 
 top_k_params:
-  top_k: 6 # will also be used for ensemble_strategy
+  top_k: 2 # will also be used for ensemble_strategy
   retrieval_strategy: "ensemble_retrieval" #alternatives: "similarity", "max_marginal_relevance", "ensemble_retrieval"
-  advanced_dense_retriever: "similarity" #alternative "mmr" # is only relevant when ensemble_retrieval or multi_query_retrieval are selected as retrieval strategy
+  advanced_dense_retriever: "mmr" #alternative ["mmr", "similarity"] # is only relevant when ensemble_retrieval or multi_query_retrieval are selected as retrieval strategy
   mq_include_original: False #boolean indicating if by multiquery retrieval the original query should be included
-  granularity: "paragraphs" # can be either 'paragraphs' or 'abstracts'
+  granularity: "abstracts" # can be either 'paragraphs' or 'abstracts'
 
 modelling_params:
   spell_checker: True
@@ -31,7 +31,7 @@ Use the following articles to determine the answer: {context}
 The question: {question}
 Your answer:
 '''
-  temperature: 0
+  temperature: 0.5
   max_tokens: 1000
   n_ctx: 2048
   top_p: 1
