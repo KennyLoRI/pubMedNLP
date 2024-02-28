@@ -297,7 +297,7 @@ For the following results, the best combination was left as is except the retrie
 | Hypothetical | 2.25% | 6.18% | 72.42% | 38.91% | 45.38% | +1.57% |
 | Yes/No | 4.08% | 11.09% | 70.37% | 36.25% | 44.17% | -2.39% |
 
-In total the positive gains of using an ensemble retrieval strategy outweigh the negative losses in the question categories. The largest loss can be observed in the 'Yes/No' question type, but it is not clear why this is the case. The largest gain can be seen in the question types 'Multiple-Choice', 'How' and 'Open-Ended' which might require a broader context to answer, where the ensemble of two different retrieval strategy shines, weighting the results of both and selecting a more diverse and also more accurate set of documents. The ensemble retrieval might also be better, because it simply succeeds in retrieving the correct documents appropriate to the question. 
+In total the positive gains of using an ensemble retrieval strategy outweigh the negative losses in the question categories. The largest loss can be observed in the 'Yes/No' question type, but it is not clear why this is the case. The largest gain can be seen in the question types 'Multiple-Choice', 'How' and 'Open-Ended' which might require a broader context to answer, where the ensemble of two different retrieval strategies shines, weighting the results of both and selecting a more diverse and also more accurate set of documents. The ensemble retrieval might also be better, because it simply succeeds in retrieving the correct documents appropriate to the question. 
 
 To further analyze the impact of the retrieval, all strategies are compared with each other in the following retriever evaluation.
 
