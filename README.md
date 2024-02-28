@@ -75,6 +75,8 @@ This project utilizes a combination of Kedro, Langchain, ChromaDB, and llama2.cp
    ```
    - Ask another question (and so on)
   
+Note: Running the system for the first time might take some additional seconds because the model has to be initialized. All questions, following the first one should be answered within a few seconds. If an answer takes more than 30 seconds to be completed, your GPU might not be automatically detected. You can check that by setting verbose = True in the parameters.yml file and then taking a look at the model initialization output. If it prints OPEN_BLAS = 1 somewhere, your GPU is automatically detected and it should be fine. If not please reach out to us in person via the emails provided in the documentation. 
+  
 ### Trouble-shooting: 
 - If you encounter an issue during your usage install pyspellchecker separately and try again:
   ```bash
