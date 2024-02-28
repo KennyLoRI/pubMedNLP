@@ -43,7 +43,7 @@ model = AutoModel.from_pretrained('pritamdeka/S-PubMedBert-MS-MARCO').to(device)
 input_csv = open("../data/01_raw/extract_data.csv")
 reader = csv.DictReader(input_csv)
 
-output_csv = open("../data/01_raw/doc_embeddings.csv", "w")
+output_csv = open("../data/01_raw/abstract_metadata_embeddings.csv.csv", "w")
 writer = csv.DictWriter(output_csv, fieldnames=["combined_doc", "embedding"])
 
 doc_batch = []

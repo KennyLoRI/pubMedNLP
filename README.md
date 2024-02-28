@@ -3,9 +3,9 @@ Transformer-based Question Answering System trained on PubMed data.
 ![Overview of the deployed pipelines](project_docs/read_me_graphic.png)
 
 ## Contributors: 
-- Kenneth Styppa (GitHub alias 'KennyLoRI' and 'Kenneth Styppa')
-- Daniel Bogacz (GitHub alias 'bgzdaniel')
-- Arjan Siddhpura (GitHub alias 'arjansiddhpura')
+- [Kenneth Styppa](mailto:kenneth.styppa@web.de) (GitHub alias 'KennyLoRI' and 'Kenneth Styppa')
+- [Daniel Bogacz](mailto:daniel.bogacz@stud.uni-heidelberg.de) (GitHub alias 'bgzdaniel')
+- [Arjan Siddhpura](mailto:arjan.siddhpura@stud.uni-heidelberg.com) (GitHub alias 'arjansiddhpura')
 
 ## Overview
 
@@ -48,14 +48,40 @@ This project utilizes a combination of Kedro, Langchain, ChromaDB, and llama2.cp
    cd your-project
    ```
 
+5. **Llama.cpp GPU installation:**
+   (When using CPU only, skip this step.)
+
+   This part might be slightly tricky, depending on which system the installation is done. We do NOT recommend installation on Windows. It has been tested, but requires multiple components which need to be downloaded. Please contact [Daniel Bogacz](mailto:daniel.bogacz@stud.uni-heidelberg.de) for details.
+
+   **Linux:**
+   ```bash
+   CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip install llama-cpp-python
+   ```
+   If installation fails, please use the following to retry after solving the issues:
+   ```bash
+   CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip install --upgrade --force-reinstall llama-cpp-python --no-cache-dir
+   ```
+
+   **MacOS:**
+   ```bash
+   CMAKE_ARGS="-DLLAMA_METAL=on" FORCE_CMAKE=1 pip install llama-cpp-python
+   ```
+   If installation fails, please use the following to retry after solving the issues:
+   ```bash
+   CMAKE_ARGS="-DLLAMA_METAL=on" FORCE_CMAKE=1 pip install --upgrade --force-reinstall llama-cpp-python --no-cache-dir
+   ```
+
+   If anything goes wrong in this step, please contact [Daniel Bogacz](mailto:daniel.bogacz@stud.uni-heidelberg.de) for **Linux** installation issues and [Kenneth Styppa](mailto:kenneth.styppa@web.de) for **MacOS** installation issues. Also refer to the installation guide provided [here](https://python.langchain.com/docs/integrations/llms/llamacpp) and also [here](https://llama-cpp-python.readthedocs.io/en/latest/install/macos/)
+
 5. **Install Dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
-6. **Download data and model files and place them into the right location:**
-   - Go to [this](https://drive.google.com/drive/folders/1-6FxGDDKGD-sMwT2Pax7VVMLzuZUH0DG) Google drive link and download the chromaDB store (folder called `chroma_store_abstracts`) as well as the llama2.cpp [model files](https://huggingface.co/TheBloke/Llama-2-7b-Chat-GGUF/blob/main/llama-2-7b-chat.Q5_K_M.gguf).
-   - Insert the chromaDB store at `[your_folder]/kedronlp/`
-   - Insert the model file into `kedronlp/data/06_models/` and keep the name.
+
+6. **Download chroma store and model files and place them into the right location:**
+   - Go to [this](https://drive.google.com/drive/folders/1-6FxGDDKGD-sMwT2Pax7VVMLzuZUH0DG) Google drive link and download the ChromaDB store (folder called `chroma_store_abstracts`) as well as the llama2.cpp [model files](https://huggingface.co/TheBloke/Llama-2-7b-Chat-GGUF/blob/main/llama-2-7b-chat.Q5_K_M.gguf).
+   - Insert the ChromaDB store at `[your_folder]/kedronlp/`
+   - Insert the model file into `[your_folder]/kedronlp/data/06_models/` and keep the name
 
 ## Usage
 ### Using the Q&A system
@@ -82,6 +108,19 @@ Note: Running the system for the first time might take some additional seconds b
   ```bash
   pip install pyspellchecker
   ```
+- When encountering issues in the Llama.cpp installation, make sure you have NVIDIA Toolkit installed. Check with:
+   ```bash
+   nvcc --version
+   ```
+   Something similar to the following should appear:
+   ```bash
+   nvcc: NVIDIA (R) Cuda compiler driver
+   Copyright (c) 2005-2023 NVIDIA Corporation
+   Built on Wed_Feb__8_05:53:42_Coordinated_Universal_Time_2023
+   Cuda compilation tools, release 12.1, V12.1.66
+   Build cuda_12.1.r12.1/compiler.32415258_0
+   ```
+   Also make sure that CMake is installed on your system.
 
 ### Optional usage possibilities 
 1. **Visualize the pipeline:**
@@ -95,21 +134,34 @@ Note: Running the system for the first time might take some additional seconds b
   kedro run --pipeline=data_processing
   ```
 3. **Create paragraphs out of abstracts:**
-   - Go to `kedronlp/scripts/`. For this, the file `extract_data.csv` is required. It needs to be placed in `data/01_raw/`. See [here](https://drive.google.com/drive/folders/1-6FxGDDKGD-sMwT2Pax7VVMLzuZUH0DG) for the data.
+   - For this, the file `extract_data.csv` is required. Place it in `kedronlp/data/01_raw`. See [here](https://drive.google.com/drive/folders/1-6FxGDDKGD-sMwT2Pax7VVMLzuZUH0DG) for the data. Go to `kedronlp/scripts`.
    ```bash
    python create_paragraphs.py
    ```
 4. **Embedding of abstracts or paragraphs:**
-   - For embedding abstracts the file `extract_data.csv` is required. See [here](https://drive.google.com/drive/folders/1-6FxGDDKGD-sMwT2Pax7VVMLzuZUH0DG) for the data. Go to `kedronlp/scripts/`.
+   - For embedding abstracts the file `extract_data.csv` is required. Place it in `kedronlp/data/01_raw`. See [here](https://drive.google.com/drive/folders/1-6FxGDDKGD-sMwT2Pax7VVMLzuZUH0DG) for the data. Go to `kedronlp/scripts`.
    ```bash
    python abstract2vec.py
    ```
-   - For embedding paragraphs the file `paragraphs.csv` is required. See [here](https://drive.google.com/drive/folders/1-6FxGDDKGD-sMwT2Pax7VVMLzuZUH0DG) for the data. Go to `kedronlp/scripts/`.
+   - For embedding paragraphs the file `paragraphs.csv` is required. Place it in `kedronlp/data/01_raw`. See [here](https://drive.google.com/drive/folders/1-6FxGDDKGD-sMwT2Pax7VVMLzuZUH0DG) for the data. Go to `kedronlp/scripts`.
    ```bash
    python paragraph2vec.py
    ```
-5. **Loading embeddings to the vector database ChromaDB**
-   TODO: @Daniel
+5. **Loading embeddings to the vector database ChromaDB:**
+   - For loading abstract based embeddings to the vector database, the file `abstract_metadata_embeddings.csv` is required. Place it in `kedronlp/data/01_raw/`. See [here](https://drive.google.com/drive/folders/1-6FxGDDKGD-sMwT2Pax7VVMLzuZUH0DG) for the data. Go to `kedronlp/scripts`.
+   ```bash
+   python vec2chroma.py --granularity abstracts
+   ```
+   - For loading paragraph based embeddings to the vector database, the file `abstract_metadata_embeddings.csv` is required. Place it in `kedronlp/data/01_raw/`. See [here](https://drive.google.com/drive/folders/1-6FxGDDKGD-sMwT2Pax7VVMLzuZUH0DG) for the data. Go to `kedronlp/scripts`.
+   ```bash
+   python vec2chroma.py --granularity paragraphs
+   ```
+6. **Running Validation and Evaluation:**
+   - Download the abstract based ChromaDB store (folder called `chroma_store_abstracts`) from [here](https://drive.google.com/drive/folders/1-6FxGDDKGD-sMwT2Pax7VVMLzuZUH0DG). The paragraph based vector database has do be created, it did not fit into the google drive link anymore. Please follow the steps above in '**Loading embeddings to the vector database ChromaDB**' for paragraph based embeddings. This should create the paragraph based ChromaDB store called `chroma_store_paragraphs`.
+   Go to `kedronlp/scripts/evaluation`.
+   ```bash
+   python valid_and_eval.py
+   ```
 
 ## Project Structure
 
