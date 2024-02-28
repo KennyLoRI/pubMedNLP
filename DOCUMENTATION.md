@@ -27,9 +27,9 @@
 - Rule-based Filter Implementation using Intentions
 - Validation and Evaluation Scripts
 
-#### Full Name 3
-- Contribution Description 3
-- Challenges Faced 3
+#### Arjan Siddhpura
+- Creation of handmade validation and evaluation dataset
+- Initial Evaluation of the pipeline
 
 ### Advisor
 - [Satya Almasian](mailto:satya.almasian@gmail.com)
