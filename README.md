@@ -168,7 +168,8 @@ Note: Running the system for the first time might take some additional seconds b
 - **data/**: This directory contains the raw and processed data as well as the model files used by the project.
 - **src/**: The source code of the project is organized into modules within this directory.
 - **conf/**: Configuration files for Kedro and other tools are stored here. If you want to run the pipelines with different retrievers, or hyperparameters you can change them in the parameters.yml file and they will automatically be broadcasted to all necessary files.
-- **scripts/**: Contains basic scripts we used during developing the project. They are not relevant to the pipeline.
+- **scripts/**: Contains scripts we used during developing the project.
+- **scripts/evaluation**: Contains files and scripts to perform a validation and evaluation.
 - **notebooks/**: Contains tests and analysis notebooks. Have a look here to see our own evaluation of our system
 - **docs/**: Documentation related to the project.
 
