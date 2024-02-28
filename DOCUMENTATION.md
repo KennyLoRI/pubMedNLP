@@ -236,6 +236,9 @@ For evaluation the best combination of parameters from the validation was used. 
 Finally, an evaluation of all suggested retrieval strategies in this project was performed, to more precisely determine the impact of different retrieval options on the system as a whole. For this, the best combination of parameters with different retrieval strategies were evaluated and recall for each strategy calculated. For each question-answer-source tuple, the recall can be either 1 or 0, depending if one of the retrieved top k sources is the gold source.
 
 ### Results
+
+In the following the results for the End-to-End Validation, End-to-End Evaluation and Retriever Evaluation will be presented. The validation results are truncated to the top 5 and bottom 5 results. See `kedronlp/scripts/evaluation/ranked_combinations.txt` for the full results for each combination.
+
 #### End-to-End Validation Results
 
 Below are the top 5 combinations with their corresponding metric scores from the 64 validated combinations:
