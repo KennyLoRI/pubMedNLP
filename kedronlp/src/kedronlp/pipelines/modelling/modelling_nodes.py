@@ -50,7 +50,8 @@ def get_user_query(modelling_params, is_evaluation = False, **kwargs): #TODO: he
 
         # Apply spell correction excluding asterisked words
         try:
-            corrected_list = [token.strip('?').strip('*') if token.strip('?').strip('*') not in highlighted_words else token.strip('?').strip('*') for token in user_input.split()]
+            spell = SpellChecker()
+            corrected_list = [spell.correction(token.strip('?').strip('*')) if token.strip('?').strip('*') not in highlighted_words else token.strip('?').strip('*') for token in user_input.split()]
             correct_query = ' '.join(corrected_list)+question_mark
         except:
             correct_query = user_input
