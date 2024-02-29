@@ -1,0 +1,72 @@
+combination:
+	temperature: 0.5
+	abstract_only: True
+	metadata_strategy: parser
+	granularity: abstracts
+	top_k: 2
+	retrieval_strategy: max_marginal_relevance
+	advanced_dense_retriever: none
+
+
+descriptive:
+	bleuscore: 0.2147
+	rougescore: 0.2668
+	bertscore: 0.8128
+	bleurtscore: 0.4339
+weighted score: 0.5468
+
+how:
+	bleuscore: 0.0568
+	rougescore: 0.1800
+	bertscore: 0.7908
+	bleurtscore: 0.4070
+weighted score: 0.5028
+
+comparative:
+	bleuscore: 0.0379
+	rougescore: 0.1520
+	bertscore: 0.7391
+	bleurtscore: 0.4548
+weighted score: 0.4965
+
+open-ended:
+	bleuscore: 0.0515
+	rougescore: 0.1321
+	bertscore: 0.7610
+	bleurtscore: 0.4053
+weighted score: 0.4849
+
+multiple-choice:
+	bleuscore: 0.0000
+	rougescore: 0.1249
+	bertscore: 0.7648
+	bleurtscore: 0.3841
+weighted score: 0.4720
+
+yes/no:
+	bleuscore: 0.0539
+	rougescore: 0.1269
+	bertscore: 0.7165
+	bleurtscore: 0.4023
+weighted score: 0.4656
+
+factoid:
+	bleuscore: 0.0547
+	rougescore: 0.1347
+	bertscore: 0.7473
+	bleurtscore: 0.3631
+weighted score: 0.4631
+
+hypothetical:
+	bleuscore: 0.0253
+	rougescore: 0.0512
+	bertscore: 0.7106
+	bleurtscore: 0.3657
+weighted score: 0.4381
+
+overall results:
+	bleuscore: 0.0619
+	rougescore: 0.1461
+	bertscore: 0.7554
+	bleurtscore: 0.4020
+	weighted score: 0.4837

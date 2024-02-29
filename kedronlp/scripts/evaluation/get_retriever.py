@@ -6,17 +6,16 @@ from langchain.retrievers import EnsembleRetriever
 from time import time
 
 def get_retriever(top_k_params, device):
-
     vectordb_path = f"../../chroma_store_{top_k_params['granularity']}"
     assert(os.path.isdir(vectordb_path))
 
     vectordb = get_langchain_chroma(device=device, persist_dir=vectordb_path)
 
     if top_k_params["retrieval_strategy"] == "ensemble_retrieval":
-        print(f"initiating ensemble retriever... (takes time due to inefficient workaround - no chroma bm25 integration yet)")
+        print(f"\ninitiating ensemble retriever... (takes long due to inefficient workaround - no chroma bm25 integration yet)")
         #initiate BM25 retriever
         start = time()
-        lang_docs = [Document(page_content=doc) for doc in vectordb.get().get("documents", [])] # TODO: status quo is an inefficient workaround - no chroma bm25 integration yet
+        lang_docs = [Document(page_content=doc) for doc in vectordb.get().get("documents", [])]
         bm25_retriever = BM25Retriever.from_documents(lang_docs)
         bm25_retriever.k = top_k_params["top_k"]
 
@@ -37,6 +36,7 @@ def get_retriever(top_k_params, device):
         retriever = ensemble_retriever
     else:
         retriever = vectordb
+
     return retriever
 
     

@@ -20,6 +20,9 @@ chroma_store_abstracts
 .env
 BLEURT-20*
 !Evaluation.csv
+!Evaluation_2.csv
+!eval_questions_handmade.csv
+!eval_questions_semi_generated.csv
 
 ##########################
 # Common files

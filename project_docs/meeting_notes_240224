@@ -1,0 +1,3 @@
+Participants: Daniel & Kenny
+Topic: Retrieval evaluation problems. Recall seems off. 
+Solution: Bug in code + a second evaluation metric that uses a cosine-similarity threshold between the retrieved and the ground-thruth abstracts to identify a correctly retrieved abstract. 

@@ -4,28 +4,40 @@ import numpy as np
 
 
 class Scorer:
-    def __init__(self):
+    def __init__(self, device):
+        self.device = device
         self.bleu = evaluate.load("bleu")
         self.rouge = evaluate.load("rouge")
         self.bertscore = evaluate.load("bertscore")
         checkpoint = "BLEURT-20-D12"
         self.bleurt = score.BleurtScorer(checkpoint)
 
+        # init bertscore with sample computation
+        self.bertscore.compute(
+            predictions=["predictions"],
+            references=["references"],
+            lang="en",
+            model_type="distilbert-base-uncased",
+            device=self.device,
+        )
+
     def get_scores(self, predictions, references):
         bleuscore = self.bleu.compute(
             predictions=predictions,
             references=references
         )["bleu"]
-        roguescore = sum(self.rouge.compute(
+        rougescore = np.mean(list(self.rouge.compute(
             predictions=predictions,
             references=references,
-            use_aggregator=True
-        ).values())
+            use_aggregator=True,
+        ).values()))
         bertscore = np.mean(
             self.bertscore.compute(
                 predictions=predictions,
                 references=references,
-                lang="en"
+                lang="en",
+                model_type="distilbert-base-uncased",
+                device=self.device,
             )["f1"]
         )
         bleurtscore = np.mean(
@@ -34,7 +46,7 @@ class Scorer:
 
         return {
             "bleuscore": bleuscore,
-            "roguescore": roguescore,
+            "rougescore": rougescore,
             "bertscore": bertscore,
             "bleurtscore": bleurtscore,
         }

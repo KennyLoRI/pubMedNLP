@@ -60,7 +60,7 @@ def get_context_details(context, top_k_params, print_context = True, as_input_di
       # Clean input lists for well formatted input
       if abstract_only:
         filtered_abstr_lst = [value for value in abstracts_list if value != "NA"]
-        structured_context = ' '.join(filtered_abstr_lst)
+        structured_context = '\n\n\n\n'.join(filtered_abstr_lst)
         context = {"context": structured_context, "question": user_input}
       else:
         context_strings = []
@@ -80,7 +80,7 @@ def instantiate_llm(temperature = 0,
                     n_gpu_layers = 40,
                     n_batch = 512,
                     verbose = True,
-                    path='data/06_models/llama-2-7b-chat.Q5_K_M.gguf'):
+                    path='../../data/06_models/llama-2-7b-chat.Q5_K_M.gguf'):
     callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
     llm = LlamaCpp(
         model_path=path,
