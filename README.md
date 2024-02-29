@@ -46,11 +46,9 @@ This project utilizes a combination of Kedro, Langchain, ChromaDB, and llama2.cp
    ```bash
    git clone https://github.com/KennyLoRI/pubMedNLP.git
    ```
-   and BLEURT repository in your working directory:
+   When using Mac set pgk_config path:
    ```bash
-   git clone https://github.com/google-research/bleurt.git
-   cd bleurt
-   pip install . 
+   export PKG_CONFIG_PATH="/opt/homebrew/opt/openblas/lib/pkgconfig"
    ```
 
    then switch to the working directory of the project:
@@ -58,12 +56,7 @@ This project utilizes a combination of Kedro, Langchain, ChromaDB, and llama2.cp
    cd pubMedNLP
    ```
    
-5. **Install Dependencies:**
-   When using Mac set pgk_config path:
-   ```bash
-   export PKG_CONFIG_PATH="/opt/homebrew/opt/openblas/lib/pkgconfig"
-   ```
-   then install the required packages:
+6. **Install Dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
@@ -172,6 +165,27 @@ Note: Running the system for the first time might take some additional seconds b
    python vec2chroma.py --granularity paragraphs
    ```
 6. **Running Validation and Evaluation:**
+   - For the validation and evaluation BleuRT is required. First clone bleuRT:
+   ```bash
+   git clone https://github.com/google-research/bleurt.git
+   ```
+   Go in into the subfolder 'bleurt':
+   ```bash
+   cd bleurt
+   ```
+   Specifically for *MacOS*: Because `tensorflow` is differently named under MacOS, the install requirements    have to be changed. Go to `bleurt/setup.py` and change in the list variable `install_requires` the entry `tensorflow` to `tensorflow-macos`. It should look like the following:
+   ```python
+   install_requires = [
+    "pandas", "numpy", "scipy", "tensorflow-macos", "tf-slim>=1.1", "sentencepiece"
+   ]
+   ```
+
+   Save the file.
+
+   Install bleuRT with the following:
+   ```bash
+   pip install . 
+   ```
    - Download the abstract based ChromaDB store (folder called `chroma_store_abstracts`) from [here](https://drive.google.com/drive/folders/1-6FxGDDKGD-sMwT2Pax7VVMLzuZUH0DG). The paragraph based vector database has do be created, it did not fit into the google drive link anymore. Please follow the steps above in '**Loading embeddings to the vector database ChromaDB**' for paragraph based embeddings. This should create the paragraph based ChromaDB store called `chroma_store_paragraphs`.
    Go to `kedronlp/scripts/evaluation`.
    ```bash
