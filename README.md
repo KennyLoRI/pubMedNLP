@@ -45,10 +45,14 @@ This project utilizes a combination of Kedro, Langchain, ChromaDB, and llama2.cp
 4. **Clone the Repository into your working directory:**
    ```bash
    git clone https://github.com/KennyLoRI/pubMedNLP.git
+   ```
+   and BLEURT repository in your working directory:
+   ```bash
+   git clone https://github.com/google-research/bleurt.git
    cd pubMedNLP
    ```
 
-5. **Llama.cpp GPU installation:**
+6. **Llama.cpp GPU installation:**
    (When using CPU only, skip this step.)
 
    This part might be slightly tricky, depending on which system the installation is done. We do NOT recommend installation on Windows. It has been tested, but requires multiple components which need to be downloaded. Please contact [Daniel Bogacz](mailto:daniel.bogacz@stud.uni-heidelberg.de) for details.
