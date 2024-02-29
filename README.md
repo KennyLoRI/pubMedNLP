@@ -177,6 +177,7 @@ Note: Running the system for the first time might take some additional seconds b
    
    - Download the abstract based ChromaDB store (folder called `chroma_store_abstracts`) from [here](https://drive.google.com/drive/folders/1-6FxGDDKGD-sMwT2Pax7VVMLzuZUH0DG). The paragraph based vector database has do be created, it did not fit into the google drive link anymore. Please follow the steps above in '**Loading embeddings to the vector database ChromaDB**' for paragraph based embeddings. This should create the paragraph based ChromaDB store called `chroma_store_paragraphs`.
    Go to `kedronlp/scripts/evaluation`.
+
    ```bash
    python valid_and_eval.py
    ```
