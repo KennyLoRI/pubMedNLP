@@ -45,7 +45,7 @@ This project utilizes a combination of Kedro, Langchain, ChromaDB, and llama2.cp
 4. **Clone the Repository into your working directory:**
    ```bash
    git clone https://github.com/KennyLoRI/pubMedNLP.git
-   cd your-project
+   cd pubMedNLP
    ```
 
 5. **Llama.cpp GPU installation:**
