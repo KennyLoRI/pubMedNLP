@@ -28,12 +28,6 @@ This project utilizes a combination of Kedro, Langchain, ChromaDB, and llama2.cp
    - Ensure to have conda installed on your system.
    - Create a folder where you want to store the project. Call it e.g. pupMedNLP
 
-   ```bash
-   python --version
-   conda --version
-   # ls, cd etc. to get to your working directory
-   ```
-
 2. **Create a Conda Environment:**
    - Create a conda environment
    - Activate the environment
@@ -80,8 +74,8 @@ This project utilizes a combination of Kedro, Langchain, ChromaDB, and llama2.cp
 
 6. **Download chroma store and model files and place them into the right location:**
    - Go to [this](https://drive.google.com/drive/folders/1-6FxGDDKGD-sMwT2Pax7VVMLzuZUH0DG) Google drive link and download the ChromaDB store (folder called `chroma_store_abstracts`) as well as the llama2.cpp [model files](https://huggingface.co/TheBloke/Llama-2-7b-Chat-GGUF/blob/main/llama-2-7b-chat.Q5_K_M.gguf).
-   - Insert the ChromaDB store at `[pubMedNLP]/kedronlp/`
-   - Insert the model file into `[pubMedNLP]/kedronlp/data/06_models/` and keep the name
+   - Insert the ChromaDB store at `pubMedNLP/kedronlp/`
+   - Insert the model file into `pubMedNLP/kedronlp/data/06_models/` and keep the name
 
 ## Usage
 ### Using the Q&A system
@@ -178,6 +172,9 @@ Note: Running the system for the first time might take some additional seconds b
    ```bash
    pip install . 
    ```
+
+   The used BleuRT model can be found [here](https://storage.googleapis.com/bleurt-oss-21/BLEURT-20-D12.zip). Place it under `pubMedNLP/kedronlp/scripts/evaluation`.
+   
    - Download the abstract based ChromaDB store (folder called `chroma_store_abstracts`) from [here](https://drive.google.com/drive/folders/1-6FxGDDKGD-sMwT2Pax7VVMLzuZUH0DG). The paragraph based vector database has do be created, it did not fit into the google drive link anymore. Please follow the steps above in '**Loading embeddings to the vector database ChromaDB**' for paragraph based embeddings. This should create the paragraph based ChromaDB store called `chroma_store_paragraphs`.
    Go to `kedronlp/scripts/evaluation`.
    ```bash
