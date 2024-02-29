@@ -80,14 +80,14 @@ This project utilizes a combination of Kedro, Langchain, ChromaDB, and llama2.cp
 
 6. **Download chroma store and model files and place them into the right location:**
    - Go to [this](https://drive.google.com/drive/folders/1-6FxGDDKGD-sMwT2Pax7VVMLzuZUH0DG) Google drive link and download the ChromaDB store (folder called `chroma_store_abstracts`) as well as the llama2.cpp [model files](https://huggingface.co/TheBloke/Llama-2-7b-Chat-GGUF/blob/main/llama-2-7b-chat.Q5_K_M.gguf).
-   - Insert the ChromaDB store at `[your_folder]/kedronlp/`
-   - Insert the model file into `[your_folder]/kedronlp/data/06_models/` and keep the name
+   - Insert the ChromaDB store at `[pubMedNLP]/kedronlp/`
+   - Insert the model file into `[pubMedNLP]/kedronlp/data/06_models/` and keep the name
 
 ## Usage
 ### Using the Q&A system
 1. **Navigate to the kedronlp folder in your terminal:**
    ```bash
-   cd [your_folder]/kedronlp
+   cd pubMedNLP/kedronlp
    ```
 
 2. **Activate the Q&A System:**
