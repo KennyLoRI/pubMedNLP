@@ -68,18 +68,10 @@ This project utilizes a combination of Kedro, Langchain, ChromaDB, and llama2.cp
 
    **Linux:**
    ```bash
-   CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip install llama-cpp-python
-   ```
-   If installation fails, please use the following to retry after solving the issues:
-   ```bash
    CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip install --upgrade --force-reinstall llama-cpp-python --no-cache-dir
    ```
 
    **MacOS:**
-   ```bash
-   CMAKE_ARGS="-DLLAMA_METAL=on" FORCE_CMAKE=1 pip install llama-cpp-python
-   ```
-   If installation fails, please use the following to retry after solving the issues:
    ```bash
    CMAKE_ARGS="-DLLAMA_METAL=on" FORCE_CMAKE=1 pip install --upgrade --force-reinstall llama-cpp-python --no-cache-dir
    ```
