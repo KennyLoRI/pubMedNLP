@@ -1,12 +1,41 @@
-#model_options:
-#  test_size: 0.2
-#  random_state: 3
-#  features:
-#    - engines
-#    - passenger_capacity
-#    - crew
-#    - d_check_complete
-#    - moon_clearance_complete
-#    - iata_approved
-#    - company_rating
-#    - review_scores_rating
+extract_params:
+  window_duration_days: 30
+  start_date: '2013/01/01'
+  end_date: '2023/11/01'
+
+top_k_params:
+  top_k: 2 # will also be used for ensemble_strategy
+  retrieval_strategy: "ensemble_retrieval" #alternatives: "similarity", "max_marginal_relevance", "ensemble_retrieval"
+  advanced_dense_retriever: "mmr" #alternative ["mmr", "similarity"] # is only relevant when ensemble_retrieval or multi_query_retrieval are selected as retrieval strategy
+  mq_include_original: False #boolean indicating if by multiquery retrieval the original query should be included
+  granularity: "abstracts" # can be either 'paragraphs' or 'abstracts'
+
+modelling_params:
+  spell_checker: True
+  abstract_only: True
+  prompt_template: '''
+You are a biomedical AI assistant to answer medical questions
+mostly about PubMed articles provided as context for you.
+Not every article in the provided context is necessarily relevant to the question.
+Carefully examine the provided information in the articles and choose the
+most likely correct information to answer the question.
+If the question is not from the biomedical domain, tell the user that
+the question is out of domain and cannot be answered by you.
+As an AI assistant, answer the question accurately,
+precisely and concisely. Only include information in your answer,
+which is necessary to answer the question.
+Be as short and concise in your answer as possible.
+Do NOT mention that your answer is based on the provided paper or context.
+
+Use the following articles to determine the answer: {context}
+The question: {question}
+Your answer:
+'''
+  temperature: 0.5
+  max_tokens: 1000
+  n_ctx: 2048
+  top_p: 1
+  n_gpu_layers: -1
+  n_batch: 512
+  verbose: True
+  metadata_strategy: "parser" # alternative: "llm_detection" or "none" to disable filtering

@@ -1,0 +1,1 @@
+{'query': 'What iss  *dysarttthria*?', 'author_names': [], 'publishing_dates': [None, None], 'paper_titles': []}
