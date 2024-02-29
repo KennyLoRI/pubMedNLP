@@ -49,6 +49,8 @@ This project utilizes a combination of Kedro, Langchain, ChromaDB, and llama2.cp
    and BLEURT repository in your working directory:
    ```bash
    git clone https://github.com/google-research/bleurt.git
+   cd bleurt
+   pip install . 
    cd pubMedNLP
    ```
 
