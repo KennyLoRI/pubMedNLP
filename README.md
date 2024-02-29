@@ -38,7 +38,7 @@ This project utilizes a combination of Kedro, Langchain, ChromaDB, and llama2.cp
    - Create a conda environment
    - Activate the environment
    ```bash
-   conda create --name your_project_env python=3.11.6
+   conda create --name your_project_env python=3.10
    conda activate your_project_env
    ```
 
@@ -51,10 +51,24 @@ This project utilizes a combination of Kedro, Langchain, ChromaDB, and llama2.cp
    git clone https://github.com/google-research/bleurt.git
    cd bleurt
    pip install . 
-   cd pubMedNLP
    ```
 
-6. **Llama.cpp GPU installation:**
+   then switch to the working directory of the project:
+   ```bash
+   cd pubMedNLP
+   ```
+   
+5. **Install Dependencies:**
+   When using Mac set pgk_config path:
+   ```bash
+   export PKG_CONFIG_PATH="/opt/homebrew/opt/openblas/lib/pkgconfig"
+   ```
+   then install the required packages:
+   ```bash
+   pip install -r requirements.txt
+   ```
+   
+7. **Llama.cpp GPU installation:**
    (When using CPU only, skip this step.)
 
    This part might be slightly tricky, depending on which system the installation is done. We do NOT recommend installation on Windows. It has been tested, but requires multiple components which need to be downloaded. Please contact [Daniel Bogacz](mailto:daniel.bogacz@stud.uni-heidelberg.de) for details.
@@ -78,11 +92,6 @@ This project utilizes a combination of Kedro, Langchain, ChromaDB, and llama2.cp
    ```
 
    If anything goes wrong in this step, please contact [Daniel Bogacz](mailto:daniel.bogacz@stud.uni-heidelberg.de) for **Linux** installation issues and [Kenneth Styppa](mailto:kenneth.styppa@web.de) for **MacOS** installation issues. Also refer to the installation guide provided [here](https://python.langchain.com/docs/integrations/llms/llamacpp) and also [here](https://llama-cpp-python.readthedocs.io/en/latest/install/macos/)
-
-5. **Install Dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
 
 6. **Download chroma store and model files and place them into the right location:**
    - Go to [this](https://drive.google.com/drive/folders/1-6FxGDDKGD-sMwT2Pax7VVMLzuZUH0DG) Google drive link and download the ChromaDB store (folder called `chroma_store_abstracts`) as well as the llama2.cpp [model files](https://huggingface.co/TheBloke/Llama-2-7b-Chat-GGUF/blob/main/llama-2-7b-chat.Q5_K_M.gguf).
