@@ -278,20 +278,37 @@ Another interesting observation looking at the full results is that the paramete
 
 #### End-to-End Evaluation Results
 
-The best combination determined in the validation was used to perform an evaluation on all questions as well as distinguish the system's performance between question types. The overall BLEU is 6.19%, the overall ROUGE is 14.61%, the overall BERTScore is 75.54%, the overall BleuRT is 40.20% and the overall weighted score is 48.37%. The results for the different question types can be seen below:
+For a baseline to compare our results to, the questions were input manually into ChatGPT without context and the answer saved as the prediction. The noted prediction was then compared with the gold answer. The baseline results for the different question types ordered by 'Weighted Score' and the overall results can be seen in the following table:
 
 | Question Type | BLEU | ROUGE | BERTScore | BleuRT | Weighted Score |
 | --- | --- | --- | --- | --- | --- |
-| Descriptive | 21.47% | 26.68% | 81.28% | 43.39% | 54.68% |
-| How | 5.68% | 18.00% | 79.08% | 40.70% | 50.28% |
-| Comparative | 3.79% | 15.20% | 73.91% | 45.48% | 49.65% |
-| Open-Ended | 5.15% | 13.21% | 76.10% | 40.53% | 48.49% |
-| Multiple-Choice | 0.00% | 12.49% | 76.48% | 38.41% | 47.20% |
-| Yes/No | 5.39% | 12.69% | 71.65% | 40.23% | 46.56% |
-| Factoid | 5.47% | 13.47% | 74.73% | 36.31% | 46.31% |
-| Hypothetical | 2.53% | 5.12% | 71.06% | 36.57% | 43.81% |
+| Multiple-Choice | 13.32% | 30.03% | 84.21% | 50.26% | 58.12% |
+| How | 11.91% | 25.95% | 85.19% | 49.28% | 57.58% |
+| Open-Ended | 7.44% | 15.76% | 80.09% | 39.28% | 50.07% |
+| Comparative | 3.34% | 17.86% | 75.81% | 41.56% | 49.07% |
+| Factoid | 7.59% | 18.58% | 77.55% | 37.30% | 48.56% |
+| Descriptive | 3.14% | 14.85% | 77.39% | 34.82% | 46.68% |
+| Yes/No | 2.32% | 9.47% | 69.12% | 30.94% | 41.20% |
+| Hypothetical | 0.00% | 5.72% | 72.12% | 28.28% | 40.73% |
+| **Overall Results** | **6.13%** | **17.28%** | **77.69%** | **38.96%** | **49.00%** |
 
-For the following results, the best combination was left unchanged, except the retrieval strategy, which was replaced with an ensemble retriever, a combination of BM25 and MMR retrieval. The ensemble retriever could also be configured to use BM25 and cosine-similarity-retrieval, but as MMR generally outperformed cosine-similarity in the validation, only the first-mentioned configuration of the ensemble retriever was evaluated. The overall BLEU is 7.80%, the overall ROUGE is 17.80%, the overall BERTScore is 77.10%, the overall BleuRT is 41.83% and the overall weighted score is 50.13%. As can be seen, the results for every metric are better with ensemble retrieval instead of only using MMR. Below are the results for the different question types with the positive or negative gain when using ensemble retrieval:
+The best combination determined in the validation was used to perform an evaluation overall as well as on all question types. The results for the different question types ordered by 'Weighted Score' and the overall results with the positive or negative gain compared to the baseline can be seen below:
+
+| Question Type | BLEU | ROUGE | BERTScore | BleuRT | Weighted Score | Weigted Score Gain |
+| --- | --- | --- | --- | --- | --- | --- |
+| Descriptive | 21.47% | 26.68% | 81.28% | 43.39% | 54.68% | +8.00% |
+| How | 5.68% | 18.00% | 79.08% | 40.70% | 50.28% | -7.30% |
+| Comparative | 3.79% | 15.20% | 73.91% | 45.48% | 49.65% | +0.58% |
+| Open-Ended | 5.15% | 13.21% | 76.10% | 40.53% | 48.49% | -1.58% |
+| Multiple-Choice | 0.00% | 12.49% | 76.48% | 38.41% | 47.20% | -10.92% |
+| Yes/No | 5.39% | 12.69% | 71.65% | 40.23% | 46.56% | +5.36% |
+| Factoid | 5.47% | 13.47% | 74.73% | 36.31% | 46.31% | -2.25% |
+| Hypothetical | 2.53% | 5.12% | 71.06% | 36.57% | 43.81% | +3.08% |
+| **Overall Results** | **6.19%** | **14.61%** | **75.54%** | **40.20%** | **48.37%** | **-0.63%** |
+
+Compared to the baseline the designed system performs much better in the question categories 'Descriptive' and 'Yes/No' with positive gains of +8.00% and +5.36% respectively. But the system underperforms in the categories 'How' and 'Multiple-Choice' with negative losses of -7.30% and -10.92% respectively. The overall weighted score roughly even. Reasons for the score differences mentioned previously might be a different focus of pre-training data of the GPT and Llama type models. Even though the baseline, ChatGPT, did not get any context to the questions, it performed very comparable to our system which uses context to answer questions. However, ChatGPT was very likely pre-trained on PubMed publications, where knowledge is saved in the model weights instead of a retrieval-based system. Still, the results presented by our system are very impressive, as it performs on par with ChatGPT even though the used LLM is comparatively very small, quantized and the whole system can run locally on a laptop. 
+
+For the following results, the best combination was left as is except the retrieval strategy, which was replaced with an ensemble retriever, a combination of BM25 and MMR retrieval. The ensemble retriever could also be configured to use BM25 and Similarity retrieval, but as MMR generally outperformed Similarity in the validation, only the first mentioned configuration of the ensemble retriever was evaluated. As can be seen the results for every metric are better with ensemble retrieval instead of only using MMR. Below are the results when using ensemble retrieval for the different question types and the overall results with the positive or negative gain compared to only using MMR:
 
 | Question Type | BLEU | ROUGE | BERTScore | BleuRT | Weighted Score | Weighted Score Gain |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -303,6 +320,7 @@ For the following results, the best combination was left unchanged, except the r
 | Comparative | 4.46% | 14.53% | 74.20% | 41.05% | 48.00% | -1.65% |
 | Hypothetical | 2.25% | 6.18% | 72.42% | 38.91% | 45.38% | +1.57% |
 | Yes/No | 4.08% | 11.09% | 70.37% | 36.25% | 44.17% | -2.39% |
+| **Overall Results** | **7.80%** | **17.80%** | **77.10%** | **41.83%** | **50.13%** | **+1.76%** |
 
 In total the positive gains of using an ensemble retrieval strategy outweigh the negative losses in the question categories. The largest loss can be observed in the 'Yes/No' question type, but it is not clear why this is the case. The largest gain can be seen in the question types 'Multiple-Choice', 'How' and 'Open-Ended' which might require a broader context to answer, where the ensemble of two different retrieval strategies shines, weighting the results of both and selecting a more diverse and also more accurate set of documents. The ensemble retrieval might also perform superior because it simply succeeds in retrieving the correct documents appropriate to the question. 
 

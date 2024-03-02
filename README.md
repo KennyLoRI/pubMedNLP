@@ -24,7 +24,7 @@ This project utilizes a combination of Kedro, Langchain, ChromaDB, and llama2.cp
 ## Installation & set-up
 
 1. **Prerequisites:**
-   - Ensure you have Python installed on your system. Your Python version should match 3.10
+   - Ensure you have Python installed on your system. Your Python version should match 3.10.
    - Ensure to have conda installed on your system.
    - Create a folder where you want to store the project. Call it e.g. pupMedNLP
 

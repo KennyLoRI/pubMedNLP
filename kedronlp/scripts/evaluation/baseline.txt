@@ -1,0 +1,62 @@
+multiple-choice:
+	bleuscore: 0.1332
+	rougescore: 0.3003
+	bertscore: 0.8421
+	bleurtscore: 0.5026
+weighted score: 0.5812
+
+how:
+	bleuscore: 0.1191
+	rougescore: 0.2595
+	bertscore: 0.8519
+	bleurtscore: 0.4928
+weighted score: 0.5758
+
+open-ended:
+	bleuscore: 0.0744
+	rougescore: 0.1576
+	bertscore: 0.8009
+	bleurtscore: 0.3928
+weighted score: 0.5007
+
+comparative:
+	bleuscore: 0.0334
+	rougescore: 0.1786
+	bertscore: 0.7581
+	bleurtscore: 0.4156
+weighted score: 0.4907
+
+factoid:
+	bleuscore: 0.0759
+	rougescore: 0.1858
+	bertscore: 0.7755
+	bleurtscore: 0.3730
+weighted score: 0.4856
+
+descriptive:
+	bleuscore: 0.0314
+	rougescore: 0.1485
+	bertscore: 0.7739
+	bleurtscore: 0.3482
+weighted score: 0.4668
+
+yes/no:
+	bleuscore: 0.0232
+	rougescore: 0.0947
+	bertscore: 0.6912
+	bleurtscore: 0.3094
+weighted score: 0.4120
+
+hypothetical:
+	bleuscore: 0.0000
+	rougescore: 0.0572
+	bertscore: 0.7212
+	bleurtscore: 0.2828
+weighted score: 0.4073
+
+overall results:
+	bleuscore: 0.0613
+	rougescore: 0.1728
+	bertscore: 0.7769
+	bleurtscore: 0.3896
+	weighted score: 0.4900
