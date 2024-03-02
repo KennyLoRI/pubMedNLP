@@ -7,6 +7,8 @@ Transformer-based Question Answering System trained on PubMed data.
 - [Daniel Bogacz](mailto:daniel.bogacz@stud.uni-heidelberg.de) (GitHub alias 'bgzdaniel')
 - [Arjan Siddhpura](mailto:arjan.siddhpura@stud.uni-heidelberg.com) (GitHub alias 'arjansiddhpura')
 
+**Important remark**: It appears commits from 'Kenneth Styppa' are only shown in the full commit history, not in the commit history of separate components. I.e. when opening files on Github, and assessing contributions to the file, commits from "Kenneth Styppa" will not appear. They only appear in the commit history of the full branch. 
+
 ## Overview
 
 This project utilizes a combination of Kedro, Langchain, ChromaDB, and llama2.cpp to build a retrieval augmented generation system for medical question answering. The project is structured into modular pipelines that can be run end-2-end to first obtain the data, preprocess and embed the data, and later perform queries to interact with the retrieved information similar to a Q&A chatbot. Due to the modularity, it is only a matter of a different command line prompts to use the latter, i.e. the readily developed Q&A system. 
