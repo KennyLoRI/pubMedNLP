@@ -10,14 +10,14 @@
 ### Member Contribution
 
 #### Kenneth Styppa
-- Technical project orchestration via Kedro 
-- Data Retrieval via Entrez API
+- Technical project orchestration via Kedro (folder structure, & basic architecture in nodes and pipelines)
+- Data Retrieval from PubMed 
 - User input retrieval & preprocessing
 - Document Retrieval (Dense, BM25, Hybrid, MMR, Filter)
 - Filter Intention Extraction on user input for improving document retrieval.
-- Text Generation Pipeline 
-- Creating the semi-automatic evaluation set
-- Organizational project orchestration
+- Full Text Generation Pipeline (context preparation, llama2 integration, Prompting, text generation postprocessing)
+- Creating the semi-automatic evaluation set (53 question-answer pairs)
+- Organizational project orchestration (planning the project, assigning tasks, checking progress, ensuring requirements are met)
 
 #### Daniel Bogacz
 - Model Research and Selection (PubMedBert and LLama.cpp)
@@ -28,8 +28,8 @@
 - Validation and Evaluation Scripts
 
 #### Arjan Siddhpura
-- Creation of handmade validation and evaluation dataset
-- Initial Evaluation of the pipeline
+- Creation of handmade evaluation dataset (60 questions)
+- Initial Evaluation of the pipeline, i.e. testing BLEURT, BERT, ROUGE and BLEU integration
 
 ### Advisor
 - [Satya Almasian](mailto:satya.almasian@gmail.com)
